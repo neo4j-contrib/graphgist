@@ -2,6 +2,7 @@
 <script src="/assets/js/opal.js"></script>
 <script src="/assets/js/asciidoctor.js"></script>
 <script src="/assets/js/jquery-1.8.1.min.js"></script>
+<script src="http://docs.neo4j.org/chunked/snapshot/js/cypherconsole.js"></script>
 <script src="http://d3js.org/d3.v3.min.js"></script>
 
 <style>
@@ -41,7 +42,7 @@
     function execute(statement, callback) {
         $.ajax({
             type: "POST",
-            url: "http://localhost:8080/console/cypher",
+            url: "http://rabbithole-test.herokuapp.com//console/cypher",
             data: statement,
             success: function (data) {
                 console.log(data);
@@ -51,7 +52,7 @@
     }
 
     function sanitizeContents(content) {
-        content = content.replace("// console", "++++\n<div class=\"console\"></div>\n++++");
+        content = content.replace("// console", "++++\n<p class=\"cypherdoc-console\" style=\"height: 200;\"><iframe id=\"cypherdoc-console\" class=\"cypherdoc-console\" src=\"http://console-test.neo4j.org\"></iframe></p>\n++++");
         return content.
                 replace(/\/\/\W*(graph.*)/gm, function (match, name) {
                     return "++++\n<div class=\"graph " + name + "\"></div>\n++++\n";
@@ -127,7 +128,7 @@
                         var file = data.files[Object.keys(data.files)[0]];
                         var content = file.content;
                         console.log(data);
-                        $("#gist_link").attr("href",data.html_url);
+                        $("#gist_link").attr("href", data.html_url);
                         content = sanitizeContents(content);
                         console.log(content);
                         document.getElementById('content').innerHTML = Opal.Asciidoctor.$render(content);
