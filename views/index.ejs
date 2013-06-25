@@ -1,4 +1,26 @@
 <html>
+<!-- style -->
+
+<link href="http://docs.neo4j.org/chunked/snapshot/css/shCore.css" rel="stylesheet" type="text/css"/>
+<link href="http://docs.neo4j.org/chunked/snapshot/css/shCoreEclipse.css" rel="stylesheet" type="text/css"/>
+<link href="http://docs.neo4j.org/chunked/snapshot/css/shThemeEclipse.css" rel="stylesheet" type="text/css"/>
+<link href="http://docs.neo4j.org/chunked/snapshot/css/neo.css" rel="stylesheet" type="text/css"/>
+<link href="http://docs.neo4j.org/chunked/snapshot/css/neo-asciidoc.css" rel="stylesheet" type="text/css"/>
+
+<!-- Syntax Highlighter -->
+
+<script type="text/javascript" src="http://docs.neo4j.org/chunked/snapshot/js/shCore.js"></script>
+<script type="text/javascript" src="http://docs.neo4j.org/chunked/snapshot/js/shBrushJava.js"></script>
+<script type="text/javascript" src="http://docs.neo4j.org/chunked/snapshot/js/shBrushJScript.js"></script>
+<script type="text/javascript" src="http://docs.neo4j.org/chunked/snapshot/js/shBrushBash.js"></script>
+<script type="text/javascript" src="http://docs.neo4j.org/chunked/snapshot/js/shBrushPlain.js"></script>
+<script type="text/javascript" src="http://docs.neo4j.org/chunked/snapshot/js/shBrushXml.js"></script>
+<script type="text/javascript" src="http://docs.neo4j.org/chunked/snapshot/js/shBrushGroovy.js"></script>
+<script type="text/javascript" src="http://docs.neo4j.org/chunked/snapshot/js/shBrushCypher.js"></script>
+<script type="text/javascript" src="http://docs.neo4j.org/chunked/snapshot/js/shBrushScala.js"></script>
+<script type="text/javascript" src="http://docs.neo4j.org/chunked/snapshot/js/shBrushSql.js"></script>
+<script type="text/javascript" src="http://docs.neo4j.org/chunked/snapshot/js/shBrushPython.js"></script>
+<script type="text/javascript" src="http://docs.neo4j.org/chunked/snapshot/js/shBrushProperties.js"></script>
 <script src="/assets/js/opal.js"></script>
 <script src="/assets/js/asciidoctor.js"></script>
 <script src="/assets/js/jquery-1.8.1.min.js"></script>
@@ -31,7 +53,7 @@
                 var graphEl = ".graph" + (index + 1);
                 $(graphEl).each(function (i, el) {
                     var viz = JSON.parse(results)['visualization'];
-                    console.log("applying to", results, viz, el);
+//                    console.log("applying to", results, viz, el);
                     var svg = d3.select(el).append("svg");
                     d3graph(viz, svg);
                 });
@@ -45,21 +67,48 @@
             url: "http://rabbithole-test.herokuapp.com//console/cypher",
             data: statement,
             success: function (data) {
-                console.log(data);
+//                console.log(data);
                 callback(data);
             }
         });
     }
 
     function sanitizeContents(content) {
-        content = content.replace("// console", "++++\n<p class=\"cypherdoc-console\" style=\"height: 200;\"><iframe id=\"cypherdoc-console\" class=\"cypherdoc-console\" src=\"http://console-test.neo4j.org\"></iframe></p>\n++++");
+        content = content.replace("\n// console\n", "++++\n<p class=\"cypherdoc-console\"\"><iframe id=\"cypherdoc-console\" class=\"cypherdoc-console\" src=\"http://console-test.neo4j.org\"></iframe></p>\n++++");
         return content.
-                replace(/\/\/\W*(graph.*)/gm, function (match, name) {
-                    return "++++\n<div class=\"graph " + name + "\"></div>\n++++\n";
+                replace(/^\/\/\W*graph(.*)/gm, function (match, name) {
+                    return "++++\n<div>Graph after <a href=\"#query"+name+"\">Query " + name + "</a></div><div class=\"graph graph" + name + "\"></div>\n++++\n";
                 });
     }
 
 
+    $(document).ready(function () {
+                var url = "https://api.github.com/gists/<%= gist %>";
+                $.ajax({
+                    url: url,
+                    success: function (data) {
+                        var file = data.files[Object.keys(data.files)[0]];
+                        var content = file.content;
+//                        console.log(data);
+                        $("#gist_link").attr("href", data.html_url);
+                        content = sanitizeContents(content);
+//                        console.log(content);
+                        document.getElementById('content').innerHTML = Opal.Asciidoctor.$render(content);
+                        executeQueries();
+//                        $("#console").
+                        $("pre>code").each(function (index, el) {
+                            var number = (index + 1);
+                            console.log("cypher ", arguments);
+                            $(el).attr("class", "brush: cypher");
+                            $(el).parent().prepend("<a name=\"query" + number + "\">Query " + number + "</a><br/>");
+                        });
+                        SyntaxHighlighter.config.tagName = 'code';
+                        SyntaxHighlighter.all()
+                    },
+                    dataType: "json"
+                });
+            }
+    );
     function d3graph(graph, svg) {
         var width = 200, height = 200;
         svg.attr("width", width)
@@ -120,29 +169,15 @@
                     });
         });
     }
-    $(document).ready(function () {
-                var url = "https://api.github.com/gists/<%= gist %>";
-                $.ajax({
-                    url: url,
-                    success: function (data) {
-                        var file = data.files[Object.keys(data.files)[0]];
-                        var content = file.content;
-                        console.log(data);
-                        $("#gist_link").attr("href", data.html_url);
-                        content = sanitizeContents(content);
-                        console.log(content);
-                        document.getElementById('content').innerHTML = Opal.Asciidoctor.$render(content);
-                        executeQueries();
-//                        $("#console").
-                    },
-                    dataType: "json"
-                });
-            }
-    );
+
 </script>
 <body>
-<a href="https://github.com/neo4j-contrib/graphgist"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png" alt="Fork me on GitHub"></a>
-<h2>Graph Gist for <a id="gist_link" href="dumy" target="_blank">Gist #<%= gist %></a></h2>
+<a href="https://github.com/neo4j-contrib/graphgist"><img style="position: absolute; top: 0; right: 0; border: 0;"
+                                                          src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png"
+                                                          alt="Fork me on GitHub"></a>
+
+
+<h2>Graph Gist for <a id="gist_link" href="" target="_blank">Gist #<%= gist %></a></h2>
 
 <div id="content"></div>
 </body>
