@@ -1,0 +1,147 @@
+<html>
+<script src="/assets/js/opal.js"></script>
+<script src="/assets/js/asciidoctor.js"></script>
+<script src="/assets/js/jquery-1.8.1.min.js"></script>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+
+<style>
+    .node {
+        stroke: #fff;
+        stroke-width: 1.5px;
+    }
+
+    .link {
+        stroke: #999;
+        stroke-opacity: .6;
+    }
+
+    .graph {
+        border-style: solid;
+        border-width: 1px;
+    }
+</style>
+
+<script type="text/javascript">
+    function executeQueries() {
+        $("code.cypher").each(function (index, element) {
+            var statement = $(element).text();
+            console.log("executing", statement);
+            execute(statement, function (results) {
+                var graphEl = ".graph" + (index + 1);
+                $(graphEl).each(function (i, el) {
+                    var viz = JSON.parse(results)['visualization'];
+                    console.log("applying to", results, viz, el);
+                    var svg = d3.select(el).append("svg");
+                    d3graph(viz, svg);
+                });
+            });
+        });
+    }
+
+    function execute(statement, callback) {
+        $.ajax({
+            type: "POST",
+            url: "http://localhost:8080/console/cypher",
+            data: statement,
+            success: function (data) {
+                console.log(data);
+                callback(data);
+            }
+        });
+    }
+
+    function sanitizeContents(content) {
+        content = content.replace("// console", "++++\n<div class=\"console\"></div>\n++++");
+        return content.
+                replace(/\/\/\W*(graph.*)/gm, function (match, name) {
+                    return "++++\n<div class=\"graph " + name + "\"></div>\n++++\n";
+                });
+    }
+
+
+    function d3graph(graph, svg) {
+        var width = 200, height = 200;
+        svg.attr("width", width)
+                .attr("height", height)
+        var color = d3.scale.category20();
+
+        var force = d3.layout.force()
+                .charge(-120)
+                .linkDistance(30)
+                .size([width, height]);
+        force
+                .nodes(graph.nodes)
+                .links(graph.links)
+                .start();
+
+        var link = svg.selectAll(".link")
+                .data(graph.links)
+                .enter().append("line")
+                .attr("class", "link")
+                .style("stroke-width", function (d) {
+                    return Math.sqrt(d.value);
+                });
+
+        var node = svg.selectAll(".node")
+                .data(graph.nodes)
+                .enter().append("circle")
+                .attr("class", "node")
+                .attr("r", 5)
+                .style("fill", function (d) {
+                    return color(d.group);
+                })
+                .call(force.drag);
+
+        node.append("title")
+                .text(function (d) {
+                    return d.name;
+                });
+
+        force.on("tick", function () {
+            link.attr("x1", function (d) {
+                return d.source.x;
+            })
+                    .attr("y1", function (d) {
+                        return d.source.y;
+                    })
+                    .attr("x2", function (d) {
+                        return d.target.x;
+                    })
+                    .attr("y2", function (d) {
+                        return d.target.y;
+                    });
+
+            node.attr("cx", function (d) {
+                return d.x;
+            })
+                    .attr("cy", function (d) {
+                        return d.y;
+                    });
+        });
+    }
+    $(document).ready(function () {
+                var url = "https://api.github.com/gists/<%= gist %>";
+                $.ajax({
+                    url: url,
+                    success: function (data) {
+                        var file = data.files[Object.keys(data.files)[0]];
+                        var content = file.content;
+                        console.log(data);
+                        $("#gist_link").attr("href",data.html_url);
+                        content = sanitizeContents(content);
+                        console.log(content);
+                        document.getElementById('content').innerHTML = Opal.Asciidoctor.$render(content);
+                        executeQueries();
+//                        $("#console").
+                    },
+                    dataType: "json"
+                });
+            }
+    );
+</script>
+<body>
+<h2>Graph Gist for <a id="gist_link" href="dumy" target="_blank">Gist #<%= gist %></a></h2>
+
+<div id="content"></div>
+</body>
+</html>
