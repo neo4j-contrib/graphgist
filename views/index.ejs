@@ -89,19 +89,17 @@
                     success: function (data) {
                         var file = data.files[Object.keys(data.files)[0]];
                         var content = file.content;
-//                        console.log(data);
                         $("#gist_link").attr("href", data.html_url);
                         content = sanitizeContents(content);
-//                        console.log(content);
                         document.getElementById('content').innerHTML = Opal.Asciidoctor.$render(content);
                         executeQueries();
-//                        $("#console").
                         $("pre>code").each(function (index, el) {
                             var number = (index + 1);
                             console.log("cypher ", arguments);
                             $(el).attr("class", "brush: cypher");
                             $(el).parent().prepend("<a name=\"query" + number + "\">Query " + number + "</a><br/>");
                         });
+                        console.log("highlighting");
                         SyntaxHighlighter.config.tagName = 'code';
                         SyntaxHighlighter.all()
                     },
