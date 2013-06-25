@@ -95,7 +95,6 @@
                         executeQueries();
                         $("pre>code").each(function (index, el) {
                             var number = (index + 1);
-                            console.log("cypher ", arguments);
                             $(el).attr("class", "brush: cypher");
                             $(el).parent().prepend("<a name=\"query" + number + "\">Query " + number + "</a><br/>");
                         });
