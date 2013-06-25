@@ -11,4 +11,4 @@ Building
     npm install
     node app.js
     
-The UI will be at http://localhost:3000 .
+The UI will be at [http://localhost:3000](http://localhost:3000) .
