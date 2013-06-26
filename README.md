@@ -1,7 +1,7 @@
 The Neo4j GraphGists
 ====================
 
-For the live site, got to [The GraphGists](http://graphgist.herokuapp.com/).
+For the live site, got to [The GraphGists](http://neo4j-contrib.github.io/graphgist/).
 
 Building
 -----------
