@@ -51,10 +51,7 @@
 
 <script type="text/javascript">
     
-    $(window).hashchange(function(){
-        $('#content').empty();
-        renderPage();
-    });
+    $(window).hashchange(renderPage);
     function executeQueries() {
         $("code.cypher").each(function (index, element) {
             var statement = $(element).text();
@@ -63,16 +60,14 @@
                 var viz = data['visualization'];
                 var newlines = results.replace(/\\n/g, '&#013;');
                 if (data.error) {
-                    $(element).append("<span class='label label-error' title='" + newlines + "'>ERROR<div class='tooltip'>Here some info</div></span >");
-
+                    $(element).append("<span class='label label-important' title='" + newlines + "'>ERROR</span >");
                 } else {
-                    $(element).append("<span class='label label-success' title='" + newlines + "'>OK<div class='tooltip'>Here some info</div></span >");
+                    $(element).append("<span class='label label-success' title='" + newlines + "'>OK</span >");
                     var graphEl = ".graph" + (index + 1);
                     $(graphEl).each(function (i, el) {
 //                    console.log("applying to", results, viz, el);
                         var svg = d3.select(el).append("svg");
                         d3graph(viz, svg);
-
                     });
                 }
             }, function (results) {
@@ -95,7 +90,7 @@
         content = content.replace("\n// console\n", "++++\n<p class=\"cypherdoc-console\"\"></p>\n++++");
         return content.
                 replace(/^\/\/\W*graph(.*)/gm, function (match, name) {
-                    return "++++\n<div>Graph after <a href=\"#query" + name + "\">Query " + name + "</a></div><div class=\"graph graph" + name + "\"></div>\n++++\n";
+                    return "++++\n<div>Graph after Query " + name + "</div><div class=\"graph graph" + name + "\"></div>\n++++\n";
                 });
     }
 
@@ -105,6 +100,9 @@
           window.history.pushState({}, "", "#5857879");
         }
         var gist = window.location.hash.substr(1);
+        if (! /^\d+$/.test(gist)) {
+            return false;
+        }
         var url = "https://api.github.com/gists/" + gist;
         $.ajax({
             url: url,
@@ -113,6 +111,7 @@
                 var content = file.content;
                 $("#gist_link").attr("href", data.html_url);
                 content = sanitizeContents(content);
+                $('#content').empty();
                 document.getElementById('content').innerHTML = Opal.Asciidoctor.$render(content);
                 executeQueries();
                 $("pre>code").each(function (index, el) {

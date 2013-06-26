@@ -52,7 +52,6 @@ function createCypherConsoles($) {
             resetConsole();
         }));
         $window = $(window);
-        var pathname = window.location.pathname;
         $window.scroll(function () {
             if ($window.scrollTop() > 150) {
                 iframe.css('position', 'fixed');
@@ -79,20 +78,5 @@ function createCypherConsoles($) {
             url += "&version=" + encodeURIComponent(neo4jVersion);
         }
         return url + "&no_root=true";
-    }
-
-    function handleCypherClick(button, link, url, title) {
-        var iframe = $("#console");
-        if (iframe.length) {
-            iframe.remove();
-        }
-        if (button === currentButton) {
-            // hitting the same button again -- don't add a new console
-            currentButton = null;
-            return;
-        }
-        iframe = $("<iframe/>").attr("id", "console").addClass("console").attr("src", url);
-        link.after(iframe);
-        currentButton = button;
     }
 }
