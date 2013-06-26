@@ -23,7 +23,7 @@
 
 function resetConsole() {
     console.log("cleaning db");
-    $('iframe.cypherdoc-console')[0].contentWindow.postMessage('START n=node(*) MATCH n-[r?]-m WITH n, r DELETE n, r;','*');
+    $('iframe.cypherdoc-console')[0].contentWindow.postMessage('START n=node(*) MATCH n-[r?]-m WITH n, r DELETE n, r;', '*');
 }
 
 function createCypherConsoles($) {
@@ -48,24 +48,21 @@ function createCypherConsoles($) {
             var query = $(this).parent().data('query');
             $('iframe.cypherdoc-console')[0].contentWindow.postMessage(query, '*');
         }));
-        $('div.query-wrapper').append(clean.clone().click(function(){
+        $('div.query-wrapper').append(clean.clone().click(function () {
             resetConsole();
         }));
         $window = $(window);
         var pathname = window.location.pathname;
-        if (pathname !== "/" && ( pathname.length < 11 || pathname.substr(-11) !== "/index.html" )) {
-            $window.scroll(function () {
-                if ($window.scrollTop() > 150) {
-                    iframe.css('position', 'fixed');
-                }
-                else {
-                    iframe.css('position', 'static');
-                }
-            });
-        }
+        $window.scroll(function () {
+            if ($window.scrollTop() > 150) {
+                iframe.css('position', 'fixed');
+            }
+            else {
+                iframe.css('position', 'static');
+            }
+        });
     });
-    
-    
+
 
     function getUrl(database, command, message) {
         var url = REQUEST_BASE;
