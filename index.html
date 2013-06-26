@@ -50,7 +50,7 @@
 </style>
 
 <script type="text/javascript">
-    
+
     $(window).hashchange(renderPage);
     function executeQueries() {
         $("code.cypher").each(function (index, element) {
@@ -97,10 +97,10 @@
 
     function renderPage() {
         if (window.location.hash < 2) {
-          window.history.pushState({}, "", "#5857879");
+            window.history.pushState({}, "", "#5857879");
         }
         var gist = window.location.hash.substr(1);
-        if (! /^\d+$/.test(gist)) {
+        if (!/^\d+$/.test(gist)) {
             return false;
         }
         var url = "https://api.github.com/gists/" + gist;
@@ -198,21 +198,17 @@
 
 <div class="navbar  navbar-inverse">
     <div class="navbar-inner">
-        <div class="container">
-            <a class="brand" href="http://neo4j.org"> <img style="height: 50px"
-                                                           src="http://assets.neo4j.org/new/img/logo-white.svg"></a>
-        </div>
-        <ul class="nav">
-            <li>
-                <a class="brand" href="http://graphgist.herokuapp.com">Neo4j GraphGists</a>
-            </li>
-        </ul>
+        <a class="brand" href="http://neo4j.org" target="_blank"> <img style="height: 50px"
+                                                                       src="http://assets.neo4j.org/new/img/logo-white.svg">Neo4j Graph Gists</a>
+        <a class="" href=" http://stackoverflow.com/search?q=neo4j" target="_blank">Neo4j SO Questions</a>
     </div>
-    <a class="btn" id="gist_link" href="" target="_blank">View/Fork/Clone this GraphGist.</a>
+    <a class="btn" id="gist_link" href="" target="_blank"><img style="height:30px"
+                                                               src="http://www.levihackwith.com/wp-content/uploads/2011/10/github-logo.png"/>
+        View/Fork/Clone this GraphGist.</a>
 </div>
 <div id="content">
 
 </div>
-<footer><a href="https://github.com/neo4j-contrib/graphgist">Github project</a></footer>
+<footer><a href="https://github.com/neo4j-contrib/graphgist">The GraphGist project on GitHub</a></footer>
 </body>
 </html>
