@@ -27,40 +27,14 @@ function resetConsole() {
 }
 
 function createCypherConsoles($) {
-    console.log("wrapping");
     var currentButton;
     var URL_BASE = "http://console-test.neo4j.org/";
     var REQUEST_BASE = URL_BASE + "?";
 
     $('pre>code').wrap('<div class="query-wrapper" />').each(function () {
-        console.log(arguments);
         var pre = $(this);
         pre.parent().data('query', pre.text());
     });
-
-    /*$('p.cypherconsole').each( function()
-     {
-     var context = $( this );
-     var title = $.trim( context.find( '> b, > strong' ).eq(0).text() ) || 'Live Cypher Console';
-     title = title.replace( /\.$/, '' );
-     var database = context.find( 'span.database' ).eq(0).text();
-     if ( !database ) return;
-     var command = context.find( 'span.command > strong' ).eq(0).text();
-     if ( !command ) return;
-     var button = $( '<button class="cypherconsole" type="button" title="Show a console" id="console-iframe-button"><img src="css/utilities-terminal.svg" /><span> ' + title + '</span></button>' );
-     var url = getUrl( database, command );
-     var link = $( '<button class="cypherconsole" type="button" title="Open the console in a new window." id="console-external-button"><img src="css/external.svg" /><span>&#8201;</span></button>' );
-     link.click( function()
-     {
-     window.open( url, '_blank' );
-     });    
-     button.click( function()
-     {
-     handleCypherClick( button, link, url, title );
-     });    
-     button.insertAfter( this );
-     link.insertAfter( button );
-     });*/
 
     $('p.cypherdoc-console').first().each(function () {
         var context = $(this);

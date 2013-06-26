@@ -8,7 +8,6 @@ Building
 
     git clone git@github.com:neo4j-contrib/graphgist.git
     cd graphgist
-    npm install
-    node app.js
     
-The UI will be at [http://localhost:3000](http://localhost:3000) .
+    
+This is a static site, not further deployment needed. It is hosted via gh-pages.
