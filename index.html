@@ -117,7 +117,7 @@
                 $("pre>code").each(function (index, el) {
                     var number = (index + 1);
                     $(el).attr("class", "brush: cypher");
-                    $(el).parent().prepend("<a name=\"query" + number + "\">Query " + number + "</a><br/>");
+                    $(el).parent().parent().prepend("<h5>Query " + number + "</h5>");
                 });
 
                 createCypherConsoles($);
@@ -204,7 +204,7 @@
     </div>
     <a class="btn" id="gist_link" href="" target="_blank"><img style="height:30px"
                                                                src="http://www.levihackwith.com/wp-content/uploads/2011/10/github-logo.png"/>
-        View/Fork/Clone this GraphGist.</a>
+        View/Fork/Clone this GraphGist on GitHub</a>
 </div>
 <div id="content">
 
