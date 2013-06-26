@@ -22,6 +22,7 @@
 <script type="text/javascript" src="http://docs.neo4j.org/chunked/snapshot/js/shBrushCypher.js"></script>
 
 <script src="js/cypherconsole.js"></script>
+<link href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
 
 <style>
     .node {
@@ -60,9 +61,9 @@
                 var viz = data['visualization'];
                 var newlines = results.replace(/\\n/g, '&#013;');
                 if (data.error) {
-                    $(element).append("<span class='label label-important' title='" + newlines + "'>ERROR</span >");
+                    $(element).after("<span class='label label-important' title='" + newlines + "'>ERROR</span >");
                 } else {
-                    $(element).append("<span class='label label-success' title='" + newlines + "'>OK</span >");
+                    $(element).after("<span class='label label-success' title='" + newlines + "'>OK</span >");
                     var graphEl = ".graph" + (index + 1);
                     $(graphEl).each(function (i, el) {
 //                    console.log("applying to", results, viz, el);
@@ -202,12 +203,10 @@
                                                                        src="http://assets.neo4j.org/new/img/logo-white.svg">Neo4j Graph Gists</a>
         <a class="" href=" http://stackoverflow.com/search?q=neo4j" target="_blank">Neo4j SO Questions</a>
     </div>
-    <a class="btn" id="gist_link" href="" target="_blank"><img style="height:30px"
-                                                               src="http://www.levihackwith.com/wp-content/uploads/2011/10/github-logo.png"/>
-        View/Fork/Clone this GraphGist on GitHub</a>
+    <a class="btn" id="gist_link" href="" target="_blank" style="font-size: 16px;"><i class="icon-github"></i> View/Fork/Clone this GraphGist on GitHub</a>
 </div>
 <div id="content">
-
+    <img alt="loading" src="ico/loading.gif" style="margin:5em;">
 </div>
 <footer><a href="https://github.com/neo4j-contrib/graphgist">The GraphGist project on GitHub</a></footer>
 </body>
