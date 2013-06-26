@@ -101,7 +101,10 @@
 
 
     function renderPage() {
-        var gist = (window.location.hash || "#5857879").substr(1);
+        if (window.location.hash < 2) {
+          window.history.pushState({}, "", "#5857879");
+        }
+        var gist = window.location.hash.substr(1);
         var url = "https://api.github.com/gists/" + gist;
         $.ajax({
             url: url,
