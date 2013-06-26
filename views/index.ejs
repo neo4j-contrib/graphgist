@@ -7,28 +7,20 @@
 <link href="http://docs.neo4j.org/chunked/snapshot/css/neo.css" rel="stylesheet" type="text/css"/>
 <link href="http://docs.neo4j.org/chunked/snapshot/css/neo-asciidoc.css" rel="stylesheet" type="text/css"/>
 
+<script src="/assets/js/opal.js"></script>
+<script src="/assets/js/asciidoctor.js"></script>
+<script src="/assets/js/jquery-1.8.1.min.js"></script>
+<script src="http://d3js.org/d3.v3.min.js"></script>
 <!--bootstrap-->
 <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
 <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
 <!-- Syntax Highlighter -->
 
 <script type="text/javascript" src="http://docs.neo4j.org/chunked/snapshot/js/shCore.js"></script>
-<script type="text/javascript" src="http://docs.neo4j.org/chunked/snapshot/js/shBrushJava.js"></script>
 <script type="text/javascript" src="http://docs.neo4j.org/chunked/snapshot/js/shBrushJScript.js"></script>
-<script type="text/javascript" src="http://docs.neo4j.org/chunked/snapshot/js/shBrushBash.js"></script>
-<script type="text/javascript" src="http://docs.neo4j.org/chunked/snapshot/js/shBrushPlain.js"></script>
-<script type="text/javascript" src="http://docs.neo4j.org/chunked/snapshot/js/shBrushXml.js"></script>
-<script type="text/javascript" src="http://docs.neo4j.org/chunked/snapshot/js/shBrushGroovy.js"></script>
 <script type="text/javascript" src="http://docs.neo4j.org/chunked/snapshot/js/shBrushCypher.js"></script>
-<script type="text/javascript" src="http://docs.neo4j.org/chunked/snapshot/js/shBrushScala.js"></script>
-<script type="text/javascript" src="http://docs.neo4j.org/chunked/snapshot/js/shBrushSql.js"></script>
-<script type="text/javascript" src="http://docs.neo4j.org/chunked/snapshot/js/shBrushPython.js"></script>
-<script type="text/javascript" src="http://docs.neo4j.org/chunked/snapshot/js/shBrushProperties.js"></script>
-<script src="/assets/js/opal.js"></script>
-<script src="/assets/js/asciidoctor.js"></script>
-<script src="/assets/js/jquery-1.8.1.min.js"></script>
-<script src="http://docs.neo4j.org/chunked/snapshot/js/cypherconsole.js"></script>
-<script src="http://d3js.org/d3.v3.min.js"></script>
+
+<script src="/assets/js/cypherconsole.js"></script>
 
 <style>
     .node {
@@ -49,10 +41,11 @@
     html {
         background: none;
     }
-    
+
     html body {
         background: none;
     }
+
 </style>
 
 <script type="text/javascript">
@@ -61,34 +54,44 @@
             var statement = $(element).text();
             console.log("executing", statement);
             execute(statement, function (results) {
-                var graphEl = ".graph" + (index + 1);
-                $(graphEl).each(function (i, el) {
-                    var viz = JSON.parse(results)['visualization'];
+                console.log("got execution result", arguments);
+                var data = JSON.parse(results);
+                var viz = data['visualization'];
+                if (data.error) {
+                    $(element).append("<span class='label label-error' title='" + results + "'>ERROR<div class='tooltip'>Here some info</div></span >");
+
+                } else {
+
+                    $(element).append("<span class='label label-success' title='" + results + "'>OK<div class='tooltip'>Here some info</div></span >");
+                    var graphEl = ".graph" + (index + 1);
+                    $(graphEl).each(function (i, el) {
 //                    console.log("applying to", results, viz, el);
-                    var svg = d3.select(el).append("svg");
-                    d3graph(viz, svg);
-                });
+                        var svg = d3.select(el).append("svg");
+                        d3graph(viz, svg);
+
+                    });
+                }
+            }, function (results) {
+                console.log("execution error", arguments);
             });
         });
     }
 
-    function execute(statement, callback) {
+    function execute(statement, callback, error) {
         $.ajax({
             type: "POST",
             url: "http://rabbithole-test.herokuapp.com//console/cypher",
             data: statement,
-            success: function (data) {
-//                console.log(data);
-                callback(data);
-            }
+            success: callback,
+            error: error
         });
     }
 
     function sanitizeContents(content) {
-        content = content.replace("\n// console\n", "++++\n<p class=\"cypherdoc-console\"\"><iframe id=\"cypherdoc-console\" class=\"cypherdoc-console\" src=\"http://console-test.neo4j.org\"></iframe></p>\n++++");
+        content = content.replace("\n// console\n", "++++\n<p class=\"cypherdoc-console\"\"></p>\n++++");
         return content.
                 replace(/^\/\/\W*graph(.*)/gm, function (match, name) {
-                    return "++++\n<div>Graph after <a href=\"#query"+name+"\">Query " + name + "</a></div><div class=\"graph graph" + name + "\"></div>\n++++\n";
+                    return "++++\n<div>Graph after <a href=\"#query" + name + "\">Query " + name + "</a></div><div class=\"graph graph" + name + "\"></div>\n++++\n";
                 });
     }
 
@@ -109,23 +112,27 @@
                             $(el).attr("class", "brush: cypher");
                             $(el).parent().prepend("<a name=\"query" + number + "\">Query " + number + "</a><br/>");
                         });
+
+                        console.log("saving statements");
+                        createCypherConsoles($);
                         console.log("highlighting");
                         SyntaxHighlighter.config.tagName = 'code';
-                        SyntaxHighlighter.all()
+                        SyntaxHighlighter.all();
+
                     },
                     dataType: "json"
                 });
             }
     );
     function d3graph(graph, svg) {
-        var width = 200, height = 200;
+        var width = 500, height = 200;
         svg.attr("width", width)
                 .attr("height", height)
         var color = d3.scale.category20();
 
         var force = d3.layout.force()
                 .charge(-120)
-                .linkDistance(30)
+                .linkDistance(10)
                 .size([width, height]);
         force
                 .nodes(graph.nodes)
@@ -187,15 +194,15 @@
 
 <div class="navbar">
     <div class="navbar-inner">
-        <a class="brand" href="#">Neo4j GraphGists</a>
+        <a class="brand" href="http://graphgist.herokuapp.com">Neo4j GraphGists</a>
         <ul class="nav">
             <!--<li class="active"><a href="#">Home</a></li>-->
-            <li><a id="gist_link" href="" target="_blank">View Gist #<%= gist %></a></li>
+            <li><a id="gist_link" href="" target="_blank">View/Fork/Clone #<%= gist %></a></li>
         </ul>
     </div>
 </div>
 <div id="content">
-    
+
 </div>
 </body>
 </html>
