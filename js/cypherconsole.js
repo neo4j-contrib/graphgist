@@ -47,7 +47,6 @@ function executeQueries()
         var graphEl = ".graph" + ( index + 1 );
         $( graphEl ).each( function( i, el )
         {
-          // console.log("applying to", results, viz, el);
           var svg = d3.select( el ).append( "svg" );
           d3graph( viz, svg );
         } );
@@ -89,6 +88,9 @@ function renderPage()
   var gist = window.location.hash.substr( 1 );
   if ( !/^\d+$/.test( gist ) )
   {
+    // TODO scroll to the correct position as needed.
+    // (offset for the wide console).
+    // Probably we should capture the clicks and manage this ourselves somehow.
     return false;
   }
   var url = "https://api.github.com/gists/" + gist;
@@ -104,23 +106,25 @@ function renderPage()
       Opal.hash2( [ 'attributes' ], {
         'attributes' : [ 'notitle!' ]
       } );
-      document.getElementById( 'content' ).innerHTML = Opal.Asciidoctor.$render( content );
-      $( "pre>code" ).each( function( index, el )
+      var generatedHtml = Opal.Asciidoctor.$render( content );
+      $( '#content' ).html( generatedHtml );
+      $( "code.cypher" ).each( function( index, el )
       {
         var number = ( index + 1 );
         var $el = $( el );
         $el.attr( "class", "brush: cypher" );
-        $el.parent().parent().prepend( "<h5>Query " + number + "</h5>" );
+        $parent = $el.parent();
+        $parent.prepend( "<h5>Query " + number + "</h5>" );
         $el.wrap( $WRAPPER.clone() ).each( function()
         {
           $el.parent().data( 'query', $el.text() );
         } );
       } );
-      SyntaxHighlighter.config.tagName = 'code';
+      SyntaxHighlighter.config['tagName'] = 'code';
       SyntaxHighlighter.defaults['tab-size'] = 4;
       SyntaxHighlighter.defaults['gutter'] = false;
       SyntaxHighlighter.defaults['toolbar'] = false;
-      SyntaxHighlighter.all();
+      SyntaxHighlighter.highlight();
       executeQueries();
       createCypherConsole();
     },
