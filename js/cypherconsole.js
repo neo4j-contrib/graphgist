@@ -180,13 +180,6 @@ function d3graph( graph, svg )
   } );
 }
 
-function resetConsole()
-{
-  console.log( "cleaning db" );
-  $( 'iframe.cypherdoc-console' )[0].contentWindow.postMessage(
-      'START n=node(*) MATCH n-[r?]-m WITH n, r DELETE n, r;', '*' );
-}
-
 function createCypherConsole()
 {
   $( 'p.cypherdoc-console' ).first().each( function()
@@ -197,7 +190,6 @@ function createCypherConsole()
     context.append( iframe );
     context.height( iframe.height() );
     var button = $( '<button class="run-query" title="Execute query"><i class="icon-play"></i> </button>' );
-    var clean = $( '<button class="clean-query" title="Clean db"><i class="icon-remove"></i> </button>' );
     $( 'div.query-wrapper' ).append( button.clone().click( function()
     {
       var query = $( this ).parent().data( 'query' );
