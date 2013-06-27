@@ -23,6 +23,7 @@ var CONSOLE_URL_BASE = "http://console-test.neo4j.org/";
 var CONSOLE_AJAX_ENDPOINT = CONSOLE_URL_BASE + "console/cypher";
 var REQUEST_BASE = CONSOLE_URL_BASE + "?";
 var $WRAPPER = $( '<div class="query-wrapper" />' );
+var $IFRAME = $( "<iframe/>" ).attr( "id", "cypherdoc-console" ).addClass( "cypherdoc-console" );
 
 $( window ).hashchange( renderPage );
 function executeQueries()
@@ -99,6 +100,9 @@ function renderPage()
       $( "#gist_link" ).attr( "href", data.html_url );
       content = sanitizeContents( content );
       $( '#content' ).empty();
+      Opal.hash2( [ 'attributes' ], {
+        'attributes' : [ 'notitle!' ]
+      } );
       document.getElementById( 'content' ).innerHTML = Opal.Asciidoctor.$render( content );
       $( "pre>code" ).each( function( index, el )
       {
@@ -186,27 +190,32 @@ function createCypherConsole()
   {
     var context = $( this );
     var url = getUrl( "none", "none", "\n\nClick the play buttons to run the queries!" );
-    var iframe = $( "<iframe/>" ).attr( "id", "cypherdoc-console" ).addClass( "cypherdoc-console" ).attr( "src", url );
+    var iframe = $IFRAME.clone().attr( "src", url );
     context.append( iframe );
     context.height( iframe.height() );
     var button = $( '<button class="run-query" title="Execute query"><i class="icon-play"></i> </button>' );
     $( 'div.query-wrapper' ).append( button.clone().click( function()
     {
       var query = $( this ).parent().data( 'query' );
-      $( 'iframe.cypherdoc-console' )[0].contentWindow.postMessage( query, '*' );
+      $( '#cypherdoc-console' )[0].contentWindow.postMessage( query, '*' );
     } ) );
-    $window = $( window );
-    $window.scroll( function()
+    var offset = iframe.offset();
+    if ( offset && offset.top )
     {
-      if ( $window.scrollTop() > 150 )
+      var limit = offset.top;
+      $window = $( window );
+      $window.scroll( function()
       {
-        iframe.css( 'position', 'fixed' );
-      }
-      else
-      {
-        iframe.css( 'position', 'static' );
-      }
-    } );
+        if ( $window.scrollTop() > limit )
+        {
+          iframe.css( 'position', 'fixed' );
+        }
+        else
+        {
+          iframe.css( 'position', 'static' );
+        }
+      } );
+    }
   } );
 
   function getUrl( database, command, message )
