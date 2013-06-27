@@ -195,10 +195,6 @@ function createCypherConsole()
       var query = $( this ).parent().data( 'query' );
       $( 'iframe.cypherdoc-console' )[0].contentWindow.postMessage( query, '*' );
     } ) );
-    $( 'div.query-wrapper' ).append( clean.clone().click( function()
-    {
-      resetConsole();
-    } ) );
     $window = $( window );
     $window.scroll( function()
     {
