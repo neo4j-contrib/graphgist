@@ -62,18 +62,19 @@ function executeQueries()
 function execute( statement, callback, error )
 {
   $.ajax( {
-    type : "POST",
-    url : CONSOLE_AJAX_ENDPOINT,
-    data : statement,
-    success : callback,
-    error : error
+    'type' : "POST",
+    'url' : CONSOLE_AJAX_ENDPOINT,
+    'data' : statement,
+    'success' : callback,
+    'error' : error,
+    'async' : false
   } );
 }
 
 function sanitizeContents( content )
 {
-  content = content.replace( "\n// console\n", "++++\n<p class=\"cypherdoc-console\"\"></p>\n++++" );
-  return content.replace( /^\/\/\W*graph(.*)/gm, function( match, name )
+  var sanitized = content.replace( "\n// console\n", "++++\n<p class=\"cypherdoc-console\"\"></p>\n++++" );
+  return sanitized.replace( /^\/\/\W*graph(.*)/gm, function( match, name )
   {
     return "++++\n<div>Graph after Query " + name + "</div><div class=\"graph graph" + name + "\"></div>\n++++\n";
   } );
