@@ -72,7 +72,7 @@ function execute( statement, callback, error )
 
 function sanitizeContents( content )
 {
-  var sanitized = content.replace( "\n// console\n", "++++\n<p class=\"cypherdoc-console\"\"></p>\n++++" );
+  var sanitized = content.replace( "\n// console\n", "[[console]]\n== Live Console ==\n++++\n<p class=\"cypherdoc-console\"\"></p>\n++++" );
   return sanitized.replace( /^\/\/\W*graph(.*)/gm, function( match, name )
   {
     return "++++\n<div>Graph after Query " + name + "</div><div class=\"graph graph" + name + "\"></div>\n++++\n";
