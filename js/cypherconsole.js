@@ -24,14 +24,18 @@ var CONSOLE_AJAX_ENDPOINT = CONSOLE_URL_BASE + "console/cypher";
 var REQUEST_BASE = CONSOLE_URL_BASE + "?";
 var $WRAPPER = $( '<div class="query-wrapper" />' );
 var $IFRAME = $( "<iframe/>" ).attr( "id", "cypherdoc-console" ).addClass( "cypherdoc-console" );
+var ASCIIDOCTOR_OPTIONS = Opal.hash2( [ 'attributes' ], {
+  'attributes' : [ 'notitle!' ]
+} );
+var DEFAULT_HASH = '#5880880';
 
 $( window ).hashchange( renderPage );
 function executeQueries()
 {
   $( "div.query-wrapper" ).each( function( index, element )
   {
-    var statement = $( element ).data( 'query' );
-    element = $( element ).children( 'code' )[0];
+    var $wrapper = $( element );
+    var statement = $wrapper.data( 'query' );
     execute( statement, function( results )
     {
       var data = JSON.parse( results );
@@ -39,11 +43,11 @@ function executeQueries()
       var newlines = results.replace( /\\n/g, '&#013;' );
       if ( data.error )
       {
-        $( element ).after( "<span class='label label-important' title='" + newlines + "'>ERROR</span >" );
+        $wrapper.after( "<span class='label label-important' title='" + newlines + "'>ERROR</span >" );
       }
       else
       {
-        $( element ).after( "<span class='label label-success' title='" + newlines + "'>OK</span >" );
+        $wrapper.after( "<span class='label label-success' title='" + newlines + "'>OK</span >" );
         var graphEl = ".graph" + ( index + 1 );
         $( graphEl ).each( function( i, el )
         {
@@ -83,7 +87,7 @@ function renderPage()
 {
   if ( window.location.hash < 2 )
   {
-    window.history.pushState( {}, "", "#5857879" );
+    window.history.pushState( {}, "", DEFAULT_HASH );
   }
   var gist = window.location.hash.substr( 1 );
   if ( !/^\d+$/.test( gist ) )
@@ -103,10 +107,7 @@ function renderPage()
       $( "#gist_link" ).attr( "href", data.html_url );
       content = sanitizeContents( content );
       $( '#content' ).empty();
-      Opal.hash2( [ 'attributes' ], {
-        'attributes' : [ 'notitle!' ]
-      } );
-      var generatedHtml = Opal.Asciidoctor.$render( content );
+      var generatedHtml = Opal.Asciidoctor.$render( content, ASCIIDOCTOR_OPTIONS );
       $( '#content' ).html( generatedHtml );
       $( "code.cypher" ).each( function( index, el )
       {
