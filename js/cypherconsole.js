@@ -1,18 +1,14 @@
 /**
- * Licensed to Neo Technology under one or more contributor license agreements.
- * See the NOTICE file distributed with this work for additional information
- * regarding copyright ownership. Neo Technology licenses this file to you under
- * the Apache License, Version 2.0 (the "License"); you may not use this file
- * except in compliance with the License. You may obtain a copy of the License
- * at
+ * Licensed to Neo Technology under one or more contributor license agreements. See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership. Neo Technology licenses this file to you under
+ * the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You
+ * may obtain a copy of the License at
  * 
  * http://www.apache.org/licenses/LICENSE-2.0
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
  */
 
 /*
@@ -76,7 +72,8 @@ function execute( statement, callback, error )
 
 function sanitizeContents( content )
 {
-  var sanitized = content.replace( "\n// console\n", "[[console]]\n== Live Console ==\n++++\n<p class=\"cypherdoc-console\"\"></p>\n++++" );
+  var sanitized = content.replace( "\n// console\n",
+      "[[console]]\n== Live Console ==\n++++\n<p class=\"cypherdoc-console\"\"></p>\n++++" );
   return sanitized.replace( /^\/\/\W*graph(.*)/gm, function( match, name )
   {
     return "++++\n<div>Graph after Query " + name + "</div><div class=\"graph graph" + name + "\"></div>\n++++\n";
@@ -106,9 +103,10 @@ function renderPage()
       var content = file.content;
       $( "#gist_link" ).attr( "href", data.html_url );
       content = sanitizeContents( content );
-      $( '#content' ).empty();
+      $content = $( '#content' );
+      $content.empty();
       var generatedHtml = Opal.Asciidoctor.$render( content, ASCIIDOCTOR_OPTIONS );
-      $( '#content' ).html( generatedHtml );
+      $content.html( generatedHtml );
       $( "code.cypher" ).each( function( index, el )
       {
         var number = ( index + 1 );
@@ -126,6 +124,19 @@ function renderPage()
       SyntaxHighlighter.defaults['gutter'] = false;
       SyntaxHighlighter.defaults['toolbar'] = false;
       SyntaxHighlighter.highlight();
+      // transform image links to images
+      $( 'a[href]', $content ).each( function()
+      {
+        var $link = $( this );
+        if ( $link.text() === this.href && this.href.length > 4 )
+        {
+          var ext = this.href.split( '.' ).pop();
+          if ( 'png|jpg|jpeg|svg'.indexOf( ext ) !== -1 )
+          {
+            $link.replaceWith( '<img src="' + this.href + '">' );
+          }
+        }
+      } );
       executeQueries();
       createCypherConsole();
     },
