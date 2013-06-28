@@ -286,7 +286,14 @@ function createCypherConsole()
     var iframe = $IFRAME.clone().attr( "src", url );
     iframe.load( function()
     {
-      // console.log('iframe loaded');
+      $( '#content pre.highlight.setup-query' ).first().children( 'div.query-wrapper' ).first().each( function()
+      {
+        var query = $( this ).data( 'query' );
+        if ( query )
+        {
+          executeInConsole( query );
+        }
+      } );
     } );
     context.append( iframe );
     context.height( iframe.height() );
@@ -294,7 +301,7 @@ function createCypherConsole()
     {
       event.preventDefault();
       var query = $( this ).prevAll( 'div.query-wrapper' ).first().data( 'query' );
-      $( '#console' )[0].contentWindow.postMessage( query, '*' );
+      executeInConsole( query );
     } ) );
     var offset = iframe.offset();
     if ( offset && offset.top )
@@ -314,6 +321,11 @@ function createCypherConsole()
       } );
     }
   } );
+  
+  function executeInConsole(query)
+  {
+    $( '#console' )[0].contentWindow.postMessage( query, '*' );
+  }
 
   function getUrl( database, command, message, session )
   {
