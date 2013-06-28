@@ -47,11 +47,11 @@ function executeQueries()
       var newlines = results.replace( /\\n/g, '&#013;' );
       if ( data.error )
       {
-        $wrapper.after( "<span class='label label-important' title='" + newlines + "'>ERROR</span >" );
+        $wrapper.after( "<span class='query-info label label-important' title='" + newlines + "'>ERROR</span >" );
       }
       else
       {
-        $wrapper.after( "<span class='label label-success' title='" + newlines + "'>OK</span >" );
+        $wrapper.after( "<span class='query-info label label-success' title='" + newlines + "'>OK</span >" );
         var graphEl = ".graph" + ( index + 1 );
         $( graphEl ).each( function( i, el )
         {
