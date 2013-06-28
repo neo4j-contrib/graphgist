@@ -15,6 +15,7 @@
  * Cypher Console Adds live cypher console feature to a page.
  */
 
+//var CONSOLE_URL_BASE = "http://localhost:8080/";
 var CONSOLE_URL_BASE = "http://console-test.neo4j.org/";
 var CONSOLE_AJAX_ENDPOINT = CONSOLE_URL_BASE + "console/cypher";
 var CONSOLE_INIT_ENDPOINT = CONSOLE_URL_BASE + "console/init";
@@ -69,13 +70,13 @@ function initConsole()
 {
   $.ajax( {
     'type' : "POST",
+    'dataType' : "json",
     'url' : CONSOLE_INIT_ENDPOINT,
     'data' : JSON.stringify({init:"none",query:"none",message:"none","no_root":true}),
     'success' : function(data, textStatus, request){
-        console.log(data);
+        console.log("success",data.sessionId);
         if (!console_session) {
-            console_session = request.getResponseHeader("Set-Cookie").split(/;=/)[1]; // JSESSIONID=83478239;path=/;
-            console.log(request.getResponseHeader("Set-Cookie"));
+            console_session = data.sessionId; // 83478239;
             console.log(console_session);
         }
         console.log(data);
