@@ -74,7 +74,7 @@ function initConsole()
     'url' : CONSOLE_INIT_ENDPOINT,
     'data' : JSON.stringify({init:"none",query:"none",message:"none","no_root":true}),
     'success' : function(data, textStatus, request){
-        console.log("success",data.sessionId);
+        console.log("sessionid",data.sessionId);
         if (!console_session) {
             console_session = data.sessionId; // 83478239;
             console.log(console_session);
@@ -89,10 +89,12 @@ function initConsole()
 }
 function execute( statement, callback, error, endpoint )
 {
-  $.ajax( {
+    var url = (endpoint || CONSOLE_AJAX_ENDPOINT);// + ";jsessionid=" + console_session;
+    console.log("calling",url);
+    $.ajax( {
     'type' : "POST",
     'headers' : {},
-    'url' : endpoint || CONSOLE_AJAX_ENDPOINT,
+    'url' : url,
     'data' : statement,
     'success' : callback,
     'error' : error,
@@ -319,7 +321,7 @@ function createCypherConsole()
 
     if ( session !== undefined )
     {
-//      url += ";/JSESSIONID=" + session;
+      url += ";jsessionid=" + session;
     }
     url += "?";
     if ( database !== undefined )
