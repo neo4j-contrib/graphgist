@@ -1,18 +1,14 @@
 /**
- * Licensed to Neo Technology under one or more contributor license agreements.
- * See the NOTICE file distributed with this work for additional information
- * regarding copyright ownership. Neo Technology licenses this file to you under
- * the Apache License, Version 2.0 (the "License"); you may not use this file
- * except in compliance with the License. You may obtain a copy of the License
- * at
+ * Licensed to Neo Technology under one or more contributor license agreements. See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership. Neo Technology licenses this file to you under
+ * the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You
+ * may obtain a copy of the License at
  * 
  * http://www.apache.org/licenses/LICENSE-2.0
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
  */
 
 /*
@@ -23,7 +19,7 @@ var CONSOLE_URL_BASE = "http://console-test.neo4j.org/";
 var CONSOLE_AJAX_ENDPOINT = CONSOLE_URL_BASE + "console/cypher";
 var CONSOLE_INIT_ENDPOINT = CONSOLE_URL_BASE + "console/init";
 var $WRAPPER = $( '<div class="query-wrapper" />' );
-var $IFRAME = $( "<iframe/>" ).attr( "id", "cypherdoc-console" ).addClass( "cypherdoc-console" );
+var $IFRAME = $( "<iframe/>" ).attr( "id", "console" ).addClass( "cypherdoc-console" );
 var ASCIIDOCTOR_OPTIONS = Opal.hash2( [ 'attributes' ], {
   'attributes' : [ 'notitle!' ]
 } );
@@ -31,6 +27,7 @@ var DEFAULT_HASH = '#5880880';
 var console_session = null;
 
 $( window ).hashchange( renderPage );
+
 function executeQueries()
 {
   $( "div.query-wrapper" ).each( function( index, element )
@@ -78,6 +75,7 @@ function initConsole( )
         }
         console.log(data);
         executeQueries();
+        createCypherConsole();
     },
     'error' : console.log,
     'async' : true
@@ -98,10 +96,10 @@ function execute( statement, callback, error, endpoint )
 
 function sanitizeContents( content )
 {
-  var sanitized = content.replace( "\n// console\n", "[[console]]\n== Live Console ==\n++++\n<p class=\"cypherdoc-console\"\"></p>\n++++" );
+  var sanitized = content.replace( /^\/\/\s*?console/m, '++++\n<p class="console"></p>\n++++\n' );
   return sanitized.replace( /^\/\/\W*graph(.*)/gm, function( match, name )
   {
-    return "++++\n<div>Graph after Query " + name + "</div><div class=\"graph graph" + name + "\"></div>\n++++\n";
+    return '++++\n<div>Graph after Query ' + name + '</div><div class="graph graph' + name + '"></div>\n++++\n';
   } );
 }
 
@@ -128,9 +126,10 @@ function renderPage()
       var content = file.content;
       $( "#gist_link" ).attr( "href", data.html_url );
       content = sanitizeContents( content );
-      $( '#content' ).empty();
+      $content = $( '#content' );
+      $content.empty();
       var generatedHtml = Opal.Asciidoctor.$render( content, ASCIIDOCTOR_OPTIONS );
-      $( '#content' ).html( generatedHtml );
+      $content.html( generatedHtml );
       $( "code.cypher" ).each( function( index, el )
       {
         var number = ( index + 1 );
@@ -148,10 +147,20 @@ function renderPage()
       SyntaxHighlighter.defaults['gutter'] = false;
       SyntaxHighlighter.defaults['toolbar'] = false;
       SyntaxHighlighter.highlight();
+      // transform image links to images
+      $( 'a[href]', $content ).each( function()
+      {
+        var $link = $( this );
+        if ( $link.text() === this.href && this.href.length > 4 )
+        {
+          var ext = this.href.split( '.' ).pop();
+          if ( 'png|jpg|jpeg|svg'.indexOf( ext ) !== -1 )
+          {
+            $link.replaceWith( '<img src="' + this.href + '">' );
+          }
+        }
+      } );
       initConsole();
-
-//      executeQueries();
-//      createCypherConsole();
     },
     dataType : "json"
   } );
@@ -216,7 +225,7 @@ function d3graph( graph, svg )
 
 function createCypherConsole()
 {
-  $( 'p.cypherdoc-console' ).first().each( function()
+  $( 'p.console' ).first().each( function()
   {
     var context = $( this );
     var url = getUrl( "none", "none", "\n\nClick the play buttons to run the queries!",console_session);
@@ -227,7 +236,7 @@ function createCypherConsole()
     $( 'div.query-wrapper' ).append( button.clone().click( function()
     {
       var query = $( this ).parent().data( 'query' );
-      $( '#cypherdoc-console' )[0].contentWindow.postMessage( query, '*' );
+      $( '#console' )[0].contentWindow.postMessage( query, '*' );
     } ) );
     var offset = iframe.offset();
     if ( offset && offset.top )
