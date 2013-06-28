@@ -103,10 +103,24 @@ function sanitizeContents( content )
 {
   var sanitized = content.replace( /^\/\/\s*?console/m, '++++\n<p class="console"></p>\n++++\n' );
   sanitized = sanitized.replace( /^\/\/\s*?hide/gm, '++++\n<span class="hide-query"></span>\n++++\n' );
+  sanitized = sanitized.replace( /^\/\/\s*?setup/m, '++++\n<span id="setup-query"></span>\n++++\n' );
   return sanitized.replace( /^\/\/\W*graph(.*)/gm, function( match, name )
   {
     return '++++\n<div>Graph after Query ' + name + '</div><div class="graph graph' + name + '"></div>\n++++\n';
   } );
+}
+
+function findQuery( selector, context, operation )
+{
+  $( selector, context ).each(
+      function()
+      {
+        $( this ).nextAll( 'div.listingblock' ).children( 'div' ).children( 'pre.highlight' ).children( 'code.cypher' )
+            .first().each( function()
+            {
+              operation( this );
+            } );
+      } );
 }
 
 function renderPage()
@@ -136,15 +150,14 @@ function renderPage()
       $content.empty();
       var generatedHtml = Opal.Asciidoctor.$render( content, ASCIIDOCTOR_OPTIONS );
       $content.html( generatedHtml );
-      $( 'span.hide-query', $content ).each(
-          function()
-          {
-            $( this ).nextAll( 'div.listingblock' ).children( 'div' ).children( 'pre.highlight' ).children(
-                'code.cypher' ).first().each( function()
-            {
-              $( this.parentNode ).addClass( 'hide-query' );
-            } );
-          } );
+      findQuery( 'span.hide-query', $content, function( codeElement )
+      {
+        $( codeElement.parentNode ).addClass( 'hide-query' );
+      } );
+      findQuery( '#setup-query', $content, function( codeElement )
+      {
+        $( codeElement.parentNode ).addClass( 'setup-query' );
+      } );
       $( "code.cypher", $content ).each( function( index, el )
       {
         var number = ( index + 1 );
@@ -268,6 +281,10 @@ function createCypherConsole()
     var context = $( this );
     var url = getUrl( "none", "none", "\n\nClick the play buttons to run the queries!", console_session );
     var iframe = $IFRAME.clone().attr( "src", url );
+    iframe.load( function()
+    {
+      // console.log('iframe loaded');
+    } );
     context.append( iframe );
     context.height( iframe.height() );
     $( 'div.query-wrapper' ).parent().append( $PLAY_BUTTON.clone().click( function( event )
