@@ -65,7 +65,7 @@ function executeQueries()
   } );
 }
 
-function initConsole( )
+function initConsole()
 {
   $.ajax( {
     'type' : "POST",
@@ -102,6 +102,7 @@ function execute( statement, callback, error, endpoint )
 function sanitizeContents( content )
 {
   var sanitized = content.replace( /^\/\/\s*?console/m, '++++\n<p class="console"></p>\n++++\n' );
+  sanitized = sanitized.replace( /^\/\/\s*?hide/gm, '++++\n<span class="hide-query"></span>\n++++\n' );
   return sanitized.replace( /^\/\/\W*graph(.*)/gm, function( match, name )
   {
     return '++++\n<div>Graph after Query ' + name + '</div><div class="graph graph' + name + '"></div>\n++++\n';
@@ -135,14 +136,23 @@ function renderPage()
       $content.empty();
       var generatedHtml = Opal.Asciidoctor.$render( content, ASCIIDOCTOR_OPTIONS );
       $content.html( generatedHtml );
-      $( "code.cypher" ).each( function( index, el )
+      $( 'span.hide-query', $content ).each(
+          function()
+          {
+            $( this ).nextAll( 'div.listingblock' ).children( 'div' ).children( 'pre.highlight' ).children(
+                'code.cypher' ).first().each( function()
+            {
+              $( this.parentNode ).addClass( 'hide-query' );
+            } );
+          } );
+      $( "code.cypher", $content ).each( function( index, el )
       {
         var number = ( index + 1 );
         var $el = $( el );
         $el.attr( "class", "brush: cypher" );
         var $parent = $el.parent();
         $parent.prepend( "<h5>Query " + number + "</h5>" );
-        $el.wrap( $WRAPPER.clone() ).each( function()
+        $el.wrap( $WRAPPER ).each( function()
         {
           $el.parent().data( 'query', $el.text() );
         } );
@@ -155,16 +165,20 @@ function renderPage()
           if ( $icon.hasClass( COLLAPSE_ICON ) )
           {
             $queryWrapper.hide();
-            $icon.removeClass( COLLAPSE_ICON );
-            $icon.addClass( EXPAND_ICON );
+            $icon.removeClass( COLLAPSE_ICON ).addClass( EXPAND_ICON );
           }
           else
           {
             $queryWrapper.show();
-            $icon.removeClass( EXPAND_ICON );
-            $icon.addClass( COLLAPSE_ICON );
+            $icon.removeClass( EXPAND_ICON ).addClass( COLLAPSE_ICON );
           }
         } );
+        if ( $parent.hasClass( 'hide-query' ) )
+        {
+          var $wrapper = $button.prevAll( 'div.query-wrapper' ).first();
+          $wrapper.hide();
+          $( 'i', $button ).removeClass( COLLAPSE_ICON ).addClass( EXPAND_ICON );
+        }
       } );
       SyntaxHighlighter.config['tagName'] = 'code';
       SyntaxHighlighter.defaults['tab-size'] = 4;
@@ -252,7 +266,7 @@ function createCypherConsole()
   $( 'p.console' ).first().each( function()
   {
     var context = $( this );
-    var url = getUrl( "none", "none", "\n\nClick the play buttons to run the queries!",console_session);
+    var url = getUrl( "none", "none", "\n\nClick the play buttons to run the queries!", console_session );
     var iframe = $IFRAME.clone().attr( "src", url );
     context.append( iframe );
     context.height( iframe.height() );
@@ -287,7 +301,7 @@ function createCypherConsole()
 
     if ( session !== undefined )
     {
-        url += ";/JSESSIONID=" + session;
+      url += ";/JSESSIONID=" + session;
     }
     url += "?";
     if ( database !== undefined )
