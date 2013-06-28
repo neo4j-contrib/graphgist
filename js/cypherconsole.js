@@ -21,13 +21,14 @@
 
 var CONSOLE_URL_BASE = "http://console-test.neo4j.org/";
 var CONSOLE_AJAX_ENDPOINT = CONSOLE_URL_BASE + "console/cypher";
-var REQUEST_BASE = CONSOLE_URL_BASE + "?";
+var CONSOLE_INIT_ENDPOINT = CONSOLE_URL_BASE + "console/init";
 var $WRAPPER = $( '<div class="query-wrapper" />' );
 var $IFRAME = $( "<iframe/>" ).attr( "id", "cypherdoc-console" ).addClass( "cypherdoc-console" );
 var ASCIIDOCTOR_OPTIONS = Opal.hash2( [ 'attributes' ], {
   'attributes' : [ 'notitle!' ]
 } );
 var DEFAULT_HASH = '#5880880';
+var console_session = null;
 
 $( window ).hashchange( renderPage );
 function executeQueries()
@@ -62,10 +63,31 @@ function executeQueries()
   } );
 }
 
-function execute( statement, callback, error )
+function initConsole( )
 {
   $.ajax( {
     'type' : "POST",
+    'url' : CONSOLE_INIT_ENDPOINT,
+    'data' : JSON.stringify({init:"none",query:"none",message:"none","no_root":true}),
+    'success' : function(data, textStatus, request){
+        console.log(data);
+        if (!console_session) {
+            console_session = request.getResponseHeader("Set-Cookie").split(/;=/)[1]; // JSESSIONID=83478239;path=/;
+            console.log(request.getResponseHeader("Set-Cookie"));
+            console.log(console_session);
+        }
+        console.log(data);
+        executeQueries();
+    },
+    'error' : console.log,
+    'async' : true
+  } );
+}
+function execute( statement, callback, error, endpoint )
+{
+  $.ajax( {
+    'type' : "POST",
+    'headers' : console_session ? {Cookie:"JSESSIONID="+console_session} : {},
     'url' : CONSOLE_AJAX_ENDPOINT,
     'data' : statement,
     'success' : callback,
@@ -126,8 +148,10 @@ function renderPage()
       SyntaxHighlighter.defaults['gutter'] = false;
       SyntaxHighlighter.defaults['toolbar'] = false;
       SyntaxHighlighter.highlight();
-      executeQueries();
-      createCypherConsole();
+      initConsole();
+
+//      executeQueries();
+//      createCypherConsole();
     },
     dataType : "json"
   } );
@@ -195,7 +219,7 @@ function createCypherConsole()
   $( 'p.cypherdoc-console' ).first().each( function()
   {
     var context = $( this );
-    var url = getUrl( "none", "none", "\n\nClick the play buttons to run the queries!" );
+    var url = getUrl( "none", "none", "\n\nClick the play buttons to run the queries!",console_session);
     var iframe = $IFRAME.clone().attr( "src", url );
     context.append( iframe );
     context.height( iframe.height() );
@@ -224,9 +248,15 @@ function createCypherConsole()
     }
   } );
 
-  function getUrl( database, command, message )
+  function getUrl( database, command, message, session )
   {
-    var url = REQUEST_BASE;
+    var url = CONSOLE_URL_BASE;
+
+    if ( session !== undefined )
+    {
+        url += ";/JSESSIONID=" + session;
+    }
+    url += "?";
     if ( database !== undefined )
     {
       url += "init=" + encodeURIComponent( database );
