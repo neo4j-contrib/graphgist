@@ -25,7 +25,7 @@ var COLLAPSE_ICON = 'icon-collapse-top';
 var EXPAND_ICON = 'icon-expand';
 var $TOOGLE_BUTTON = $( '<span class="query-toggle" title="Show/Hide the query."><i class="' + COLLAPSE_ICON
     + ' icon-large"></i></span>' );
-var $PLAY_BUTTON = $( '<a class="run-query btn btn-primary" title="Execute the query." href="#"><i class="icon-play"></i></a>' );
+var $PLAY_BUTTON = $( '<a class="run-query btn btn-small btn-primary" title="Execute the query." href="#"><i class="icon-play"></i></a>' );
 var ASCIIDOCTOR_OPTIONS = Opal.hash2( [ 'attributes' ], {
   'attributes' : [ 'notitle!' ]
 } );
