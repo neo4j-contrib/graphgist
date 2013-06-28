@@ -91,8 +91,8 @@ function execute( statement, callback, error, endpoint )
 {
   $.ajax( {
     'type' : "POST",
-    'headers' : console_session ? {Cookie:"JSESSIONID="+console_session} : {},
-    'url' : CONSOLE_AJAX_ENDPOINT,
+    'headers' : {},
+    'url' : endpoint || CONSOLE_AJAX_ENDPOINT,
     'data' : statement,
     'success' : callback,
     'error' : error,
@@ -319,7 +319,7 @@ function createCypherConsole()
 
     if ( session !== undefined )
     {
-      url += ";/JSESSIONID=" + session;
+//      url += ";/JSESSIONID=" + session;
     }
     url += "?";
     if ( database !== undefined )
