@@ -19,13 +19,14 @@ var CONSOLE_URL_BASE = "http://console-test.neo4j.org/";
 var CONSOLE_AJAX_ENDPOINT = CONSOLE_URL_BASE + "console/cypher";
 var REQUEST_BASE = CONSOLE_URL_BASE + "?";
 var $WRAPPER = $( '<div class="query-wrapper" />' );
-var $IFRAME = $( "<iframe/>" ).attr( "id", "cypherdoc-console" ).addClass( "cypherdoc-console" );
+var $IFRAME = $( "<iframe/>" ).attr( "id", "console" ).addClass( "cypherdoc-console" );
 var ASCIIDOCTOR_OPTIONS = Opal.hash2( [ 'attributes' ], {
   'attributes' : [ 'notitle!' ]
 } );
 var DEFAULT_HASH = '#5880880';
 
 $( window ).hashchange( renderPage );
+
 function executeQueries()
 {
   $( "div.query-wrapper" ).each( function( index, element )
@@ -72,11 +73,10 @@ function execute( statement, callback, error )
 
 function sanitizeContents( content )
 {
-  var sanitized = content.replace( "\n// console\n",
-      "[[console]]\n== Live Console ==\n++++\n<p class=\"cypherdoc-console\"\"></p>\n++++" );
+  var sanitized = content.replace( /^\/\/\s*?console/m, '++++\n<p class="console"></p>\n++++\n' );
   return sanitized.replace( /^\/\/\W*graph(.*)/gm, function( match, name )
   {
-    return "++++\n<div>Graph after Query " + name + "</div><div class=\"graph graph" + name + "\"></div>\n++++\n";
+    return '++++\n<div>Graph after Query ' + name + '</div><div class="graph graph' + name + '"></div>\n++++\n';
   } );
 }
 
@@ -203,7 +203,7 @@ function d3graph( graph, svg )
 
 function createCypherConsole()
 {
-  $( 'p.cypherdoc-console' ).first().each( function()
+  $( 'p.console' ).first().each( function()
   {
     var context = $( this );
     var url = getUrl( "none", "none", "\n\nClick the play buttons to run the queries!" );
@@ -214,7 +214,7 @@ function createCypherConsole()
     $( 'div.query-wrapper' ).append( button.clone().click( function()
     {
       var query = $( this ).parent().data( 'query' );
-      $( '#cypherdoc-console' )[0].contentWindow.postMessage( query, '*' );
+      $( '#console' )[0].contentWindow.postMessage( query, '*' );
     } ) );
     var offset = iframe.offset();
     if ( offset && offset.top )
