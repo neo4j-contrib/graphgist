@@ -20,6 +20,11 @@ var CONSOLE_AJAX_ENDPOINT = CONSOLE_URL_BASE + "console/cypher";
 var CONSOLE_INIT_ENDPOINT = CONSOLE_URL_BASE + "console/init";
 var $WRAPPER = $( '<div class="query-wrapper" />' );
 var $IFRAME = $( "<iframe/>" ).attr( "id", "console" ).addClass( "cypherdoc-console" );
+var COLLAPSE_ICON = 'icon-collapse-top';
+var EXPAND_ICON = 'icon-expand';
+var $TOOGLE_BUTTON = $( '<span class="query-toggle" title="Show/Hide the query."><i class="' + COLLAPSE_ICON
+    + ' icon-large"></i></span>' );
+var $PLAY_BUTTON = $( '<a class="run-query btn btn-primary" title="Execute the query." href="#"><i class="icon-play"></i></a>' );
 var ASCIIDOCTOR_OPTIONS = Opal.hash2( [ 'attributes' ], {
   'attributes' : [ 'notitle!' ]
 } );
@@ -135,11 +140,30 @@ function renderPage()
         var number = ( index + 1 );
         var $el = $( el );
         $el.attr( "class", "brush: cypher" );
-        $parent = $el.parent();
+        var $parent = $el.parent();
         $parent.prepend( "<h5>Query " + number + "</h5>" );
         $el.wrap( $WRAPPER.clone() ).each( function()
         {
           $el.parent().data( 'query', $el.text() );
+        } );
+        var $button = $TOOGLE_BUTTON.clone();
+        $parent.append( $button );
+        $button.click( function()
+        {
+          var $icon = $( 'i', this );
+          var $queryWrapper = $icon.parent().prevAll( 'div.query-wrapper' ).first();
+          if ( $icon.hasClass( COLLAPSE_ICON ) )
+          {
+            $queryWrapper.hide();
+            $icon.removeClass( COLLAPSE_ICON );
+            $icon.addClass( EXPAND_ICON );
+          }
+          else
+          {
+            $queryWrapper.show();
+            $icon.removeClass( EXPAND_ICON );
+            $icon.addClass( COLLAPSE_ICON );
+          }
         } );
       } );
       SyntaxHighlighter.config['tagName'] = 'code';
@@ -232,10 +256,10 @@ function createCypherConsole()
     var iframe = $IFRAME.clone().attr( "src", url );
     context.append( iframe );
     context.height( iframe.height() );
-    var button = $( '<button class="run-query" title="Execute query"><i class="icon-play"></i> </button>' );
-    $( 'div.query-wrapper' ).append( button.clone().click( function()
+    $( 'div.query-wrapper' ).parent().append( $PLAY_BUTTON.clone().click( function( event )
     {
-      var query = $( this ).parent().data( 'query' );
+      event.preventDefault();
+      var query = $( this ).prevAll( 'div.query-wrapper' ).first().data( 'query' );
       $( '#console' )[0].contentWindow.postMessage( query, '*' );
     } ) );
     var offset = iframe.offset();

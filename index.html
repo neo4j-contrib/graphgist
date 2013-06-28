@@ -1,11 +1,11 @@
 <html>
 <!-- style -->
 
-<link href="http://docs.neo4j.org/chunked/snapshot/css/shCore.css" rel="stylesheet" type="text/css"/>
-<link href="http://docs.neo4j.org/chunked/snapshot/css/shCoreEclipse.css" rel="stylesheet" type="text/css"/>
-<link href="http://docs.neo4j.org/chunked/snapshot/css/shThemeEclipse.css" rel="stylesheet" type="text/css"/>
-<link href="http://docs.neo4j.org/chunked/snapshot/css/neo.css" rel="stylesheet" type="text/css"/>
-<link href="http://docs.neo4j.org/chunked/snapshot/css/neo-asciidoc.css" rel="stylesheet" type="text/css"/>
+<link href="http://docs.neo4j.org/chunked/snapshot/css/shCore.css" rel="stylesheet" type="text/css" />
+<link href="http://docs.neo4j.org/chunked/snapshot/css/shCoreEclipse.css" rel="stylesheet" type="text/css" />
+<link href="http://docs.neo4j.org/chunked/snapshot/css/shThemeEclipse.css" rel="stylesheet" type="text/css" />
+<link href="http://docs.neo4j.org/chunked/snapshot/css/neo.css" rel="stylesheet" type="text/css" />
+<link href="http://docs.neo4j.org/chunked/snapshot/css/neo-asciidoc.css" rel="stylesheet" type="text/css" />
 
 <script src="js/opal.js"></script>
 <script src="js/asciidoctor.js"></script>
@@ -13,12 +13,11 @@
 <script src="js/jquery.ba-hashchange.min.js"></script>
 <script src="http://d3js.org/d3.v3.min.js"></script>
 
-<!--bootstrap-->
+<!-- Bootstrap -->
 <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
 <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
 
 <!-- Syntax Highlighter -->
-
 <script type="text/javascript" src="http://docs.neo4j.org/chunked/snapshot/js/shCore.js"></script>
 <script type="text/javascript" src="http://docs.neo4j.org/chunked/snapshot/js/shBrushJScript.js"></script>
 <script type="text/javascript" src="http://docs.neo4j.org/chunked/snapshot/js/shBrushCypher.js"></script>
@@ -27,44 +26,66 @@
 <script src="js/cypherconsole.js"></script>
 
 <style>
-    .node {
-        stroke: #fff;
-        stroke-width: 1.5px;
-    }
+.node {
+  stroke: #fff;
+  stroke-width: 1.5px;
+}
 
-    .link {
-        stroke: #999;
-        stroke-opacity: .6;
-    }
+.link {
+  stroke: #999;
+  stroke-opacity: .6;
+}
 
-    .graph {
-        border-style: solid;
-        border-width: 1px;
-    }
+.graph {
+  border-style: solid;
+  border-width: 1px;
+}
 
-    html {
-        background: none;
-    }
+html {
+  background: none;
+}
 
-    html body {
-        background: none;
-    }
+html body {
+  background: none;
+}
 
+pre.highlight {
+  position: relative;
+}
+
+span.query-toggle {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 12px;
+}
+
+a.run-query {
+  position: absolute;
+  bottom: 9.5px;
+  right: 9.5px;
+}
 </style>
 
 <body>
 
-<div class="navbar  navbar-inverse">
+  <div class="navbar  navbar-inverse">
     <div class="navbar-inner">
-        <a class="brand" href="http://neo4j.org" target="_blank"> <img style="height: 50px"
-                                                                       src="http://assets.neo4j.org/new/img/logo-white.svg"></a><h2><a href="http://gist.neo4j.org">Neo4j Graph Gists</a></h2>
-        <a class="" href=" http://stackoverflow.com/search?q=neo4j" target="_blank">Neo4j SO Questions</a>
+      <a class="brand" href="http://neo4j.org" target="_blank"> <img style="height: 50px"
+        src="http://assets.neo4j.org/new/img/logo-white.svg"></a>
+      <h2>
+        <a href="http://gist.neo4j.org">Neo4j Graph Gists</a>
+      </h2>
+      <a class="" href=" http://stackoverflow.com/search?q=neo4j" target="_blank">Neo4j SO Questions</a>
     </div>
-    <a class="btn btn-success" id="gist_link" href="" target="_blank" style="font-size: 16px;"><i class="icon-github"></i> Improve/Change this GraphGist ...</a>
-</div>
-<div id="content">
-    <img alt="loading" src="ico/loading.gif" style="margin:5em;">
-</div>
-<footer><a href="https://github.com/neo4j-contrib/graphgist">The GraphGist project on GitHub</a></footer>
+    <a class="btn btn-success" id="gist_link" href="" target="_blank" style="font-size: 16px;"><i
+      class="icon-github"></i> Improve/Change this GraphGist ...</a>
+  </div>
+  <div id="content">
+    <img alt="loading" src="ico/loading.gif" style="margin: 5em;">
+  </div>
+  <footer>
+    <a href="https://github.com/neo4j-contrib/graphgist">The GraphGist project on GitHub</a>
+  </footer>
 </body>
 </html>
