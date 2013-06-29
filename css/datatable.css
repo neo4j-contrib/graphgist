@@ -1,0 +1,85 @@
+table {
+/*
+    clear: both;
+*/
+    color: black;
+    border: 1px dashed black;
+    /*max-width: 75%;*/
+    /*min-width: 50%;*/
+/*
+    padding: 5px;
+    min-width: 50%;
+*/
+}
+thead {
+/*    border-bottom: 2px dashed white;*/
+}
+
+th, td {
+/*    border-right: 2px dashed white;*/
+    padding: 5px;
+}
+
+th {
+/*    border-bottom: 2px dashed white;*/
+}
+.odd {
+    background: lightgray;
+}
+
+.dataTables_wrapper {
+    display: inline-block;
+    max-width: 75%;
+    min-width: 50%;
+    z-index: 100;
+}
+
+.dataTables_length {
+    float: left;
+}
+.dataTables_filter {
+    text-align: right;
+}
+.dataTables_info {
+    float: left;
+    margin: 3px;
+}
+
+.dataTables_paginate {
+    margin: 3px;
+    text-align: right;
+}
+.paging_two_button {
+
+}
+.paginate_disabled_previous, .paginate_disabled_next {
+    display: none;
+    padding: 3px;
+}
+.paginate_enabled_previous, .paginate_enabled_next {
+    padding: 3px;
+    color: #090
+}
+
+.css_right {
+    float: right;
+}
+.sorting_asc {
+	background: url('../images/sort_asc.png') no-repeat center right;
+}
+
+.sorting_desc {
+	background: url('../images/sort_desc.png') no-repeat center right;
+}
+
+.sorting {
+	background: url('../images/sort_both.png') no-repeat center right;
+}
+
+.sorting_asc_disabled {
+	background: url('../images/sort_asc_disabled.png') no-repeat center right;
+}
+
+.sorting_desc_disabled {
+	background: url('../images/sort_desc_disabled.png') no-repeat center right;
+}
