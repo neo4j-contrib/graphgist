@@ -1,0 +1,78 @@
+= The Neo4j GraphGist Console =
+
+This is a sample GraphGist explaining some of the base concepts of sharing graphs using http://docs.neo4j.org/chunked/milestone/cypher-query-lang.html[the Cypher query language].
+
+
+// The following is a placeholder for a Cypher console.
+
+//console
+
+[source,cypher]
+----
+CREATE ({name:'you'})-[:SEE]->({name:'This GraphGist'})-[:FORK_ON_GITHUB]->(your_gistfile{name:'Your Gist'})
+CREATE (your_gistfile)-[:INSERT_ID_HERE]->({name:'Your GraphGist'})
+----
+
+== How can I do this? ==
+
+Try forking and editing http://gist.neo4j.org/#5861321[A very simple GraphGist] to get started.
+
+Other interesting GraphGists:
+
+* http://gist.neo4j.org/#5878518[Money Laundering]
+
+This document is a GraphGist, see https://gist.github.com/nawroth/5880880[This Gist] for the source of this Gist, or click on the Navigation Bar Item.
+
+== The Rules ==
+
+* GraphGists are shared via Github, and referenced by their Gist ID, e.g. the Github Gist https://gist.github.com/nawroth/5880880 can be referred to as the Graph Gist http://gist.neo4j.org/#5880880.
+* Everything is valid http://asciidoctor.org/docs/asciidoc-quick-reference/[AsciiDoc syntax], with some magic comments thrown in for extra fun.
+* Cypher queries are added as source blocks, use +[source,cypher]+ as the denominator.
+* All cypher statements are executed against a live, empty Neo4j database in the order they appear. The data is retained between the queries.
+* You can request a live console by using the comment tag +// console+
+* You can request a graph visualization referring to the graph after the corresponding query number, e.g. +// graph1+ will insert the visualization of the graph after the first query block is run.
+
+== An example Gist ==
+
+Below see the markup for some examples.
+
+//a cypher query, getting the number 2
+
+//setup
+[source,cypher]
+----
+CREATE (n{name:'first node'});
+----
+
+Some more text after the first Query, using an external image, 
+
+http://chinwag.com/files/logos/events/2221/neo4j_logo.png
+
+Now, let's insert the visualization for the second query.
+
+//The following is a placeholder for the graph visualisation for query 2.
+
+//graph2
+
+//  hide
+[source,cypher]
+----
+CREATE (movie:Movie { title:"Matrix", year: 1999 })
+CREATE (movie)<-[:ACTED_IN { role:"Neo" }]-(:Actor { name:"Keanu Reeves", age: 48 })
+CREATE (movie)<-[:DIRECTED]-(:Director { name:"Wachowski" }),
+  (movie)<-[:RATED { stars: 5 }]-(:User { login:"Michael" })
+RETURN movie;
+----
+
+Let's do it for the above query, too.
+
+//graph3
+
+A non-working query: 
+
+[source,cypher]
+----
+CREATE (movie:Movie RETURN 1;
+----
+
+//graph4
