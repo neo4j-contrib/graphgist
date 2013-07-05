@@ -46,7 +46,7 @@ CREATE (n{name:'first node'});
 
 Some more text after the first Query, using an external image, 
 
-http://chinwag.com/files/logos/events/2221/neo4j_logo.png
+image::http://chinwag.com/files/logos/events/2221/neo4j_logo.png["logo"]
 
 Now, let's insert the visualization for the second query.
 

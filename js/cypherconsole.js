@@ -13,8 +13,8 @@
 
 'use strict';
 
-//var CONSOLE_URL_BASE = 'http://localhost:8080/';
-var CONSOLE_URL_BASE = 'http://console-test.neo4j.org/';
+var CONSOLE_URL_BASE = 'http://localhost:8080/';
+// var CONSOLE_URL_BASE = 'http://console-test.neo4j.org/';
 var CONSOLE_AJAX_ENDPOINT = CONSOLE_URL_BASE + 'console/cypher';
 var CONSOLE_INIT_ENDPOINT = CONSOLE_URL_BASE + 'console/init';
 var $WRAPPER = $( '<div class="query-wrapper" />' );
@@ -173,7 +173,7 @@ function execute( statement, callback, error, endpoint )
   } );
 }
 
-function sanitizeContents( content )
+function preProcessContents( content )
 {
   var sanitized = content.replace( /^\/\/\s*?console/m, '++++\n<p class="console"></p>\n++++\n' );
   sanitized = sanitized.replace( /^\/\/\s*?hide/gm, '++++\n<span class="hide-query"></span>\n++++\n' );
@@ -253,7 +253,7 @@ function fetchLocalSnippet( id, success, error )
 function renderContent( originalContent, link )
 {
   $( '#gist_link' ).attr( 'href', link );
-  var doc = sanitizeContents( originalContent );
+  var doc = preProcessContents( originalContent );
   $content.empty();
   var generatedHtml = undefined;
   try
