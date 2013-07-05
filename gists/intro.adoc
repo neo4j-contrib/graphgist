@@ -38,6 +38,7 @@ Below see the markup for some examples.
 
 //a cypher query, getting the number 2
 
+//output
 //setup
 [source,cypher]
 ----

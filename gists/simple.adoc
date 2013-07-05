@@ -1,0 +1,49 @@
+= The simplest GraphGist
+
+This http://neo4j.org[Neo4j] GrgaphGist shows the basics of using http://asciidoctor.org/docs/asciidoc-writers-guide/[AsciiDoctor] syntax and a few additions for GraphGists, namely +//console+ for a live console, and +//table1+, +//graph1+ and +//output1+ comment elements to visualize queries with the corresponding number. 
+
+Click on the upper navbar to see the source for this Gist.
+
+== Show a live query console
+
+
++//console+
+
+becomes 
+
+//console
+
+== Use +[source,cypher]+ source blocks to define a http://docs.neo4j.org/chunked/snapshot/cypher-query-lang.html[Cypher] query
+
+------
+[source,cypher]
+----
+CREATE (n{name:'cypher'})-[:LIKES]->({name:'icecream'}) return n.name, ID(n) as id
+----
+------
+
+becomes
+
+// output
+
+[source,cypher]
+----
+CREATE (n{name:'cypher'})-[:LIKES]->({name:'icecream'}) return n.name, ID(n) as id
+----
+
+== Show a graph visualization for the results from Query 1
+
++//graph+
+
+becomes 
+
+//graph
+
+== Show a result table for Query 1
+
++//table1+
+
+becomes
+
+//table1   
+

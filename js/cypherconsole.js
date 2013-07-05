@@ -55,6 +55,7 @@ function executeQueries()
   {
     var $wrapper = $( element );
     $wrapper.data( 'number', index + 1 );
+    var showOutput = $wrapper.parent().data( 'show-output' );
     var statement = $wrapper.data( 'query' );
     execute( statement, function( results )
     {
@@ -65,22 +66,10 @@ function executeQueries()
       }
       else
       {
-        createQueryResultButton( $QUERY_OK_BUTTON, $wrapper, data.result, true );
+        createQueryResultButton( $QUERY_OK_BUTTON, $wrapper, data.result, !showOutput );
 
         var viz = data['visualization'];
         $wrapper.data( 'visualization', viz );
-        // var graphEl = '.graph' + ( index + 1 );
-        // $( graphEl ).each( function( i, el )
-        // {
-        // d3graph( el, viz );
-        // } );
-
-        var resultEl = '.output' + ( index + 1 );
-        $( resultEl ).each( function( i, el )
-        {
-          var result = data.result;
-          $( el ).append( '<pre>' + result + '</pre>' );
-        } );
 
         var tableEl = '.resulttable' + ( index + 1 );
         $( tableEl ).each( function( i, el )
@@ -103,7 +92,11 @@ function createQueryResultButton( $buttonType, $wrapper, message, hide )
   var $message = $QUERY_MESSAGE.clone().text( replaceNewlines( message ) );
   if ( hide )
   {
-    $message.hide();
+    toggler( $message, $button, 'hide' );
+  }
+  else
+  {
+    toggler( $message, $button, 'show' );
   }
   $button.click( function()
   {
@@ -199,13 +192,10 @@ function preProcessContents( content )
   sanitized = sanitized.replace( /^\/\/\s*?hide/gm, '++++\n<span class="hide-query"></span>\n++++\n' );
   sanitized = sanitized.replace( /^\/\/\s*?setup/m, '++++\n<span id="setup-query"></span>\n++++\n' );
   sanitized = sanitized.replace( /^\/\/\s*?graph.*/gm, '++++\n<h5 class="graph-visualization"></h5>\n++++\n' );
+  sanitized = sanitized.replace( /^\/\/\s*?output.*/gm, '++++\n<span class="query-output"></span>\n++++\n' );
   sanitized = sanitized.replace( /^\/\/\W*table(.*)/gm, function( match, name )
   {
     return '++++\n<h5>Results from Query ' + name + '</h5><div class="resulttable' + name + '"></div>\n++++\n';
-  } );
-  sanitized = sanitized.replace( /^\/\/\W*output(.*)/gm, function( match, name )
-  {
-    return '++++\n<h5>Raw output from Query ' + name + '</h5><div class="output' + name + '"></div>\n++++\n';
   } );
   return sanitized;
 }
@@ -334,12 +324,16 @@ function postProcessPage()
   {
     $( codeElement.parentNode ).addClass( 'setup-query' );
   } );
+  findQuery( 'span.query-output', $content, function( codeElement )
+  {
+    $( codeElement.parentNode ).data( 'show-output', true );
+  } );
   $( 'code.cypher', $content ).each( function( index, el )
   {
     var number = ( index + 1 );
     var $el = $( el );
-    $el.attr( 'class', 'brush: cypher' );
     var $parent = $el.parent();
+    $el.attr( 'class', 'brush: cypher' );
     $parent.prepend( '<h5>Query ' + number + '</h5>' );
     $el.wrap( $WRAPPER ).each( function()
     {
@@ -436,11 +430,17 @@ function createCypherConsole()
     {
       $( '#content pre.highlight.setup-query' ).first().children( 'div.query-wrapper' ).first().each( function()
       {
-        var query = $( this ).data( 'query' );
+        var $wrapper = $( this );
+        var query = $wrapper.data( 'query' );
         if ( query )
         {
           executeInConsole( query );
         }
+        $wrapper.prevAll( 'h5' ).first().each( function()
+        {
+          var $heading = $( this );
+          $heading.text( $heading.text() + ' — this query has been used to initialize the console' );
+        } );
       } );
     } );
     context.append( iframe );
