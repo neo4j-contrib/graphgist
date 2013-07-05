@@ -50,9 +50,9 @@ image::http://chinwag.com/files/logos/events/2221/neo4j_logo.png["logo"]
 
 Now, let's insert the visualization for the second query.
 
-//The following is a placeholder for the graph visualisation for query 2.
+//The following is a placeholder for the graph visualization for query 2.
 
-//graph2
+//graph
 
 //  hide
 [source,cypher]
@@ -66,7 +66,7 @@ RETURN movie;
 
 Let's do it for the above query, too.
 
-//graph3
+//graph
 
 A non-working query: 
 
@@ -75,4 +75,4 @@ A non-working query:
 CREATE (movie:Movie RETURN 1;
 ----
 
-//graph4
+//graph

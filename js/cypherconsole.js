@@ -29,6 +29,7 @@ var $QUERY_OK_BUTTON = $( '<a class="query-info btn btn-small btn-success" title
 var $QUERY_ERROR_BUTTON = $( '<a class="query-info btn btn-small btn-danger" title="Click to show/hide results">ERROR <i class="icon-large '
     + COLLAPSE_ICON + '"></i></a >' );
 var $QUERY_MESSAGE = $( '<pre/>' ).addClass( 'query-message' );
+var $VISUALIZATION = $( '<pre/>' ).addClass( 'visualization' );
 var ASCIIDOCTOR_OPTIONS = Opal.hash2( [ 'attributes' ], {
   'attributes' : [ 'notitle!' ]
 } );
@@ -53,6 +54,7 @@ function executeQueries()
   $( 'div.query-wrapper' ).each( function( index, element )
   {
     var $wrapper = $( element );
+    $wrapper.data( 'number', index + 1 );
     var statement = $wrapper.data( 'query' );
     execute( statement, function( results )
     {
@@ -67,12 +69,11 @@ function executeQueries()
 
         var viz = data['visualization'];
         $wrapper.data( 'visualization', viz );
-        var graphEl = '.graph' + ( index + 1 );
-        $( graphEl ).each( function( i, el )
-        {
-          var svg = d3.select( el ).append( 'svg' );
-          d3graph( viz, svg );
-        } );
+        // var graphEl = '.graph' + ( index + 1 );
+        // $( graphEl ).each( function( i, el )
+        // {
+        // d3graph( el, viz );
+        // } );
 
         var resultEl = '.output' + ( index + 1 );
         $( resultEl ).each( function( i, el )
@@ -152,6 +153,7 @@ function initConsole()
       // console.log( data );
       executeQueries();
       createCypherConsole();
+      renderGraphs();
     },
     'error' : console.log,
     'async' : true
@@ -173,15 +175,30 @@ function execute( statement, callback, error, endpoint )
   } );
 }
 
+function renderGraphs()
+{
+  findPreviousQueryWrapper( 'h5.graph-visualization', $content, function( $heading, $wrapper )
+  {
+    var visualization = $wrapper.data( 'visualization' );
+    $heading.text( 'The graph after query ' + $wrapper.data( 'number' ) );
+    var $visContainer = $VISUALIZATION.clone().appendTo( $heading );
+    if ( visualization )
+    {
+      d3graph( $visContainer[0], visualization );
+    }
+    else
+    {
+      $visContainer.text( 'There is no graph to render.' ).addClass( 'alert-error' );
+    }
+  } );
+}
+
 function preProcessContents( content )
 {
   var sanitized = content.replace( /^\/\/\s*?console/m, '++++\n<p class="console"></p>\n++++\n' );
   sanitized = sanitized.replace( /^\/\/\s*?hide/gm, '++++\n<span class="hide-query"></span>\n++++\n' );
   sanitized = sanitized.replace( /^\/\/\s*?setup/m, '++++\n<span id="setup-query"></span>\n++++\n' );
-  sanitized = sanitized.replace( /^\/\/\W*graph(.*)/gm, function( match, name )
-  {
-    return '++++\n<h5>Graph after Query ' + name + '</h5><div class="graph graph' + name + '"></div>\n++++\n';
-  } );
+  sanitized = sanitized.replace( /^\/\/\s*?graph.*/gm, '++++\n<h5 class="graph-visualization"></h5>\n++++\n' );
   sanitized = sanitized.replace( /^\/\/\W*table(.*)/gm, function( match, name )
   {
     return '++++\n<h5>Results from Query ' + name + '</h5><div class="resulttable' + name + '"></div>\n++++\n';
@@ -203,6 +220,20 @@ function findQuery( selector, context, operation )
             {
               operation( this );
             } );
+      } );
+}
+
+function findPreviousQueryWrapper( selector, context, operation )
+{
+  $( selector, context ).each(
+      function()
+      {
+        var $selected = $( this );
+        $selected.prevAll( 'div.listingblock' ).children( 'div' ).children( 'pre.highlight' ).children(
+            'div.query-wrapper' ).first().each( function()
+        {
+          operation( $selected, $( this ) );
+        } );
       } );
 }
 
@@ -339,23 +370,11 @@ function postProcessPage()
   SyntaxHighlighter.defaults['gutter'] = false;
   SyntaxHighlighter.defaults['toolbar'] = false;
   SyntaxHighlighter.highlight();
-  // transform image links to images
-  $( 'a[href]', $content ).each( function()
-  {
-    var $link = $( this );
-    if ( $link.text() === this.href && this.href.length > 4 )
-    {
-      var ext = this.href.split( '.' ).pop();
-      if ( 'png|jpg|jpeg|svg'.indexOf( ext ) !== -1 )
-      {
-        $link.replaceWith( '<img src="' + this.href + '">' );
-      }
-    }
-  } );
 }
 
-function d3graph( graph, svg )
+function d3graph( element, graph )
 {
+  var svg = d3.select( element ).append( 'svg' );
   var width = 500, height = 200;
   svg.attr( 'width', width ).attr( 'height', height );
   var color = d3.scale.category20();
