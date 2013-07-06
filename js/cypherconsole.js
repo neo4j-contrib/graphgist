@@ -13,6 +13,8 @@
 
 'use strict';
 
+jQuery.fn.reverse = [].reverse;
+
 var CONSOLE_URL_BASE = 'http://localhost:8080/';
 // var CONSOLE_URL_BASE = 'http://console-test.neo4j.org/';
 var CONSOLE_AJAX_ENDPOINT = CONSOLE_URL_BASE + 'console/cypher';
@@ -44,230 +46,26 @@ $( document ).ready( function()
   renderPage();
 } );
 
-function replaceNewlines( str )
+function renderPage()
 {
-  return str.replace( /\\n/g, '&#013;' );
-}
-
-function executeQueries()
-{
-  $( 'div.query-wrapper' ).each( function( index, element )
+  var id = window.location.search;
+  if ( id.length < 2 )
   {
-    var $wrapper = $( element );
-    $wrapper.data( 'number', index + 1 );
-    var showOutput = $wrapper.parent().data( 'show-output' );
-    var statement = $wrapper.data( 'query' );
-    execute( statement, function( results )
-    {
-      var data = JSON.parse( results );
-      if ( data.error )
-      {
-        createQueryResultButton( $QUERY_ERROR_BUTTON, $wrapper, data.error, false );
-      }
-      else
-      {
-        createQueryResultButton( $QUERY_OK_BUTTON, $wrapper, data.result, !showOutput );
-
-        var viz = data['visualization'];
-        $wrapper.data( 'visualization', viz );
-
-        var tableEl = '.resulttable' + ( index + 1 );
-        $( tableEl ).each( function( i, el )
-        {
-          // console.log( data );
-          renderResult( el, data );
-        } );
-      }
-    }, function( results )
-    {
-      console.log( 'Execution error', arguments );
-    } );
-  } );
-}
-
-function createQueryResultButton( $buttonType, $wrapper, message, hide )
-{
-  var $button = $buttonType.clone();
-  $wrapper.after( $button );
-  var $message = $QUERY_MESSAGE.clone().text( replaceNewlines( message ) );
-  if ( hide )
-  {
-    toggler( $message, $button, 'hide' );
+    id = DEFAULT_SOURCE;
   }
   else
   {
-    toggler( $message, $button, 'show' );
+    id = id.substr( 1 );
   }
-  $button.click( function()
+  var fetcher = fetchGithubGist;
+  if ( id.length > 4 && id.substr( 0, 4 ) === 'neo-' )
   {
-    toggler( $message, $button );
-  } );
-  $wrapper.after( $message );
-}
-
-function toggler( $target, button, action )
-{
-  var $icon = $( 'i', button );
-  var stateIsExpanded = $icon.hasClass( COLLAPSE_ICON );
-  if ( ( action && action === 'hide' ) || ( action === undefined && stateIsExpanded ) )
-  {
-    $target.hide();
-    $icon.removeClass( COLLAPSE_ICON ).addClass( EXPAND_ICON );
-    return 'hide';
+    fetcher = fetchLocalSnippet;
+    id = id.substr( 4 );
   }
-  else
+  fetcher( id, renderContent, function( message )
   {
-    $target.show();
-    $icon.removeClass( EXPAND_ICON ).addClass( COLLAPSE_ICON );
-    return 'show';
-  }
-}
-
-function initConsole()
-{
-  $.ajax( {
-    'type' : 'POST',
-    'dataType' : 'json',
-    'url' : CONSOLE_INIT_ENDPOINT,
-    'data' : JSON.stringify( {
-      'init' : 'none',
-      'query' : 'none',
-      'message' : 'none',
-      'no_root' : true
-    } ),
-    'success' : function( data, textStatus, request )
-    {
-      // console.log( 'sessionid', data.sessionId );
-      if ( !console_session )
-      {
-        console_session = data.sessionId; // 83478239;
-        // console.log( console_session );
-      }
-      // console.log( data );
-      executeQueries();
-      createCypherConsole();
-      renderGraphs();
-    },
-    'error' : console.log,
-    'async' : true
-  } );
-}
-
-function execute( statement, callback, error, endpoint )
-{
-  var url = ( endpoint || CONSOLE_AJAX_ENDPOINT );// + ';jsessionid=' + console_session;
-  // console.log( 'calling', url );
-  $.ajax( {
-    'type' : 'POST',
-    'headers' : {},
-    'url' : url,
-    'data' : statement,
-    'success' : callback,
-    'error' : error,
-    'async' : false
-  } );
-}
-
-function renderGraphs()
-{
-  findPreviousQueryWrapper( 'h5.graph-visualization', $content, function( $heading, $wrapper )
-  {
-    var visualization = $wrapper.data( 'visualization' );
-    $heading.text( 'The graph after query ' + $wrapper.data( 'number' ) );
-    var $visContainer = $VISUALIZATION.clone().appendTo( $heading );
-    if ( visualization )
-    {
-      d3graph( $visContainer[0], visualization );
-    }
-    else
-    {
-      $visContainer.text( 'There is no graph to render.' ).addClass( 'alert-error' );
-    }
-  } );
-}
-
-function preProcessContents( content )
-{
-  var sanitized = content.replace( /^\/\/\s*?console/m, '++++\n<p class="console"></p>\n++++\n' );
-  sanitized = sanitized.replace( /^\/\/\s*?hide/gm, '++++\n<span class="hide-query"></span>\n++++\n' );
-  sanitized = sanitized.replace( /^\/\/\s*?setup/m, '++++\n<span id="setup-query"></span>\n++++\n' );
-  sanitized = sanitized.replace( /^\/\/\s*?graph.*/gm, '++++\n<h5 class="graph-visualization"></h5>\n++++\n' );
-  sanitized = sanitized.replace( /^\/\/\s*?output.*/gm, '++++\n<span class="query-output"></span>\n++++\n' );
-  sanitized = sanitized.replace( /^\/\/\W*table(.*)/gm, function( match, name )
-  {
-    return '++++\n<h5>Results from Query ' + name + '</h5><div class="resulttable' + name + '"></div>\n++++\n';
-  } );
-  return sanitized;
-}
-
-function findQuery( selector, context, operation )
-{
-  $( selector, context ).each(
-      function()
-      {
-        $( this ).nextAll( 'div.listingblock' ).children( 'div' ).children( 'pre.highlight' ).children( 'code.cypher' )
-            .first().each( function()
-            {
-              operation( this );
-            } );
-      } );
-}
-
-function findPreviousQueryWrapper( selector, context, operation )
-{
-  $( selector, context ).each(
-      function()
-      {
-        var $selected = $( this );
-        $selected.prevAll( 'div.listingblock' ).children( 'div' ).children( 'pre.highlight' ).children(
-            'div.query-wrapper' ).first().each( function()
-        {
-          operation( $selected, $( this ) );
-        } );
-      } );
-}
-
-function fetchGithubGist( gist, success, error )
-{
-  if ( !VALID_GIST.test( gist ) )
-  {
-    error( 'The gist id is malformed: ' + gist );
-    return;
-  }
-
-  var url = 'https://api.github.com/gists/' + gist;
-  $.ajax( {
-    'url' : url,
-    'success' : function( data )
-    {
-      var file = data.files[Object.keys( data.files )[0]];
-      var content = file.content;
-      var link = data.html_url;
-      success( content, link );
-    },
-    'dataType' : 'json',
-    'error' : function( xhr, status, errorMessage )
-    {
-      error( errorMessage );
-    }
-  } );
-}
-
-function fetchLocalSnippet( id, success, error )
-{
-  var url = './gists/' + id + '.adoc';
-  $.ajax( {
-    'url' : url,
-    'success' : function( data )
-    {
-      var link = 'https://github.com/neo4j-contrib/graphgist/tree/master/gists/' + id + '.adoc';
-      success( data, link );
-    },
-    'dataType' : 'text',
-    'error' : function( xhr, status, errorMessage )
-    {
-      error( errorMessage );
-    }
+    errorMessage( message, id );
   } );
 }
 
@@ -291,27 +89,18 @@ function renderContent( originalContent, link )
   initConsole();
 }
 
-function renderPage()
+function preProcessContents( content )
 {
-  var id = window.location.search;
-  if ( id.length < 2 )
+  var sanitized = content.replace( /^\/\/\s*?console/m, '++++\n<p class="console"></p>\n++++\n' );
+  sanitized = sanitized.replace( /^\/\/\s*?hide/gm, '++++\n<span class="hide-query"></span>\n++++\n' );
+  sanitized = sanitized.replace( /^\/\/\s*?setup/m, '++++\n<span id="setup-query"></span>\n++++\n' );
+  sanitized = sanitized.replace( /^\/\/\s*?graph.*/gm, '++++\n<h5 class="graph-visualization"></h5>\n++++\n' );
+  sanitized = sanitized.replace( /^\/\/\s*?output.*/gm, '++++\n<span class="query-output"></span>\n++++\n' );
+  sanitized = sanitized.replace( /^\/\/\W*table(.*)/gm, function( match, name )
   {
-    id = DEFAULT_SOURCE;
-  }
-  else
-  {
-    id = id.substr( 1 );
-  }
-  var fetcher = fetchGithubGist;
-  if ( id.length > 4 && id.substr( 0, 4 ) === 'neo-' )
-  {
-    fetcher = fetchLocalSnippet;
-    id = id.substr( 4 );
-  }
-  fetcher( id, renderContent, function( message )
-  {
-    errorMessage( message, id );
+    return '++++\n<h5>Results from Query ' + name + '</h5><div class="resulttable' + name + '"></div>\n++++\n';
   } );
+  return sanitized;
 }
 
 function postProcessPage()
@@ -366,56 +155,87 @@ function postProcessPage()
   SyntaxHighlighter.highlight();
 }
 
-function d3graph( element, graph )
+function initConsole()
 {
-  var svg = d3.select( element ).append( 'svg' );
-  var width = 500, height = 200;
-  svg.attr( 'width', width ).attr( 'height', height );
-  var color = d3.scale.category20();
-
-  var force = d3.layout.force().charge( -120 ).linkDistance( 10 ).size( [ width, height ] );
-  force.nodes( graph.nodes ).links( graph.links ).start();
-
-  var link = svg.selectAll( '.link' ).data( graph.links ).enter().append( 'line' ).attr( 'class', 'link' ).style(
-      'stroke-width', function( d )
+  $.ajax( {
+    'type' : 'POST',
+    'dataType' : 'json',
+    'url' : CONSOLE_INIT_ENDPOINT,
+    'data' : JSON.stringify( {
+      'init' : 'none',
+      'query' : 'none',
+      'message' : 'none',
+      'no_root' : true
+    } ),
+    'success' : function( data, textStatus, request )
+    {
+      // console.log( 'sessionid', data.sessionId );
+      if ( !console_session )
       {
-        return Math.sqrt( d.value );
-      } );
-
-  var node = svg.selectAll( '.node' ).data( graph.nodes ).enter().append( 'circle' ).attr( 'class', 'node' ).attr( 'r',
-      5 ).style( 'fill', function( d )
-  {
-    return color( d.group );
-  } ).call( force.drag );
-
-  node.append( 'title' ).text( function( d )
-  {
-    return d.name;
+        console_session = data.sessionId; // 83478239;
+        // console.log( console_session );
+      }
+      // console.log( data );
+      executeQueries();
+      createCypherConsole();
+      renderGraphs();
+    },
+    'error' : console.log,
+    'async' : true
   } );
+}
 
-  force.on( 'tick', function()
+function executeQueries()
+{
+  $( 'div.query-wrapper' ).each( function( index, element )
   {
-    link.attr( 'x1', function( d )
+    var $wrapper = $( element );
+    $wrapper.data( 'number', index + 1 );
+    var showOutput = $wrapper.parent().data( 'show-output' );
+    var statement = $wrapper.data( 'query' );
+    execute( statement, function( results )
     {
-      return d.source.x;
-    } ).attr( 'y1', function( d )
-    {
-      return d.source.y;
-    } ).attr( 'x2', function( d )
-    {
-      return d.target.x;
-    } ).attr( 'y2', function( d )
-    {
-      return d.target.y;
-    } );
+      var data = JSON.parse( results );
+      if ( data.error )
+      {
+        createQueryResultButton( $QUERY_ERROR_BUTTON, $wrapper, data.error, false );
+      }
+      else
+      {
+        createQueryResultButton( $QUERY_OK_BUTTON, $wrapper, data.result, !showOutput );
 
-    node.attr( 'cx', function( d )
+        var viz = data['visualization'];
+        $wrapper.data( 'visualization', viz );
+
+        var tableEl = '.resulttable' + ( index + 1 );
+        $( tableEl ).each( function( i, el )
+        {
+          // console.log( data );
+          renderResult( el, data );
+        } );
+      }
+    }, function( results )
     {
-      return d.x;
-    } ).attr( 'cy', function( d )
-    {
-      return d.y;
+      console.log( 'Execution error', arguments );
     } );
+  } );
+}
+
+function renderGraphs()
+{
+  findPreviousQueryWrapper( 'h5.graph-visualization', $content, function( $heading, $wrapper )
+  {
+    var visualization = $wrapper.data( 'visualization' );
+    $heading.text( 'The graph after query ' + $wrapper.data( 'number' ) );
+    var $visContainer = $VISUALIZATION.clone().appendTo( $heading );
+    if ( visualization )
+    {
+      d3graph( $visContainer[0], visualization );
+    }
+    else
+    {
+      $visContainer.text( 'There is no graph to render.' ).addClass( 'alert-error' );
+    }
   } );
 }
 
@@ -504,6 +324,166 @@ function createCypherConsole()
   }
 }
 
+function replaceNewlines( str )
+{
+  return str.replace( /\\n/g, '&#013;' );
+}
+
+function createQueryResultButton( $buttonType, $wrapper, message, hide )
+{
+  var $button = $buttonType.clone();
+  $wrapper.after( $button );
+  var $message = $QUERY_MESSAGE.clone().text( replaceNewlines( message ) );
+  if ( hide )
+  {
+    toggler( $message, $button, 'hide' );
+  }
+  else
+  {
+    toggler( $message, $button, 'show' );
+  }
+  $button.click( function()
+  {
+    toggler( $message, $button );
+  } );
+  $wrapper.after( $message );
+}
+
+function toggler( $target, button, action )
+{
+  var $icon = $( 'i', button );
+  var stateIsExpanded = $icon.hasClass( COLLAPSE_ICON );
+  if ( ( action && action === 'hide' ) || ( action === undefined && stateIsExpanded ) )
+  {
+    $target.hide();
+    $icon.removeClass( COLLAPSE_ICON ).addClass( EXPAND_ICON );
+    return 'hide';
+  }
+  else
+  {
+    $target.show();
+    $icon.removeClass( EXPAND_ICON ).addClass( COLLAPSE_ICON );
+    return 'show';
+  }
+}
+
+function execute( statement, callback, error, endpoint )
+{
+  var url = ( endpoint || CONSOLE_AJAX_ENDPOINT );// + ';jsessionid=' + console_session;
+  // console.log( 'calling', url );
+  $.ajax( {
+    'type' : 'POST',
+    'headers' : {},
+    'url' : url,
+    'data' : statement,
+    'success' : callback,
+    'error' : error,
+    'async' : false
+  } );
+}
+
+function findQuery( selector, context, operation )
+{
+  $( selector, context ).each(
+      function()
+      {
+        $( this ).nextAll( 'div.listingblock' ).children( 'div' ).children( 'pre.highlight' ).children( 'code.cypher' )
+            .first().each( function()
+            {
+              operation( this );
+            } );
+      } );
+}
+
+function findPreviousQueryWrapper( selector, context, operation )
+{
+  $( selector, context ).each( function()
+  {
+    var $selected = $( this );
+    findPreviousQueryWrapperSearch( $selected, $selected, operation );
+  } );
+}
+
+function findPreviousQueryWrapperSearch( $container, $selected, operation )
+{
+  var done = false;
+  done = findQueryWrapper( $container, $selected, operation );
+  if ( done )
+  {
+    return true;
+  }
+  var $newContainer = $container.prev();
+  if ( $newContainer.length > 0 )
+  {
+    return findPreviousQueryWrapperSearch( $newContainer, $selected, operation );
+  }
+  else
+  {
+    var $up = $container.parent();
+    done = $up.length === 0 || $up.prop( 'tagName' ).toUpperCase() === 'BODY';
+    if ( !done )
+    {
+      return findPreviousQueryWrapperSearch( $up, $selected, operation );
+    }
+  }
+  return done;
+}
+
+function findQueryWrapper( $container, $selected, operation )
+{
+  var done = false;
+  $container.find( 'div.query-wrapper' ).last().each( function()
+  {
+    operation( $selected, $( this ) );
+    done = true;
+  } );
+  return done;
+}
+
+function fetchGithubGist( gist, success, error )
+{
+  if ( !VALID_GIST.test( gist ) )
+  {
+    error( 'The gist id is malformed: ' + gist );
+    return;
+  }
+
+  var url = 'https://api.github.com/gists/' + gist;
+  $.ajax( {
+    'url' : url,
+    'success' : function( data )
+    {
+      var file = data.files[Object.keys( data.files )[0]];
+      var content = file.content;
+      var link = data.html_url;
+      success( content, link );
+    },
+    'dataType' : 'json',
+    'error' : function( xhr, status, errorMessage )
+    {
+      error( errorMessage );
+    }
+  } );
+}
+
+function fetchLocalSnippet( id, success, error )
+{
+  var url = './gists/' + id + '.adoc';
+  $.ajax( {
+    'url' : url,
+    'success' : function( data )
+    {
+      var link = 'https://github.com/neo4j-contrib/graphgist/tree/master/gists/' + id + '.adoc';
+      success( data, link );
+    },
+    'dataType' : 'text',
+    'error' : function( xhr, status, errorMessage )
+    {
+      error( errorMessage );
+    }
+  } );
+}
+
 function errorMessage( message, gist )
 {
   var messageText;
@@ -517,4 +497,57 @@ function errorMessage( message, gist )
   }
 
   $content.html( '<div class="alert alert-block alert-error"><h4>Error</h4>' + messageText + '</div>' );
+}
+
+function d3graph( element, graph )
+{
+  var svg = d3.select( element ).append( 'svg' );
+  var width = 500, height = 200;
+  svg.attr( 'width', width ).attr( 'height', height );
+  var color = d3.scale.category20();
+
+  var force = d3.layout.force().charge( -120 ).linkDistance( 10 ).size( [ width, height ] );
+  force.nodes( graph.nodes ).links( graph.links ).start();
+
+  var link = svg.selectAll( '.link' ).data( graph.links ).enter().append( 'line' ).attr( 'class', 'link' ).style(
+      'stroke-width', function( d )
+      {
+        return Math.sqrt( d.value );
+      } );
+
+  var node = svg.selectAll( '.node' ).data( graph.nodes ).enter().append( 'circle' ).attr( 'class', 'node' ).attr( 'r',
+      5 ).style( 'fill', function( d )
+  {
+    return color( d.group );
+  } ).call( force.drag );
+
+  node.append( 'title' ).text( function( d )
+  {
+    return d.name;
+  } );
+
+  force.on( 'tick', function()
+  {
+    link.attr( 'x1', function( d )
+    {
+      return d.source.x;
+    } ).attr( 'y1', function( d )
+    {
+      return d.source.y;
+    } ).attr( 'x2', function( d )
+    {
+      return d.target.x;
+    } ).attr( 'y2', function( d )
+    {
+      return d.target.y;
+    } );
+
+    node.attr( 'cx', function( d )
+    {
+      return d.x;
+    } ).attr( 'cy', function( d )
+    {
+      return d.y;
+    } );
+  } );
 }
