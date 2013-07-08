@@ -13,10 +13,8 @@
 
 'use strict';
 
-jQuery.fn.reverse = [].reverse;
-
-var CONSOLE_URL_BASE = 'http://localhost:8080/';
-// var CONSOLE_URL_BASE = 'http://console-test.neo4j.org/';
+// var CONSOLE_URL_BASE = 'http://localhost:8080/';
+var CONSOLE_URL_BASE = 'http://console-test.neo4j.org/';
 var CONSOLE_AJAX_ENDPOINT = CONSOLE_URL_BASE + 'console/cypher';
 var CONSOLE_INIT_ENDPOINT = CONSOLE_URL_BASE + 'console/init';
 var $WRAPPER = $( '<div class="query-wrapper" />' );
@@ -32,9 +30,8 @@ var $QUERY_ERROR_BUTTON = $( '<a class="query-info btn btn-small btn-danger" tit
     + COLLAPSE_ICON + '"></i></a >' );
 var $QUERY_MESSAGE = $( '<pre/>' ).addClass( 'query-message' );
 var $VISUALIZATION = $( '<pre/>' ).addClass( 'visualization' );
-var ASCIIDOCTOR_OPTIONS = Opal.hash2( [ 'attributes' ], {
-  'attributes' : [ 'notitle!' ]
-} );
+var $TABLE = $( '<div/>' ).addClass( 'result-table' );
+var ASCIIDOCTOR_OPTIONS = Opal.hash( 'attributes', [ 'notitle!' ] );
 var DEFAULT_SOURCE = 'neo-intro';
 var VALID_GIST = /^[0-9a-f]{5,32}$/;
 var console_session = null;
@@ -96,10 +93,7 @@ function preProcessContents( content )
   sanitized = sanitized.replace( /^\/\/\s*?setup/m, '++++\n<span id="setup-query"></span>\n++++\n' );
   sanitized = sanitized.replace( /^\/\/\s*?graph.*/gm, '++++\n<h5 class="graph-visualization"></h5>\n++++\n' );
   sanitized = sanitized.replace( /^\/\/\s*?output.*/gm, '++++\n<span class="query-output"></span>\n++++\n' );
-  sanitized = sanitized.replace( /^\/\/\W*table(.*)/gm, function( match, name )
-  {
-    return '++++\n<h5>Results from Query ' + name + '</h5><div class="resulttable' + name + '"></div>\n++++\n';
-  } );
+  sanitized = sanitized.replace( /^\/\/\s*?table.*/gm, '++++\n<h5 class="result-table"></h5>\n++++\n' );
   return sanitized;
 }
 
@@ -153,6 +147,7 @@ function postProcessPage()
   SyntaxHighlighter.defaults['gutter'] = false;
   SyntaxHighlighter.defaults['toolbar'] = false;
   SyntaxHighlighter.highlight();
+  $( 'table' ).addClass( 'table' );
 }
 
 function initConsole()
@@ -179,6 +174,7 @@ function initConsole()
       executeQueries();
       createCypherConsole();
       renderGraphs();
+      renderTables();
     },
     'error' : console.log,
     'async' : true
@@ -204,15 +200,8 @@ function executeQueries()
       {
         createQueryResultButton( $QUERY_OK_BUTTON, $wrapper, data.result, !showOutput );
 
-        var viz = data['visualization'];
-        $wrapper.data( 'visualization', viz );
-
-        var tableEl = '.resulttable' + ( index + 1 );
-        $( tableEl ).each( function( i, el )
-        {
-          // console.log( data );
-          renderResult( el, data );
-        } );
+        $wrapper.data( 'visualization', data['visualization'] );
+        $wrapper.data( 'data', data );
       }
     }, function( results )
     {
@@ -236,6 +225,18 @@ function renderGraphs()
     {
       $visContainer.text( 'There is no graph to render.' ).addClass( 'alert-error' );
     }
+  } );
+}
+
+function renderTables()
+{
+  findPreviousQueryWrapper( 'h5.result-table', $content, function( $heading, $wrapper )
+  {
+    $heading.text( 'The results of query ' + $wrapper.data( 'number' ) );
+    var $tableContainer = $TABLE.clone().appendTo( $heading );
+    renderTable( $tableContainer, $wrapper.data( 'data' ) );
+    // TODO
+    // $tableContainer.text( "Couldn't render the result table." ).addClass( 'alert-error' );
   } );
 }
 

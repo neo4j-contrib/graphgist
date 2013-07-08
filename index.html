@@ -4,32 +4,30 @@
 
 <title>Neo4j Graph Gist</title>
 
-<!-- style -->
-<link href="http://docs.neo4j.org/chunked/snapshot/css/shCore.css" rel="stylesheet" type="text/css" />
-<link href="http://docs.neo4j.org/chunked/snapshot/css/shCoreEclipse.css" rel="stylesheet" type="text/css" />
-<link href="http://docs.neo4j.org/chunked/snapshot/css/shThemeEclipse.css" rel="stylesheet" type="text/css" />
-<link href="http://docs.neo4j.org/chunked/snapshot/css/neo.css" rel="stylesheet" type="text/css" />
-<link href="http://docs.neo4j.org/chunked/snapshot/css/neo-asciidoc.css" rel="stylesheet" type="text/css" />
-
 <script src="js/opal.js"></script>
 <script src="js/asciidoctor.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
-<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.2.2/d3.v3.min.js"></script>
 
 <!-- Bootstrap -->
 <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
 <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+<link href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
+
+<link href="css/datatable.css" rel="stylesheet">
+<script src="js/jquery.dataTables.min.js"></script>
+<script src="js/cypher.datatable.js"></script>
+<script src="js/cypherconsole.js"></script>
 
 <!-- Syntax Highlighter -->
 <script type="text/javascript" src="http://docs.neo4j.org/chunked/snapshot/js/shCore.js"></script>
 <script type="text/javascript" src="http://docs.neo4j.org/chunked/snapshot/js/shBrushJScript.js"></script>
 <script type="text/javascript" src="http://docs.neo4j.org/chunked/snapshot/js/shBrushCypher.js"></script>
-<link href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
 
-<link href="css/datatable.css" rel="stylesheet">
-<script src="js/jquery.dataTables.min.js"></script>
-<script src="js/cypherconsole.js"></script>
-<script src="js/cypher.datatable.js"></script>
+<!-- style -->
+<link href="http://docs.neo4j.org/chunked/snapshot/css/shCore.css" rel="stylesheet" type="text/css" />
+<link href="http://docs.neo4j.org/chunked/snapshot/css/shCoreEclipse.css" rel="stylesheet" type="text/css" />
+<link href="http://docs.neo4j.org/chunked/snapshot/css/shThemeEclipse.css" rel="stylesheet" type="text/css" />
 
 <link rel="icon" href="favicon.ico" />
 <link rel="shortcut icon" href="favicon.ico" />
@@ -50,12 +48,13 @@
   border-width: 1px;
 }
 
-html {
+html,html body {
   background: none;
 }
 
-html body {
-  background: none;
+#content {
+  max-width: 60em;
+  margin: 0 auto;
 }
 
 pre.highlight {
@@ -91,9 +90,33 @@ a.run-query {
   {
   background-color: transparent !important;
 }
+
+#console,p.console {
+  height: 23em;
+}
+
+#console {
+  width: 80em;
+  height: 23em;
+  display: block;
+  left: 0;
+  top: 0;
+  width: 99.7%;
+  z-index: 1000;
+}
+
+p.console {
+  margin-bottom: 3.5em;
+}
+
+p.console {
+  background-color: #eeeeee;
+}
+
+span.query-toggle {
+  cursor: pointer;
+}
 </style>
-
-
 
 <body>
   <div class="navbar">

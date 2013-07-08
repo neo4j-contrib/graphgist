@@ -1,49 +1,83 @@
-= The simplest GraphGist
+= How to create a GraphGist
 
-This http://neo4j.org[Neo4j] GrgaphGist shows the basics of using http://asciidoctor.org/docs/asciidoc-writers-guide/[AsciiDoctor] syntax and a few additions for GraphGists, namely +//console+ for a live console, and +//table1+, +//graph1+ and +//output1+ comment elements to visualize queries with the corresponding number. 
+This GraphGist shows the basics of using http://asciidoctor.org/docs/asciidoc-quick-reference/[AsciiDoctor] syntax and a few additions for GraphGists.
+The additions are entered as comments on their own line.
+They are:  +//console+ for a query console; +//hide+, +//setup+ and +//output+ to configure a query; +//graph+ and +//table+ to visualize queries and show a result table.
 
-Click on the upper navbar to see the source for this Gist.
+Click on the Page Source button in the menu to see the source for this GraphGist.
+Read below to get the full details.
 
-== Show a live query console
-
+== Include a query console
 
 +//console+
 
-becomes 
+becomes:
 
 //console
 
-== Use +[source,cypher]+ source blocks to define a http://docs.neo4j.org/chunked/snapshot/cypher-query-lang.html[Cypher] query
+NOTE: The page layout will work best when the console precedes the first query.
+
+== Define a http://docs.neo4j.org/chunked/snapshot/cypher-query-lang.html[Cypher] query
 
 ------
 [source,cypher]
 ----
-CREATE (n{name:'cypher'})-[:LIKES]->({name:'icecream'}) return n.name, ID(n) as id
+CREATE (n{name:'cypher'})-[:LIKES]->({name:'icecream'}) return n.name
 ----
 ------
 
-becomes
-
-// output
+becomes:
 
 [source,cypher]
 ----
-CREATE (n{name:'cypher'})-[:LIKES]->({name:'icecream'}) return n.name, ID(n) as id
+CREATE (n{name:'cypher'})-[:LIKES]->({name:'icecream'}) return n.name
 ----
 
-== Show a graph visualization for the results from Query 1
+Queries are executed in the order they appear on the page during processing, so make sure they work in that order.
+Each query has a green or red button to indicate if the query was successful or not.
+The console is set up after the executions, with an empty database.
+
+There's three additional settings you can use for queries.
+They all go as comments, on their own lines, before the query.
+The settings are:
+
+[width="50%",cols="1m,5"]
+|===
+| hide | Hide the query. The reader can still expand it to see it.
+  Useful for long queries like setting up initial data.
+| setup | Initialize the console with this query.
+| output | Show the output from the query.
+  The output is always there, but this option makes it visible at page load for this query.
+|===
+
+Let's try all the settings together, which means this query will be used to initialize the console, it will be hidden, and the raw output will be shown:
+
+//hide
+//setup
+//output
+[source,cypher]
+----
+CREATE (n{name:'cypher'})-[:LIKES]->({name:'icecream'}) return n.name
+----
+
+
+== Show a graph visualization
+
+The visualization is based on the database contents after the preceding query in the page.
 
 +//graph+
 
-becomes 
+becomes:
 
 //graph
 
-== Show a result table for Query 1
+== Show a result table for a query
 
-+//table1+
+This will show a result table for the preceding query.
 
-becomes
++//table+
 
-//table1   
+becomes:
+
+//table
 

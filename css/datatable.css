@@ -1,9 +1,9 @@
-table {
+table.dataTable  {
 /*
     clear: both;
 */
     color: black;
-    border: 1px dashed black;
+    border: 1px solid #bbbbbb;
     /*max-width: 75%;*/
     /*min-width: 50%;*/
 /*
@@ -11,19 +11,19 @@ table {
     min-width: 50%;
 */
 }
-thead {
+table.dataTable thead {
 /*    border-bottom: 2px dashed white;*/
 }
 
-th, td {
+table.dataTable th, .dataTable td {
 /*    border-right: 2px dashed white;*/
     padding: 5px;
 }
 
-th {
+table.dataTable th {
 /*    border-bottom: 2px dashed white;*/
 }
-.odd {
+table.dataTable .odd {
     background: lightgray;
 }
 
@@ -61,7 +61,7 @@ th {
     color: #090
 }
 
-.css_right {
+table.dataTable .css_right {
     float: right;
 }
 .sorting_asc {
