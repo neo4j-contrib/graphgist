@@ -17,12 +17,13 @@ GraphGist( jQuery );
 
 function GraphGist( $ )
 {
-  //var CONSOLE_URL_BASE = 'http://localhost:8080/';
+  // var CONSOLE_URL_BASE = 'http://localhost:8080/';
   var CONSOLE_URL_BASE = 'http://console-test.neo4j.org/';
   var CONSOLE_AJAX_ENDPOINT = CONSOLE_URL_BASE + 'console/cypher';
   var CONSOLE_INIT_ENDPOINT = CONSOLE_URL_BASE + 'console/init';
   var $WRAPPER = $( '<div class="query-wrapper" />' );
   var $IFRAME = $( '<iframe/>' ).attr( 'id', 'console' ).addClass( 'cypherdoc-console' );
+  var $IFRAME_WRAPPER = $( '<div/>' ).attr( 'id', 'console-wrapper' );
   var COLLAPSE_ICON = 'icon-collapse-top';
   var EXPAND_ICON = 'icon-expand';
   var $TOOGLE_BUTTON = $( '<span class="query-toggle" title="Show/Hide the query."><i class="' + COLLAPSE_ICON
@@ -96,8 +97,10 @@ function GraphGist( $ )
 
   function preProcessContents( content )
   {
-    var sanitized = content.replace( /^\/\/\s*?console/m,
-        '++++\n<p class="console"><span class="loading"><i class="icon-cogs"></i> Running queries, preparing the console!</span></p>\n++++\n' );
+    var sanitized = content
+        .replace(
+            /^\/\/\s*?console/m,
+            '++++\n<p class="console"><span class="loading"><i class="icon-cogs"></i> Running queries, preparing the console!</span></p>\n++++\n' );
     sanitized = sanitized.replace( /^\/\/\s*?hide/gm, '++++\n<span class="hide-query"></span>\n++++\n' );
     sanitized = sanitized.replace( /^\/\/\s*?setup/m, '++++\n<span id="setup-query"></span>\n++++\n' );
     sanitized = sanitized.replace( /^\/\/\s*?graph.*/gm, '++++\n<h5 class="graph-visualization"></h5>\n++++\n' );
@@ -274,8 +277,10 @@ function GraphGist( $ )
         } );
       } );
       $context.empty();
-      $context.append( $iframe );
-      $context.height( $iframe.height() );
+      var $iframeWrapper = $IFRAME_WRAPPER.clone();
+      $iframeWrapper.append( $iframe );
+      $context.append( $iframeWrapper );
+      $context.height( $iframeWrapper.height() );
       $context.css( 'background', 'none' );
       $( 'div.query-wrapper' ).parent().append( $PLAY_BUTTON.clone().click( function( event )
       {
@@ -283,7 +288,7 @@ function GraphGist( $ )
         var query = $( this ).prevAll( 'div.query-wrapper' ).first().data( 'query' );
         executeInConsole( query );
       } ) );
-      var offset = $iframe.offset();
+      var offset = $iframeWrapper.offset();
       if ( offset && offset.top )
       {
         var limit = offset.top;
@@ -292,11 +297,11 @@ function GraphGist( $ )
         {
           if ( $window.scrollTop() > limit )
           {
-            $iframe.css( 'position', 'fixed' );
+            $iframeWrapper.css( 'position', 'fixed' );
           }
           else
           {
-            $iframe.css( 'position', 'static' );
+            $iframeWrapper.css( 'position', 'static' );
           }
         } );
       }
