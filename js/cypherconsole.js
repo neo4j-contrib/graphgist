@@ -293,6 +293,11 @@ function GraphGist( $ )
       {
         var limit = offset.top;
         var $window = $( window );
+        if ( $window.scrollTop() > limit )
+        {
+          // in case the page is already scrolled-down.
+          $iframeWrapper.css( 'position', 'fixed' );
+        }
         $window.scroll( function()
         {
           if ( $window.scrollTop() > limit )
