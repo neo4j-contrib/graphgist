@@ -50,10 +50,6 @@ function GraphGist( $ )
     $gistId = $( '#gist-id' );
     renderPage();
     $gistId.keydown( readSourceId );
-    /*@cc_on @*/
-    /*@
-    $content.addClass( 'internet-explorer' );
-    @*/
   } );
 
   function renderPage()
