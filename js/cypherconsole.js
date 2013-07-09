@@ -50,6 +50,10 @@ function GraphGist( $ )
     $gistId = $( '#gist-id' );
     renderPage();
     $gistId.keydown( readSourceId );
+    if ( /* @cc_on!@ */false )
+    {
+      $content.addClass( 'internet-explorer' );
+    }
   } );
 
   function renderPage()
@@ -296,17 +300,17 @@ function GraphGist( $ )
         if ( $window.scrollTop() > limit )
         {
           // in case the page is already scrolled-down.
-          $iframeWrapper.css( 'position', 'fixed' );
+          $iframeWrapper.addClass( 'fixed-console' );
         }
         $window.scroll( function()
         {
           if ( $window.scrollTop() > limit )
           {
-            $iframeWrapper.css( 'position', 'fixed' );
+            $iframeWrapper.addClass( 'fixed-console' );
           }
           else
           {
-            $iframeWrapper.css( 'position', 'static' );
+            $iframeWrapper.removeClass( 'fixed-console' );
           }
         } );
       }
