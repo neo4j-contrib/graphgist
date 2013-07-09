@@ -104,7 +104,6 @@ a.run-query {
 }
 
 #console {
-  width: 80em;
   height: 23em;
   display: block;
   left: 0;
@@ -114,11 +113,16 @@ a.run-query {
 }
 
 p.console {
-  margin-bottom: 3.5em;
+  margin-bottom: 3.5em;  
+  background: #eeeeee url('images/loading.gif') no-repeat center center;
 }
 
-p.console {
-  background-color: #eeeeee;
+p.console>span.loading {
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+  padding: 4em 0 0 0;
+  text-align: center;
 }
 
 span.query-toggle {
@@ -129,6 +133,14 @@ span.query-toggle {
   width: 20em;
 }
 </style>
+
+<!--[if IE]>
+<style>
+#console {
+  width: 98%;
+}
+</style>
+<![endif]-->
 
 <body>
   <div class="navbar">

@@ -96,7 +96,8 @@ function GraphGist( $ )
 
   function preProcessContents( content )
   {
-    var sanitized = content.replace( /^\/\/\s*?console/m, '++++\n<p class="console"></p>\n++++\n' );
+    var sanitized = content.replace( /^\/\/\s*?console/m,
+        '++++\n<p class="console"><span class="loading"><i class="icon-cogs"></i> Running queries, preparing the console!</span></p>\n++++\n' );
     sanitized = sanitized.replace( /^\/\/\s*?hide/gm, '++++\n<span class="hide-query"></span>\n++++\n' );
     sanitized = sanitized.replace( /^\/\/\s*?setup/m, '++++\n<span id="setup-query"></span>\n++++\n' );
     sanitized = sanitized.replace( /^\/\/\s*?graph.*/gm, '++++\n<h5 class="graph-visualization"></h5>\n++++\n' );
@@ -252,10 +253,10 @@ function GraphGist( $ )
   {
     $( 'p.console' ).first().each( function()
     {
-      var context = $( this );
+      var $context = $( this );
       var url = getUrl( 'none', 'none', '\n\nClick the play buttons to run the queries!', console_session );
-      var iframe = $IFRAME.clone().attr( 'src', url );
-      iframe.load( function()
+      var $iframe = $IFRAME.clone().attr( 'src', url );
+      $iframe.load( function()
       {
         $( '#content pre.highlight.setup-query' ).first().children( 'div.query-wrapper' ).first().each( function()
         {
@@ -272,15 +273,17 @@ function GraphGist( $ )
           } );
         } );
       } );
-      context.append( iframe );
-      context.height( iframe.height() );
+      $context.empty();
+      $context.append( $iframe );
+      $context.height( $iframe.height() );
+      $context.css( 'background', 'none' );
       $( 'div.query-wrapper' ).parent().append( $PLAY_BUTTON.clone().click( function( event )
       {
         event.preventDefault();
         var query = $( this ).prevAll( 'div.query-wrapper' ).first().data( 'query' );
         executeInConsole( query );
       } ) );
-      var offset = iframe.offset();
+      var offset = $iframe.offset();
       if ( offset && offset.top )
       {
         var limit = offset.top;
@@ -289,11 +292,11 @@ function GraphGist( $ )
         {
           if ( $window.scrollTop() > limit )
           {
-            iframe.css( 'position', 'fixed' );
+            $iframe.css( 'position', 'fixed' );
           }
           else
           {
-            iframe.css( 'position', 'static' );
+            $iframe.css( 'position', 'static' );
           }
         } );
       }
@@ -514,7 +517,7 @@ function GraphGist( $ )
       window.location.assign( '?' + gist );
     }
   }
-  
+
   function errorMessage( message, gist )
   {
     var messageText;
