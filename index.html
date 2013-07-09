@@ -57,6 +57,14 @@ html,html body {
   margin: 0 auto;
 }
 
+footer {
+  max-width: 60em;
+  margin: 2em auto 0.5em auto;
+  padding: 0.25em;
+  border-top: 1px solid #cccccc;
+  text-align: right;
+}
+
 pre.highlight {
   position: relative;
   padding-bottom: 28px;
@@ -116,6 +124,10 @@ p.console {
 span.query-toggle {
   cursor: pointer;
 }
+
+#gist-id {
+  width: 20em;
+}
 </style>
 
 <body>
@@ -133,18 +145,16 @@ span.query-toggle {
       <a class="btn btn-small btn-success" id="gist_link" href="" target="_blank" style="">
         <i class="icon-github"></i> Page Source @ GitHub
       </a>
-      <!-- 
       <form class="navbar-form pull-right">
-        <input type="text" class="span2" id="id-input" placeholder="Gist id or URL">
+        <input type="text" class="span2" id="gist-id" placeholder="Gist URL or id">
       </form>
-       -->
     </div>
   </div>
   <div id="content">
     <img alt="loading" src="images/loading.gif" style="margin: 5em;">
   </div>
   <footer>
-    <a href="https://github.com/neo4j-contrib/graphgist">The GraphGist project on GitHub</a>
+    <i class="icon-github-sign"></i> The GraphGist project is on <a href="https://github.com/neo4j-contrib/graphgist">GitHub</a>
   </footer>
 </body>
 </html>
