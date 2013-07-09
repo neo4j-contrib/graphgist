@@ -50,7 +50,7 @@ function GraphGist( $ )
     $gistId = $( '#gist-id' );
     renderPage();
     $gistId.keydown( readSourceId );
-    if ( /* @cc_on!@ */false )
+    if ( /*@cc_on!@*/false )
     {
       $content.addClass( 'internet-explorer' );
     }
