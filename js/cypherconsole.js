@@ -17,8 +17,8 @@ GraphGist( jQuery );
 
 function GraphGist( $ )
 {
-  // var CONSOLE_URL_BASE = 'http://localhost:8080/';
-  var CONSOLE_URL_BASE = 'http://console-test.neo4j.org/';
+  var CONSOLE_URL_BASE = 'http://localhost:8080/';
+  // var CONSOLE_URL_BASE = 'http://console-test.neo4j.org/';
   var CONSOLE_AJAX_ENDPOINT = CONSOLE_URL_BASE + 'console/cypher';
   var CONSOLE_INIT_ENDPOINT = CONSOLE_URL_BASE + 'console/init';
   var $WRAPPER = $( '<div class="query-wrapper" />' );
@@ -168,6 +168,9 @@ function GraphGist( $ )
       'type' : 'POST',
       'dataType' : 'json',
       'url' : CONSOLE_INIT_ENDPOINT,
+      'xhrFields': {
+          'withCredentials': true
+       },
       'data' : JSON.stringify( {
         'init' : 'none',
         'query' : 'none',
@@ -394,8 +397,11 @@ function GraphGist( $ )
     var url = ( endpoint || CONSOLE_AJAX_ENDPOINT );// + ';jsessionid=' + console_session;
     // console.log( 'calling', url );
     $.ajax( {
+      'xhrFields': {
+          'withCredentials': true
+       },
       'type' : 'POST',
-      'headers' : {},
+      // 'headers' : {},
       'url' : url,
       'data' : statement,
       'success' : callback,
@@ -533,7 +539,7 @@ function GraphGist( $ )
     var messageText;
     if ( gist )
     {
-      messageText = 'Somethng went wrong fetching the gist "' + gist + '":<p>' + message + '</p>';
+      messageText = 'Something went wrong fetching the gist "' + gist + '":<p>' + message + '</p>';
     }
     else
     {
