@@ -17,7 +17,7 @@ GraphGist( jQuery );
 
 function GraphGist( $ )
 {
-  // var CONSOLE_URL_BASE = 'http://localhost:8080/';
+  //var CONSOLE_URL_BASE = 'http://localhost:8080/';
   var CONSOLE_URL_BASE = 'http://console-test.neo4j.org/';
   var CONSOLE_AJAX_ENDPOINT = CONSOLE_URL_BASE + 'console/cypher';
   var CONSOLE_INIT_ENDPOINT = CONSOLE_URL_BASE + 'console/init';
@@ -34,7 +34,7 @@ function GraphGist( $ )
   var $QUERY_ERROR_BUTTON = $( '<a class="query-info btn btn-small btn-danger" title="Click to show/hide results">ERROR <i class="icon-large '
       + COLLAPSE_ICON + '"></i></a >' );
   var $QUERY_MESSAGE = $( '<pre/>' ).addClass( 'query-message' );
-  var $VISUALIZATION = $( '<pre/>' ).addClass( 'visualization' );
+  var $VISUALIZATION = $( '<div/>' ).addClass( 'visualization' );
   var $TABLE = $( '<div/>' ).addClass( 'result-table' );
   var ASCIIDOCTOR_OPTIONS = Opal.hash( 'attributes', [ 'notitle!' ] );
   var DEFAULT_SOURCE = '5956219';
@@ -168,9 +168,9 @@ function GraphGist( $ )
       'type' : 'POST',
       'dataType' : 'json',
       'url' : CONSOLE_INIT_ENDPOINT,
-      'xhrFields': {
-          'withCredentials': true
-       },
+      'xhrFields' : {
+        'withCredentials' : true
+      },
       'data' : JSON.stringify( {
         'init' : 'none',
         'query' : 'none',
@@ -220,6 +220,7 @@ function GraphGist( $ )
         }
       }, function( results )
       {
+        console.log( 'Could not execute: ' + statement );
         console.log( 'Execution error', arguments );
       } );
     } );
@@ -397,9 +398,9 @@ function GraphGist( $ )
     var url = ( endpoint || CONSOLE_AJAX_ENDPOINT );// + ';jsessionid=' + console_session;
     // console.log( 'calling', url );
     $.ajax( {
-      'xhrFields': {
-          'withCredentials': true
-       },
+      'xhrFields' : {
+        'withCredentials' : true
+      },
       'type' : 'POST',
       // 'headers' : {},
       'url' : url,
@@ -549,56 +550,11 @@ function GraphGist( $ )
     $content.html( '<div class="alert alert-block alert-error"><h4>Error</h4>' + messageText + '</div>' );
   }
 
+  var visualizer = new GraphVisualization();
+
   function d3graph( element, graph )
   {
-    var svg = d3.select( element ).append( 'svg' );
     var width = 500, height = 200;
-    svg.attr( 'width', width ).attr( 'height', height );
-    var color = d3.scale.category20();
-
-    var force = d3.layout.force().charge( -120 ).linkDistance( 10 ).size( [ width, height ] );
-    force.nodes( graph.nodes ).links( graph.links ).start();
-
-    var link = svg.selectAll( '.link' ).data( graph.links ).enter().append( 'line' ).attr( 'class', 'link' ).style(
-        'stroke-width', function( d )
-        {
-          return Math.sqrt( d.value );
-        } );
-
-    var node = svg.selectAll( '.node' ).data( graph.nodes ).enter().append( 'circle' ).attr( 'class', 'node' ).attr(
-        'r', 5 ).style( 'fill', function( d )
-    {
-      return color( d.group );
-    } ).call( force.drag );
-
-    node.append( 'title' ).text( function( d )
-    {
-      return d.name;
-    } );
-
-    force.on( 'tick', function()
-    {
-      link.attr( 'x1', function( d )
-      {
-        return d.source.x;
-      } ).attr( 'y1', function( d )
-      {
-        return d.source.y;
-      } ).attr( 'x2', function( d )
-      {
-        return d.target.x;
-      } ).attr( 'y2', function( d )
-      {
-        return d.target.y;
-      } );
-
-      node.attr( 'cx', function( d )
-      {
-        return d.x;
-      } ).attr( 'cy', function( d )
-      {
-        return d.y;
-      } );
-    } );
+    visualizer.visualize( element, width, height, graph );
   }
 }

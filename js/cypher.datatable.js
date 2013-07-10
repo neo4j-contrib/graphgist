@@ -94,7 +94,7 @@ function props( cell )
 
 function renderTable( element, data )
 {
-  if ( !data.stats.rows )
+  if ( !data || !'stats' in data || !'rows' in data.stats )
   {
     return;
   }

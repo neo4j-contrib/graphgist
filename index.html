@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 
+<html>
+<head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <title>Neo4j Graph Gist</title>
@@ -15,8 +17,10 @@
 <link href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
 
 <link href="css/datatable.css" rel="stylesheet">
+<link href="css/d3.css" rel="stylesheet">
 <script src="js/jquery.dataTables.min.js"></script>
 <script src="js/cypher.datatable.js"></script>
+<script src="js/visualization.js"></script>
 <script src="js/cypherconsole.js"></script>
 
 <!-- Syntax Highlighter -->
@@ -33,16 +37,6 @@
 <link rel="shortcut icon" href="favicon.ico" />
 
 <style>
-.node {
-  stroke: #fff;
-  stroke-width: 1.5px;
-}
-
-.link {
-  stroke: #999;
-  stroke-opacity: .6;
-}
-
 .graph {
   border-style: solid;
   border-width: 1px;
@@ -50,6 +44,10 @@
 
 html,html body {
   background: none;
+}
+
+iframe {
+  border: 1px solid rgba(0, 0, 0, 0.15);
 }
 
 #content {
@@ -145,9 +143,7 @@ span.query-toggle {
 }
 </style>
 
-<!--[if IE]>
-  <link href="css/ie.css" rel="stylesheet">
-<![endif]-->
+</head>
 
 <body>
   <div class="navbar">

@@ -1,0 +1,56 @@
+div.visualization {
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+}
+
+.path-text {
+  font: 8px sans-serif;
+  pointer-events: none;
+  text-align: center;
+}
+
+.shadow {
+  stroke: #000;
+  stroke-width: 1.5px;
+  stroke-opacity: .8;
+}
+
+text {
+  fill: none;
+  stroke: none;
+  font-family: sans-serif;
+  font-weight: normal;
+  text-shadow: none; pointer-events : none;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.selected {
+  stroke: red;
+  stroke-width: 1.5px;
+}
+
+.link {
+  stroke: #222;
+}
+
+.marker {
+  stroke: #222;
+  fill: #222;
+}
+
+.node {
+  color: #fa8072;
+}
+
+.relationship {
+  color: #87cefa;
+}
+
+.keyword {
+  color: #70E0BC;
+}
+
+.function {
+  color: #C370E0;
+}
