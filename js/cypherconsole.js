@@ -17,8 +17,8 @@ GraphGist( jQuery );
 
 function GraphGist( $ )
 {
-  var CONSOLE_URL_BASE = 'http://localhost:8080/';
-  // var CONSOLE_URL_BASE = 'http://console-test.neo4j.org/';
+  // var CONSOLE_URL_BASE = 'http://localhost:8080/';
+  var CONSOLE_URL_BASE = 'http://console-test.neo4j.org/';
   var CONSOLE_AJAX_ENDPOINT = CONSOLE_URL_BASE + 'console/cypher';
   var CONSOLE_INIT_ENDPOINT = CONSOLE_URL_BASE + 'console/init';
   var $WRAPPER = $( '<div class="query-wrapper" />' );
