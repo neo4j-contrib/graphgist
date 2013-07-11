@@ -100,12 +100,14 @@ function GraphGist( $ )
     postProcessPage();
     initConsole( function()
     {
-      executeQueries();
-      initConsole();
-      createCypherConsole();
-      renderGraphs();
-      renderTables();
-    } );
+      executeQueries(function() {
+          initConsole(function() {
+              createCypherConsole();
+              renderGraphs();
+              renderTables();
+          });
+      });
+    });
   }
 
   function preProcessContents( content )
@@ -205,37 +207,46 @@ function GraphGist( $ )
         }
       },
       'error' : console.log,
-      'async' : false
+      'async' : true
     } );
   }
 
-  function executeQueries()
+  function executeQueries(callbackAfter, queries, index)
   {
-    $( 'div.query-wrapper' ).each( function( index, element )
+    if (queries === undefined) 
     {
-      var $wrapper = $( element );
-      $wrapper.data( 'number', index + 1 );
-      var showOutput = $wrapper.parent().data( 'show-output' );
-      var statement = $wrapper.data( 'query' );
-      execute( statement, function( results )
+      queries = $( 'div.query-wrapper' ).toArray();
+      index = 0;
+    }
+    if (queries.length === 0) 
+    {
+      if (callbackAfter) callbackAfter();
+      return;
+    }
+    var $wrapper = $( queries.pop() );
+    $wrapper.data( 'number', index + 1);
+    var showOutput = $wrapper.parent().data( 'show-output' );
+    var statement = $wrapper.data( 'query' );
+    execute( statement, function( results )
+    {
+      var data = JSON.parse( results );
+      if ( data.error )
       {
-        var data = JSON.parse( results );
-        if ( data.error )
-        {
-          createQueryResultButton( $QUERY_ERROR_BUTTON, $wrapper, data.error, false );
-        }
-        else
-        {
-          createQueryResultButton( $QUERY_OK_BUTTON, $wrapper, data.result, !showOutput );
-
-          $wrapper.data( 'visualization', data['visualization'] );
-          $wrapper.data( 'data', data );
-        }
-      }, function( results )
+        createQueryResultButton( $QUERY_ERROR_BUTTON, $wrapper, data.error, false );
+      }
+      else
       {
-        console.log( 'Could not execute: ' + statement );
-        console.log( 'Execution error', arguments );
-      } );
+        createQueryResultButton( $QUERY_OK_BUTTON, $wrapper, data.result, !showOutput );
+    
+        $wrapper.data( 'visualization', data['visualization'] );
+        $wrapper.data( 'data', data );
+      }
+      executeQueries(callbackAfter, queries, index + 1);
+    }, function( results )
+    {
+      console.log( 'Could not execute: ' + statement );
+      console.log( 'Execution error', arguments );
+      executeQueries(callbackAfter, queries, index + 1);
     } );
   }
 
@@ -421,7 +432,7 @@ function GraphGist( $ )
       'data' : statement,
       'success' : callback,
       'error' : error,
-      'async' : false
+      'async' : true
     } );
   }
 
