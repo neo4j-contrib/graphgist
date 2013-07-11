@@ -17,7 +17,7 @@ GraphGist( jQuery );
 
 function GraphGist( $ )
 {
-  //var CONSOLE_URL_BASE = 'http://localhost:8080/';
+  // var CONSOLE_URL_BASE = 'http://localhost:8080/';
   var CONSOLE_URL_BASE = 'http://console-test.neo4j.org/';
   var CONSOLE_AJAX_ENDPOINT = CONSOLE_URL_BASE + 'console/cypher';
   var CONSOLE_INIT_ENDPOINT = CONSOLE_URL_BASE + 'console/init';
@@ -35,7 +35,7 @@ function GraphGist( $ )
       + COLLAPSE_ICON + '"></i></a >' );
   var $QUERY_MESSAGE = $( '<pre/>' ).addClass( 'query-message' );
   var $VISUALIZATION = $( '<div/>' ).addClass( 'visualization' );
-  var $TABLE = $( '<div/>' ).addClass( 'result-table' );
+  var $TABLE_CONTAINER = $( '<div/>' ).addClass( 'result-table' );
   var ASCIIDOCTOR_OPTIONS = Opal.hash( 'attributes', [ 'notitle!' ] );
   var DEFAULT_SOURCE = '5956219';
   var VALID_GIST = /^[0-9a-f]{5,32}$/;
@@ -232,7 +232,7 @@ function GraphGist( $ )
     {
       var visualization = $wrapper.data( 'visualization' );
       $heading.text( 'The graph after query ' + $wrapper.data( 'number' ) );
-      var $visContainer = $VISUALIZATION.clone().appendTo( $heading );
+      var $visContainer = $VISUALIZATION.clone().insertAfter( $heading );
       if ( visualization )
       {
         d3graph( $visContainer[0], visualization );
@@ -249,10 +249,11 @@ function GraphGist( $ )
     findPreviousQueryWrapper( 'h5.result-table', $content, function( $heading, $wrapper )
     {
       $heading.text( 'The results of query ' + $wrapper.data( 'number' ) );
-      var $tableContainer = $TABLE.clone().appendTo( $heading );
-      renderTable( $tableContainer, $wrapper.data( 'data' ) );
-      // TODO
-      // $tableContainer.text( "Couldn't render the result table." ).addClass( 'alert-error' );
+      var $tableContainer = $TABLE_CONTAINER.clone().insertAfter( $heading );
+      if ( !renderTable( $tableContainer, $wrapper.data( 'data' ) ) )
+      {
+        $tableContainer.text( "Couldn't render the result table." ).addClass( 'alert-error' );
+      }
     } );
   }
 

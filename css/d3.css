@@ -3,26 +3,27 @@ div.visualization {
   border-radius: 4px;
 }
 
-.path-text {
-  font: 8px sans-serif;
-  pointer-events: none;
-  text-align: center;
-}
-
-.shadow {
+.d3-shadow {
   stroke: #000;
   stroke-width: 1.5px;
   stroke-opacity: .8;
 }
 
-text {
-  fill: none;
+.d3-text,.d3-path-text {
   stroke: none;
   font-family: sans-serif;
-  font-weight: normal;
-  text-shadow: none; pointer-events : none;
-  z-index: 10;
+  text-shadow: none;
   pointer-events: none;
+}
+
+.d3-text {
+  font-size: 10px;
+  z-index: 10;
+}
+
+.d3-path-text {
+  font-size: 8px;
+  text-align: center;
 }
 
 .selected {
@@ -30,27 +31,15 @@ text {
   stroke-width: 1.5px;
 }
 
-.link {
+.d3-link {
   stroke: #222;
 }
 
-.marker {
+.d3-marker {
   stroke: #222;
   fill: #222;
 }
 
-.node {
+.d3-node {
   color: #fa8072;
-}
-
-.relationship {
-  color: #87cefa;
-}
-
-.keyword {
-  color: #70E0BC;
-}
-
-.function {
-  color: #C370E0;
 }
