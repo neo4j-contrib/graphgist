@@ -92,7 +92,13 @@ function GraphGist( $ )
     }
     $content.html( generatedHtml );
     postProcessPage();
-    initConsole();
+    initConsole(function() {
+        executeQueries();
+        initConsole();
+        createCypherConsole();
+        renderGraphs();
+        renderTables();
+    });
   }
 
   function preProcessContents( content )
@@ -162,7 +168,7 @@ function GraphGist( $ )
     $( 'table' ).addClass( 'table' );
   }
 
-  function initConsole()
+  function initConsole(callback)
   {
     $.ajax( {
       'type' : 'POST',
@@ -186,13 +192,10 @@ function GraphGist( $ )
           // console.log( console_session );
         }
         // console.log( data );
-        executeQueries();
-        createCypherConsole();
-        renderGraphs();
-        renderTables();
+        if (callback) callback();
       },
       'error' : console.log,
-      'async' : true
+      'async' : false
     } );
   }
 
@@ -262,7 +265,7 @@ function GraphGist( $ )
     $( 'p.console' ).first().each( function()
     {
       var $context = $( this );
-      var url = getUrl( 'none', 'none', '\n\nClick the play buttons to run the queries!', console_session );
+      var url = getUrl( 'none', 'none', '\n\nClick the play buttons to run the queries!'/* , console_session */ );
       var $iframe = $IFRAME.clone().attr( 'src', url );
       $iframe.load( function()
       {
