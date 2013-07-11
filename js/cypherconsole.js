@@ -21,6 +21,7 @@ function GraphGist( $ )
   var CONSOLE_URL_BASE = 'http://console-test.neo4j.org/';
   var CONSOLE_AJAX_ENDPOINT = CONSOLE_URL_BASE + 'console/cypher';
   var CONSOLE_INIT_ENDPOINT = CONSOLE_URL_BASE + 'console/init';
+  var DROPBOX_BASE_URL = 'https://dl.dropboxusercontent.com/u/';
   var $WRAPPER = $( '<div class="query-wrapper" />' );
   var $IFRAME = $( '<iframe/>' ).attr( 'id', 'console' ).addClass( 'cypherdoc-console' );
   var $IFRAME_WRAPPER = $( '<div/>' ).attr( 'id', 'console-wrapper' );
@@ -69,6 +70,11 @@ function GraphGist( $ )
       fetcher = fetchLocalSnippet;
       id = id.substr( 4 );
     }
+    else if ( id.length > 8 && id.substr( 0, 8 ) === 'dropbox-' )
+    {
+      fetcher = fetchDropboxFile;
+      id = id.substr( 8 );
+    }
     fetcher( id, renderContent, function( message )
     {
       errorMessage( message, id );
@@ -92,13 +98,14 @@ function GraphGist( $ )
     }
     $content.html( generatedHtml );
     postProcessPage();
-    initConsole(function() {
-        executeQueries();
-        initConsole();
-        createCypherConsole();
-        renderGraphs();
-        renderTables();
-    });
+    initConsole( function()
+    {
+      executeQueries();
+      initConsole();
+      createCypherConsole();
+      renderGraphs();
+      renderTables();
+    } );
   }
 
   function preProcessContents( content )
@@ -168,7 +175,7 @@ function GraphGist( $ )
     $( 'table' ).addClass( 'table' );
   }
 
-  function initConsole(callback)
+  function initConsole( callback )
   {
     $.ajax( {
       'type' : 'POST',
@@ -192,7 +199,10 @@ function GraphGist( $ )
           // console.log( console_session );
         }
         // console.log( data );
-        if (callback) callback();
+        if ( callback )
+        {
+          callback();
+        }
       },
       'error' : console.log,
       'async' : false
@@ -265,7 +275,7 @@ function GraphGist( $ )
     $( 'p.console' ).first().each( function()
     {
       var $context = $( this );
-      var url = getUrl( 'none', 'none', '\n\nClick the play buttons to run the queries!'/* , console_session */ );
+      var url = getUrl( 'none', 'none', '\n\nClick the play buttons to run the queries!'/* , console_session */);
       var $iframe = $IFRAME.clone().attr( 'src', url );
       $iframe.load( function()
       {
@@ -499,6 +509,23 @@ function GraphGist( $ )
     } );
   }
 
+  function fetchDropboxFile( id, success, error )
+  {
+    var url = DROPBOX_BASE_URL + decodeURIComponent( id );
+    $.ajax( {
+      'url' : url,
+      'success' : function( data )
+      {
+        success( data, url );
+      },
+      'dataType' : 'text',
+      'error' : function( xhr, status, errorMessage )
+      {
+        error( errorMessage );
+      }
+    } );
+  }
+
   function fetchLocalSnippet( id, success, error )
   {
     var url = './gists/' + id + '.adoc';
@@ -527,8 +554,16 @@ function GraphGist( $ )
       var gist = $.trim( $target.val() );
       if ( gist.indexOf( '/' ) !== -1 )
       {
-        var pos = gist.lastIndexOf( '/' );
-        gist = gist.substr( pos + 1 );
+        var baseLen = DROPBOX_BASE_URL.length;
+        if ( gist.length > baseLen && gist.substr( 0, baseLen ) === DROPBOX_BASE_URL )
+        {
+          gist = 'dropbox-' + encodeURIComponent( gist.substr( baseLen ) );
+        }
+        else
+        {
+          var pos = gist.lastIndexOf( '/' );
+          gist = gist.substr( pos + 1 );
+        }
       }
       if ( gist.charAt( 0 ) === '?' )
       {

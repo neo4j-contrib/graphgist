@@ -57,7 +57,7 @@ Let's try all the settings together, which means this query will be used to init
  //output
  [source,cypher]
  ----
- CREATE (n{name:'cypher'})-[:LIKES]->({name:'icecream'}) return n.name
+ CREATE (n{name:'neo4j'})-[:LIKES]->({name:'complex data'}) return n.name
  ----
 
 which becomes:
@@ -67,7 +67,7 @@ which becomes:
 //output
 [source,cypher]
 ----
-CREATE (n{name:'cypher'})-[:LIKES]->({name:'icecream'}) return n.name
+CREATE (n{name:'neo4j'})-[:LIKES]->({name:'complex data'}) return n.name
 ----
 
 
