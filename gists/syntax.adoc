@@ -1,6 +1,7 @@
 = How to create a GraphGist
 
 You create a GraphGist by creating a https://gist.github.com/[GitHub Gist] in http://asciidoctor.org/docs/asciidoc-quick-reference/[AsciiDoc] and enter the URL to it in the form on this page.
+Alternatively, you can put an AsciiDoc document in dropbox and enter the public URL in the form.
 
 This GraphGist shows the basics of using AsciiDoc syntax and a few additions for GraphGists.
 The additions are entered as comments on their own line.
@@ -90,4 +91,51 @@ This will show a result table for the preceding query.
 becomes:
 
 //table
+
+== Basic AsciiDoc formatting
+
+[width="50%",cols="1m,1a"]
+|===
+| \_Italic_ | _Italic_
+| \*Bold* | *Bold*
+| \`Monospace` | `Monospace`
+| `http://www.neo4j.org/` | http://www.neo4j.org/
+| `http://www.neo4j.org/[neo4j.org]` | http://www.neo4j.org/[neo4j.org]
+| `link:./?5956246[Link to a GraphGist]` | link:./?5956246[Link to a GraphGist]
+|===
+
+Headings:
+
+ = Heading 1
+ == Heading 2
+ === Heading 3
+
+Images:
+
+ image::http://assets.neo4j.org/img/still/cineasts.gif[]
+
+image::http://assets.neo4j.org/img/still/cineasts.gif[]
+
+----
+* Item 1
+** Item 1.1
+* Item 2
+----
+
+* Item 1
+** Item 1.1
+* Item 2
+
+----
+. First
+. Second
+----
+
+. First
+. Second
+
+Monospaced block: indent lines with one space.
+
+Tables are well supported.
+See http://asciidoctor.org/docs/asciidoc-quick-reference/[AsciiDoc Quick Reference] for information on that and more.
 
