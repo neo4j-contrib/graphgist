@@ -1,7 +1,7 @@
 = How to create a GraphGist
 
 You create a GraphGist by creating a https://gist.github.com/[GitHub Gist] in http://asciidoctor.org/docs/asciidoc-quick-reference/[AsciiDoc] and enter the URL to it in the form on this page.
-Alternatively, you can put an AsciiDoc document in dropbox and enter the public URL in the form.
+Alternatively, you can put an AsciiDoc document in https://www.dropbox.com/[Dropbox] and enter the public URL in the form.
 
 This GraphGist shows the basics of using AsciiDoc syntax and a few additions for GraphGists.
 The additions are entered as comments on their own line.

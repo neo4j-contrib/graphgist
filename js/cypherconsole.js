@@ -81,7 +81,7 @@ function GraphGist( $ )
 
   function renderContent( originalContent, link )
   {
-    $( '#gist_link' ).attr( 'href', link );
+    $( '#gist_link' ).attr( 'href', link ).removeClass( 'disabled' );
     var doc = preProcessContents( originalContent );
     $content.empty();
     var generatedHtml = undefined;
