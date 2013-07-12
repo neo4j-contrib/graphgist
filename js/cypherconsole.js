@@ -100,14 +100,16 @@ function GraphGist( $ )
     postProcessPage();
     initConsole( function()
     {
-      executeQueries(function() {
-          initConsole(function() {
-              createCypherConsole();
-              renderGraphs();
-              renderTables();
-          });
-      });
-    });
+      executeQueries( function()
+      {
+        initConsole( function()
+        {
+          createCypherConsole();
+          renderGraphs();
+          renderTables();
+        } );
+      } );
+    } );
   }
 
   function preProcessContents( content )
@@ -211,20 +213,20 @@ function GraphGist( $ )
     } );
   }
 
-  function executeQueries(callbackAfter, queries, index)
+  function executeQueries( callbackAfter, queries, index )
   {
-    if (queries === undefined) 
+    var remainingQueries = queries || $( 'div.query-wrapper' ).toArray().reverse();
+    var number = ( index || 0 ) + 1;
+    if ( remainingQueries.length === 0 )
     {
-      queries = $( 'div.query-wrapper' ).toArray();
-      index = 0;
-    }
-    if (queries.length === 0) 
-    {
-      if (callbackAfter) callbackAfter();
+      if ( callbackAfter )
+      {
+        callbackAfter();
+      }
       return;
     }
-    var $wrapper = $( queries.pop() );
-    $wrapper.data( 'number', index + 1);
+    var $wrapper = $( remainingQueries.pop() );
+    $wrapper.data( 'number', number );
     var showOutput = $wrapper.parent().data( 'show-output' );
     var statement = $wrapper.data( 'query' );
     execute( statement, function( results )
@@ -237,16 +239,16 @@ function GraphGist( $ )
       else
       {
         createQueryResultButton( $QUERY_OK_BUTTON, $wrapper, data.result, !showOutput );
-    
+
         $wrapper.data( 'visualization', data['visualization'] );
         $wrapper.data( 'data', data );
       }
-      executeQueries(callbackAfter, queries, index + 1);
+      executeQueries( callbackAfter, remainingQueries, number );
     }, function( results )
     {
       console.log( 'Could not execute: ' + statement );
       console.log( 'Execution error', arguments );
-      executeQueries(callbackAfter, queries, index + 1);
+      executeQueries( callbackAfter, remainingQueries, number );
     } );
   }
 
