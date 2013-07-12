@@ -71,7 +71,14 @@ function GraphGist( $ )
     }
     else if ( !VALID_GIST.test( id ) )
     {
-      fetcher = fetchLocalSnippet;
+      if ( id.indexOf( '%3A%2F%2F' ) !== -1 )
+      {
+        fetcher = fetchAnyUrl;
+      }
+      else
+      {
+        fetcher = fetchLocalSnippet;
+      }
     }
     fetcher( id, renderContent, function( message )
     {
@@ -528,6 +535,23 @@ function GraphGist( $ )
     } );
   }
 
+  function fetchAnyUrl( id, success, error )
+  {
+    var url = decodeURIComponent( id );
+    $.ajax( {
+      'url' : url,
+      'success' : function( data )
+      {
+        success( data, url );
+      },
+      'dataType' : 'text',
+      'error' : function( xhr, status, errorMessage )
+      {
+        error( errorMessage );
+      }
+    } );
+  }
+
   function fetchLocalSnippet( id, success, error )
   {
     var url = './gists/' + id + '.adoc';
@@ -560,6 +584,10 @@ function GraphGist( $ )
         if ( gist.length > baseLen && gist.substr( 0, baseLen ) === DROPBOX_BASE_URL )
         {
           gist = 'dropbox-' + encodeURIComponent( gist.substr( baseLen ) );
+        }
+        else if ( gist.indexOf( '://' ) !== -1 )
+        {
+          gist = encodeURIComponent( gist );
         }
         else
         {
