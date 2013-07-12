@@ -1,0 +1,135 @@
+= Develop a Graph
+
+== There are Three APIs...
+
+Neo4j has a trio of programming interfaces, focused on different kinds of interaction.
+
+image::https://raw.github.com/neo4j/neo4j/1.9.1/community/server/src/main/resources/webadmin-html/deck/img/api-trio.png[]
+
+* _Work_ with the Cypher query language over HTTP.
+* _Discover_ raw graph primitives over REST.
+* _Customize_ the database with plugins (for special cases).
+
+As always, pick the right tool for the job.
+
+== Work with the Cypher language
+
+Neo4j's Cypher language is purpose built for working with graph data.
+Inspired by SQL syntax, embracing pattern matching for describing paths, Cypher is the primary tool for building graph applications.
+
+We'll add a console to the page where you can play with Cypher:
+
+//console
+
+Let's use Cypher to generate the graph described in the Neo4j Learn Guide.
+Starting with Emil:
+
+[source,cypher]
+----
+CREATE (ee:Person { name: "Emil", from: "Sweden" }) RETURN ee;
+----
+
+* `CREATE` clause to create data,
+* `()` parenthesis to indicate a node,
+* `:Person` to label the node,
+* `{}` brackets to add properties to the node,
+* `RETURN` clause indicates what data to return.
+
+== Finding nodes
+
+Now find the node representing Emil:
+
+[source,cypher]
+----
+MATCH (ee:Person) WHERE ee.name = "Emil"
+RETURN ee;
+----
+
+* `MATCH` clause specify what to look for,
+* `(ee:Person)` to find all nodes labeled `Person`,
+* `WHERE` clause to filter the results,
+* `ee.name = "Emil"` to filter nodes where the property 'name' is 'Emil',
+* `RETURN` clause requests particular results.
+
+== Create nodes and relationships
+
+`CREATE` clauses can create many nodes and relationships at once.
+
+[source,cypher]
+----
+CREATE (ee:Person { name: "Emil", from: "Sweden", klout: 99 }),
+(js:Person { name: "Johan", from: "Sweden", learn: "surfing" }),
+(ir:Person { name: "Ian", from: "England", title: "author" }),
+(rvb:Person { name: "Rik", from: "Belgium", pet: "Orval" }),
+(ally:Person { name: "Allison", from: "California", hobby: "surfing" }),
+(ee)-[:KNOWS {since: 2001}]->(js),(ee)-[:KNOWS {rating: 5}]->(ir),
+(js)-[:KNOWS]->(ir),(js)-[:KNOWS]->(rvb),
+(ir)-[:KNOWS]->(js),(ir)-[:KNOWS]->(ally),
+(rvb)-[:KNOWS]->(ally);
+----
+
+== Pattern matching
+
+Cypher uses patterns to describe how to find things in the graph. For instance, to find Emil's friends:
+
+[source,cypher]
+----
+MATCH (ee:Person)-[:KNOWS]->(friends:Person) 
+WHERE ee.name = "Emil"
+RETURN friends;
+----
+
+* `MATCH` clause to describe the pattern to look for, from known Nodes to found Nodes,
+* `(ee:Person)` starts the pattern with Emil,
+* `-[:KNOWS]->` matches outgoing "KNOWS" relationships,
+* `(friends:Person)` will be bound to Emil's friends.
+
+== Recommendations
+
+Pattern matching can be used to make recommendations.
+Johan is learning to surf, so he may want to find a new friend who already does:
+
+[source,cypher]
+----
+MATCH (js:Person)-[:KNOWS]->()-[:KNOWS]->(surfer:Person) 
+WHERE js.name = "Johan" 
+AND has(surfer.hobby) AND surfer.hobby = "surfing"
+RETURN DISTINCT surfer;
+----
+
+* `()` empty parenthesis to ignore these nodes,
+* `has(surfer.hobby)` to only look for persons with a hobby,
+* `DISTINCT` because there may be multiple paths to a friend,
+* `surfer` will contain Allison, a friend of a friend who surfs.
+
+== Discover with REST
+
+Once you've created a graph with Cypher, the REST interface can be useful for interactively walking the graph in a hypermedia way.
+This interface is also useful for checking system statistics and settings.
+
+* work with raw graph primitives
+* basic monitoring
+* not recommended for high-load access
+
+The web is a graph.
+Why not navigate a graph like browsing the web.
+
+== Customize with Plugins
+
+
+Cypher is an expressive and powerful language, intended to cover the vast majority of operations.
+When you have specialized needs, plugins allow you to ``get under the hood.''
+
+* raw access to the database
+* your choice of JVM language
+* _note:_ for advanced users with special needs
+
+With great power comes great responsibility.
+
+== Summary
+
+Start your application using Cypher to create and query graph data.
+Use the REST API to monitor the database.
+In special cases, consider a plugin.
+
+Now, go get started on your own application.

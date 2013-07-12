@@ -585,14 +585,14 @@ function GraphGist( $ )
         {
           gist = 'dropbox-' + encodeURIComponent( gist.substr( baseLen ) );
         }
-        else if ( gist.indexOf( '://' ) !== -1 )
-        {
-          gist = encodeURIComponent( gist );
-        }
         else
         {
           var pos = gist.lastIndexOf( '/' );
           gist = gist.substr( pos + 1 );
+          if ( gist.indexOf( '://' ) !== -1 && !VALID_GIST.test( gist ) )
+          {
+            gist = encodeURIComponent( gist );
+          }
         }
       }
       if ( gist.charAt( 0 ) === '?' )
