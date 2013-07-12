@@ -41,7 +41,6 @@ function GraphGist( $ )
   var DEFAULT_SOURCE = '5956219';
   var VALID_GIST = /^[0-9a-f]{5,32}$/;
 
-  var console_session = null;
   var $content = undefined;
   var $gistId = undefined;
 
@@ -65,15 +64,14 @@ function GraphGist( $ )
       id = id.substr( 1 );
     }
     var fetcher = fetchGithubGist;
-    if ( id.length > 4 && id.substr( 0, 4 ) === 'neo-' )
-    {
-      fetcher = fetchLocalSnippet;
-      id = id.substr( 4 );
-    }
-    else if ( id.length > 8 && id.substr( 0, 8 ) === 'dropbox-' )
+    if ( id.length > 8 && id.substr( 0, 8 ) === 'dropbox-' )
     {
       fetcher = fetchDropboxFile;
       id = id.substr( 8 );
+    }
+    else if ( !VALID_GIST.test( id ) )
+    {
+      fetcher = fetchLocalSnippet;
     }
     fetcher( id, renderContent, function( message )
     {
@@ -196,19 +194,12 @@ function GraphGist( $ )
       } ),
       'success' : function( data, textStatus, request )
       {
-        // console.log( 'sessionid', data.sessionId );
-        if ( !console_session )
-        {
-          console_session = data.sessionId; // 83478239;
-          // console.log( console_session );
-        }
-        // console.log( data );
         if ( callback )
         {
           callback();
         }
       },
-      'error' : console.log,
+      'error' : console.log, // TODO add error message to the user
       'async' : true
     } );
   }
@@ -288,7 +279,7 @@ function GraphGist( $ )
     $( 'p.console' ).first().each( function()
     {
       var $context = $( this );
-      var url = getUrl( 'none', 'none', '\n\nClick the play buttons to run the queries!'/* , console_session */);
+      var url = getUrl( 'none', 'none', '\n\nClick the play buttons to run the queries!' );
       var $iframe = $IFRAME.clone().attr( 'src', url );
       $iframe.load( function()
       {
@@ -422,14 +413,12 @@ function GraphGist( $ )
 
   function execute( statement, callback, error, endpoint )
   {
-    var url = ( endpoint || CONSOLE_AJAX_ENDPOINT );// + ';jsessionid=' + console_session;
-    // console.log( 'calling', url );
+    var url = ( endpoint || CONSOLE_AJAX_ENDPOINT );
     $.ajax( {
       'xhrFields' : {
         'withCredentials' : true
       },
       'type' : 'POST',
-      // 'headers' : {},
       'url' : url,
       'data' : statement,
       'success' : callback,
@@ -592,7 +581,7 @@ function GraphGist( $ )
     var messageText;
     if ( gist )
     {
-      messageText = 'Something went wrong fetching the gist "' + gist + '":<p>' + message + '</p>';
+      messageText = 'Something went wrong fetching the GraphGist "' + gist + '":<p>' + message + '</p>';
     }
     else
     {
