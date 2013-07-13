@@ -623,7 +623,7 @@ function GraphGist( $ )
 
   function d3graph( element, graph )
   {
-    var width = 500, height = 200;
+    var width = 800, height = 300;
     visualizer.visualize( element, width, height, graph );
   }
 }

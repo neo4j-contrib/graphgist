@@ -105,11 +105,11 @@ function GraphVisualization()
   function visualize( elementOrId, w, h, data )
   {
     var select = ( typeof elementOrId === 'string' ) ? '#' + elementOrId : elementOrId;
-    var vis = d3.select( select ).append( 'svg' ).attr( 'class', 'd3-graph' ).attr( 'width', w / 2 ).attr( 'height', h )
-        .attr( 'style', 'pointer-events:fill; margin-left:' + w / 2 );
-
+    var vis = d3.select( select ).append( 'svg' ).attr( 'class', 'd3-graph' ).attr( 'height', h )
+        .attr( 'style', 'pointer-events:fill;');
+//    console.log($(d3).width());
     var force = self.force = d3.layout.force().nodes( data.nodes ).links( data.links ).gravity( .2 ).distance( 80 )
-        .charge( -1000 ).size( [ w / 2, h ] ).start();
+        .charge( -1000 ).size([w, h]).start();
 
     // end-of-line arrow
     vis.append( 'svg:defs' ).selectAll( 'marker' ).data( [ 'end-marker' ] ) // link types if needed
