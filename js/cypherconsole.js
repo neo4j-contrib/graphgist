@@ -588,10 +588,14 @@ function GraphGist( $ )
         else
         {
           var pos = gist.lastIndexOf( '/' );
-          gist = gist.substr( pos + 1 );
-          if ( gist.indexOf( '://' ) !== -1 && !VALID_GIST.test( gist ) )
+          var endOfUrl = gist.substr( pos + 1 );
+          if ( gist.indexOf( '://' ) !== -1 && !VALID_GIST.test( endOfUrl ) )
           {
             gist = encodeURIComponent( gist );
+          }
+          else
+          {
+            gist = endOfUrl;
           }
         }
       }
