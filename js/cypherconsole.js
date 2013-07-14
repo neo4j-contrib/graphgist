@@ -503,6 +503,10 @@ function GraphGist( $ )
     var url = 'https://api.github.com/gists/' + gist;
     $.ajax( {
       'url' : url,
+      'headers': {
+	      // 'Origin':"http://gist.neo4j.org" 
+	      'Authorization':'a0864a6765346c3d551a394760557f85a4e67c49'
+       },
       'success' : function( data )
       {
         var file = data.files[Object.keys( data.files )[0]];
@@ -539,6 +543,10 @@ function GraphGist( $ )
   {
     var url = decodeURIComponent( id );
     $.ajax( {
+      'headers': {
+	      // 'Origin':"http://gist.neo4j.org" 
+	      'Authorization':'a0864a6765346c3d551a394760557f85a4e67c49'
+       },
       'url' : url,
       'success' : function( data )
       {
