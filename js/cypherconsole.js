@@ -176,12 +176,24 @@ function GraphGist( $ )
         toggler( $wrapper, $toggleQuery, 'hide' );
       }
     } );
+
     SyntaxHighlighter.config['tagName'] = 'code';
     SyntaxHighlighter.defaults['tab-size'] = 4;
     SyntaxHighlighter.defaults['gutter'] = false;
     SyntaxHighlighter.defaults['toolbar'] = false;
     SyntaxHighlighter.highlight();
-    $( 'table' ).addClass( 'table' );
+
+    $( 'table' ).addClass( 'table' ); // bootstrap formatting
+
+    var heading = $( 'h1' ).first();
+    if ( !heading.length )
+    {
+      heading = $( 'h2' ).first();
+    }
+    if ( heading.length )
+    {
+      document.title = heading.text() + "  -  Neo4j Graph Gist";
+    }
   }
 
   function initConsole( callback )
