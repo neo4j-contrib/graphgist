@@ -3,6 +3,8 @@ The Neo4j GraphGists
 
 For the live site, go to [The GraphGists](http://gist.neo4j.org/).
 
+For a loose collection of GraphGists, see [the wiki](https://github.com/neo4j-contrib/graphgist/wiki).
+
 Building
 -----------
 
