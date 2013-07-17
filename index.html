@@ -2,197 +2,194 @@
 
 <html>
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Neo4j Graph Gist</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>Neo4j Graph Gist</title>
 
-    <script src="js/opal.js"></script>
-    <script src="js/asciidoctor.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/d3/3.2.2/d3.v3.min.js"></script>
+<script src="js/opal.js"></script>
+<script src="js/asciidoctor.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/d3/3.2.2/d3.v3.min.js"></script>
 
-    <!-- Bootstrap -->
-    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
-    <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
-    <link href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
+<!-- Bootstrap -->
+<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
+<script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+<link href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
 
-    <link href="css/datatable.css" rel="stylesheet">
-    <link href="css/d3.css" rel="stylesheet">
-    <link href="css/social-buttons.css" rel="stylesheet">
-    <script src="js/jquery.dataTables.min.js"></script>
-    <script src="js/cypher.datatable.js"></script>
-    <script src="js/visualization.js"></script>
-    <script src="js/cypherconsole.js"></script>
+<link href="css/datatable.css" rel="stylesheet">
+<link href="css/d3.css" rel="stylesheet">
+<script src="js/jquery.dataTables.min.js"></script>
+<script src="js/cypher.datatable.js"></script>
+<script src="js/visualization.js"></script>
+<script src="js/cypherconsole.js"></script>
 
-    <!-- Syntax Highlighter -->
-    <script type="text/javascript" src="http://docs.neo4j.org/chunked/snapshot/js/shCore.js"></script>
-    <script type="text/javascript" src="http://docs.neo4j.org/chunked/snapshot/js/shBrushJScript.js"></script>
-    <script type="text/javascript" src="http://docs.neo4j.org/chunked/snapshot/js/shBrushCypher.js"></script>
+<!-- Syntax Highlighter -->
+<script type="text/javascript" src="http://docs.neo4j.org/chunked/snapshot/js/shCore.js"></script>
+<script type="text/javascript" src="http://docs.neo4j.org/chunked/snapshot/js/shBrushJScript.js"></script>
+<script type="text/javascript" src="http://docs.neo4j.org/chunked/snapshot/js/shBrushCypher.js"></script>
 
-    <!-- style -->
-    <link href="http://docs.neo4j.org/chunked/snapshot/css/shCore.css" rel="stylesheet" type="text/css"/>
-    <link href="http://docs.neo4j.org/chunked/snapshot/css/shCoreEclipse.css" rel="stylesheet" type="text/css"/>
-    <link href="http://docs.neo4j.org/chunked/snapshot/css/shThemeEclipse.css" rel="stylesheet" type="text/css"/>
+<!-- style -->
+<link href="http://docs.neo4j.org/chunked/snapshot/css/shCore.css" rel="stylesheet" type="text/css" />
+<link href="http://docs.neo4j.org/chunked/snapshot/css/shCoreEclipse.css" rel="stylesheet" type="text/css" />
+<link href="http://docs.neo4j.org/chunked/snapshot/css/shThemeEclipse.css" rel="stylesheet" type="text/css" />
 
-    <link rel="icon" href="favicon.ico"/>
-    <link rel="shortcut icon" href="favicon.ico"/>
+<link rel="icon" href="favicon.ico" />
+<link rel="shortcut icon" href="favicon.ico" />
 
-    <style>
-        .graph {
-            border-style: solid;
-            border-width: 1px;
-        }
+<style>
+.graph {
+  border-style: solid;
+  border-width: 1px;
+}
 
-        html, html body {
-            background: none;
-        }
+html,html body {
+  background: none;
+}
 
-        iframe {
-            border: 1px solid rgba(0, 0, 0, 0.15);
-        }
+iframe {
+  border: 1px solid rgba(0, 0, 0, 0.15);
+}
 
-        #content {
-            max-width: 60em;
-            margin: 0 auto;
-        }
+#content {
+  max-width: 60em;
+  margin: 0 auto;
+}
 
-        footer {
-            max-width: 60em;
-            margin: 2em auto 0.5em auto;
-            padding: 0.25em;
-            border-top: 1px solid #cccccc;
-            text-align: right;
-        }
+footer {
+  max-width: 60em;
+  margin: 2em auto 0.5em auto;
+  padding: 0.25em;
+  border-top: 1px solid #cccccc;
+  text-align: right;
+}
 
-        li>p {
-            margin: 0;
-        }
+li>p {
+  margin: 0;
+}
 
-        pre.highlight {
-            position: relative;
-            padding-bottom: 28px;
-            padding-top: 0;
-        }
+pre.highlight {
+  position: relative;
+  padding-bottom: 28px;
+  padding-top: 0;
+}
 
-        pre.highlight h5 {
-            margin: 6px 0;
-        }
+pre.highlight h5 {
+  margin: 6px 0;
+}
 
-        span.query-toggle {
-            position: absolute;
-            top: 0;
-            right: 0;
-            padding: 6px 9.5px 9.5px 9.5px;
-        }
+span.query-toggle {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 6px 9.5px 9.5px 9.5px;
+}
 
-        a.run-query {
-            position: absolute;
-            bottom: 6px;
-            left: 9.5px;
-        }
+a.run-query {
+  position: absolute;
+  bottom: 6px;
+  left: 9.5px;
+}
 
-        .query-info {
-            position: absolute;
-            bottom: 6px;
-            right: 9.5px;
-        }
+.query-info {
+  position: absolute;
+  bottom: 6px;
+  right: 9.5px;
+}
 
-        #content .syntaxhighlighter, #content .syntaxhighlighter .line.alt1, #content .syntaxhighlighter .line.alt2 {
-            background-color: transparent !important;
-        }
+#content .syntaxhighlighter,#content .syntaxhighlighter .line.alt1,#content .syntaxhighlighter .line.alt2
+  {
+  background-color: transparent !important;
+}
 
-        #console-wrapper, p.console {
-            height: 23em;
-        }
+#console-wrapper,p.console {
+  height: 23em;
+}
 
-        #console {
-            height: 100%;
-            width: 100%;
-        }
+#console {
+  height: 100%;
+  width: 100%;
+}
 
-        #console-wrapper {
-            left: 0;
-            top: 0;
-            width: 99.7%;
-            z-index: 1000;
-        }
+#console-wrapper {
+  left: 0;
+  top: 0;
+  width: 99.7%;
+  z-index: 1000;
+}
 
-        #console-wrapper.fixed-console {
-            position: fixed;
-        }
+#console-wrapper.fixed-console {
+  position: fixed;
+}
 
-        #content.internet-explorer #console-wrapper.fixed-console {
-            width: 98%;
-        }
+#content.internet-explorer #console-wrapper.fixed-console {
+  width: 98%;
+}
 
-        p.console {
-            margin-bottom: 3.5em;
-            background: #eeeeee url('images/loading.gif') no-repeat center center;
-        }
+p.console {
+  margin-bottom: 3.5em;
+  background: #eeeeee url('images/loading.gif') no-repeat center center;
+}
 
-        p.console>span.loading {
-            display: block;
-            margin: 0 auto;
-            width: 100%;
-            padding: 4em 0 0 0;
-            text-align: center;
-        }
+p.console>span.loading {
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+  padding: 4em 0 0 0;
+  text-align: center;
+}
 
-        span.query-toggle {
-            cursor: pointer;
-        }
+span.query-toggle {
+  cursor: pointer;
+}
 
-        #gist-id {
-            width: 20em;
-        }
-    </style>
+#gist-id {
+  width: 20em;
+}
+</style>
 
 </head>
 
 <body>
-<div class="navbar">
+  <div class="navbar">
     <div class="navbar-inner">
-        <a class="brand" href="http://gist.neo4j.org/">
-            <img style="height: 40px;" src="images/neo4j-gray_60x80.png"> Neo4j Graph Gist
-        </a>
-        <a class="btn btn-small" href=" http://www.neo4j.org/" target="_blank">
-            <i class="icon-home"></i> Neo4j
-        </a>
-        <a class="btn btn-small" href=" http://docs.neo4j.org/chunked/milestone/cypher-query-lang.html" target="_blank">
-            <i class="icon-book"></i> Cypher Manual
-        </a>
-        <a class="btn btn-small" href=" http://docs.neo4j.org/refcard/1.9/" target="_blank">
-            <i class="icon-columns"></i> Cypher Refcard
-        </a>
-        <a class="btn btn-small btn-success disabled" id="gist_link" href="javascript:;" target="_blank">
-            <i class="icon-file-text"></i> Page Source
-        </a>
-
-        <form class="navbar-form pull-right">
-            <div class="input-prepend">
+      <a class="brand" href="http://gist.neo4j.org/">
+        <img style="height: 40px;" src="images/neo4j-gray_60x80.png"> Neo4j Graph Gist
+      </a>
+      <a class="btn btn-small" href=" http://www.neo4j.org/" target="_blank">
+        <i class="icon-home"></i> Neo4j
+      </a>
+      <a class="btn btn-small" href=" http://docs.neo4j.org/chunked/milestone/cypher-query-lang.html" target="_blank">
+        <i class="icon-book"></i> Cypher Manual
+      </a>
+      <a class="btn btn-small" href=" http://docs.neo4j.org/refcard/1.9/" target="_blank">
+        <i class="icon-columns"></i> Cypher Refcard
+      </a>
+      <a class="btn btn-small btn-success disabled" id="gist_link" href="javascript:;" target="_blank">
+        <i class="icon-file-text"></i> Page Source
+      </a>
+      <form class="navbar-form pull-right">
+        <div class="input-prepend">
           <span class="add-on">
             <i class="icon-github"></i> <i class="icon-dropbox"></i>
           </span>
-                <input type="text" class="span2" id="gist-id" placeholder="GitHub Gist / Dropbox URL">
-            </div>
-        </form>
-        <a id="twitter-share" href="" target="_blank" class="btn btn-small btn-twitter"><i class="icon-twitter"></i> | Tweet</a>
-
+          <input type="text" class="span2" id="gist-id" placeholder="GitHub Gist / Dropbox URL">
+        </div>
+      </form>
     </div>
-</div>
-<div id="content">
+  </div>
+  <div id="content">
     <img alt="loading" src="images/loading.gif" style="margin: 5em;">
-</div>
-<footer>
+  </div>
+  <footer>
     <i class="icon-github-sign"></i> The GraphGist project is on
     <a href="https://github.com/neo4j-contrib/graphgist">GitHub</a>
-</footer>
-<script type="text/javascript" src="js/ga.js"></script>
-<script type="text/javascript">
-    /*@cc_on @*/
-    /*@
-     $( '#content' ).addClass( 'internet-explorer' );
-     @*/
-</script>
+  </footer>
+  <script type="text/javascript" src="js/ga.js"></script>
+  <script type="text/javascript">
+      /*@cc_on @*/
+      /*@
+      $( '#content' ).addClass( 'internet-explorer' );
+      @*/
+    </script>
 </body>
 </html>

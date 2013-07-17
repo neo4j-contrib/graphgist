@@ -84,15 +84,6 @@ function GraphGist( $ )
     {
       errorMessage( message, id );
     } );
-
-    twitterShare();
-  }
-
-  function twitterShare(){
-      var title = document.title;
-      var href = window.location.href;
-      console.log(title, href);
-      $('#twitter-share').attr('href','https://twitter.com/intent/tweet?text='+encodeURIComponent('Check out this GraphGist: ')+'&url='+encodeURIComponent(href));
   }
 
   function renderContent( originalContent, link )
