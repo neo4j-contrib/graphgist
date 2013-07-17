@@ -27,9 +27,9 @@ function GraphGist($) {
     var $TOOGLE_BUTTON = $('<span class="query-toggle" title="Show/Hide the query."><i class="' + COLLAPSE_ICON
         + ' icon-large"></i></span>');
     var $PLAY_BUTTON = $('<a class="run-query btn btn-small btn-success" title="Execute the query." href="#"><i class="icon-play"></i></a>');
-    var $QUERY_OK_BUTTON = $('<span class="badge badge-success">OK</span><a class="query-info btn btn-small" title="Click to show/hide results"><i class="icon-large '
+    var $QUERY_OK_BUTTON = $('<a class="query-info badge badge-success" title="Click to show/hide results">OK <i class="'
         + COLLAPSE_ICON + '"></i></a >');
-    var $QUERY_ERROR_BUTTON = $('<span class="badge badge-error">ERROR</span><a class="query-info btn btn-small btn-danger" title="Click to show/hide results">ERROR <i class="icon-large '
+    var $QUERY_ERROR_BUTTON = $('<a class="query-info badge badge-important" title="Click to show/hide results">ERROR <i class="'
         + COLLAPSE_ICON + '"></i></a >');
     var $QUERY_MESSAGE = $('<pre/>').addClass('query-message');
     var $VISUALIZATION = $('<div/>').addClass('visualization');
