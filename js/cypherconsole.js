@@ -16,20 +16,20 @@
 GraphGist(jQuery);
 
 function GraphGist($) {
-    // var CONSOLE_URL_BASE = 'http://localhost:8080/';
+//    var CONSOLE_URL_BASE = 'http://localhost:8080/';
     var CONSOLE_URL_BASE = 'http://console-test.neo4j.org/';
     var DROPBOX_BASE_URL = 'https://dl.dropboxusercontent.com/u/';
     var $WRAPPER = $('<div class="query-wrapper" />');
     var $IFRAME = $('<iframe/>').attr('id', 'console').addClass('cypherdoc-console');
     var $IFRAME_WRAPPER = $('<div/>').attr('id', 'console-wrapper');
-    var COLLAPSE_ICON = 'icon-collapse-top';
-    var EXPAND_ICON = 'icon-expand';
+    var COLLAPSE_ICON = 'icon-minus';
+    var EXPAND_ICON = 'icon-plus';
     var $TOOGLE_BUTTON = $('<span class="query-toggle" title="Show/Hide the query."><i class="' + COLLAPSE_ICON
         + ' icon-large"></i></span>');
-    var $PLAY_BUTTON = $('<a class="run-query btn btn-small btn-primary" title="Execute the query." href="#"><i class="icon-play"></i></a>');
-    var $QUERY_OK_BUTTON = $('<a class="query-info btn btn-small btn-success" title="Click to show/hide results">OK <i class="icon-large '
-        + EXPAND_ICON + '"></i></a >');
-    var $QUERY_ERROR_BUTTON = $('<a class="query-info btn btn-small btn-danger" title="Click to show/hide results">ERROR <i class="icon-large '
+    var $PLAY_BUTTON = $('<a class="run-query btn btn-small btn-success" title="Execute the query." href="#"><i class="icon-play"></i></a>');
+    var $QUERY_OK_BUTTON = $('<span class="badge badge-success">OK</span><a class="query-info btn btn-small" title="Click to show/hide results"><i class="icon-large '
+        + COLLAPSE_ICON + '"></i></a >');
+    var $QUERY_ERROR_BUTTON = $('<span class="badge badge-error">ERROR</span><a class="query-info btn btn-small btn-danger" title="Click to show/hide results">ERROR <i class="icon-large '
         + COLLAPSE_ICON + '"></i></a >');
     var $QUERY_MESSAGE = $('<pre/>').addClass('query-message');
     var $VISUALIZATION = $('<div/>').addClass('visualization');
