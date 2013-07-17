@@ -19,8 +19,6 @@ function GraphGist( $ )
 {
   // var CONSOLE_URL_BASE = 'http://localhost:8080/';
   var CONSOLE_URL_BASE = 'http://console-test.neo4j.org/';
-  var CONSOLE_AJAX_ENDPOINT = CONSOLE_URL_BASE + 'console/cypher';
-  var CONSOLE_INIT_ENDPOINT = CONSOLE_URL_BASE + 'console/init';
   var DROPBOX_BASE_URL = 'https://dl.dropboxusercontent.com/u/';
   var $WRAPPER = $( '<div class="query-wrapper" />' );
   var $IFRAME = $( '<iframe/>' ).attr( 'id', 'console' ).addClass( 'cypherdoc-console' );
@@ -43,6 +41,7 @@ function GraphGist( $ )
 
   var $content = undefined;
   var $gistId = undefined;
+  var consolr = undefined;
 
   $( document ).ready( function()
   {
@@ -103,18 +102,28 @@ function GraphGist( $ )
     }
     $content.html( generatedHtml );
     postProcessPage();
-    initConsole( function()
+    createCypherConsole( function()
     {
       executeQueries( function()
       {
         initConsole( function()
         {
-          createCypherConsole();
           renderGraphs();
           renderTables();
+          runSetupQuery();
         } );
       } );
     } );
+  }
+
+  function twitterShare()
+  {
+    var title = document.title;
+    var href = window.location.href;
+    $( '#twitter-share' ).attr(
+        'href',
+        'https://twitter.com/intent/tweet?text=' + encodeURIComponent( 'Check out this: ' + title ) + '&url='
+            + encodeURIComponent( href ) );
   }
 
   function preProcessContents( content )
@@ -192,73 +201,93 @@ function GraphGist( $ )
     }
     if ( heading.length )
     {
-      document.title = heading.text() + "  -  Neo4j Graph Gist";
+      document.title = heading.text() + "  -  Neo4j GraphGist";
     }
+    twitterShare();
   }
 
   function initConsole( callback )
   {
-    $.ajax( {
-      'type' : 'POST',
-      'dataType' : 'json',
-      'url' : CONSOLE_INIT_ENDPOINT,
-      'xhrFields' : {
-        'withCredentials' : true
-      },
-      'data' : JSON.stringify( {
-        'init' : 'none',
-        'query' : 'none',
-        'message' : 'none',
-        'no_root' : true
-      } ),
-      'success' : function( data, textStatus, request )
+    consolr.init( {
+      'init' : 'none',
+      'query' : 'none',
+      'message' : 'none',
+      'no_root' : true
+    }, success );
+
+    function success( data )
+    {
+      if ( callback )
       {
-        if ( callback )
-        {
-          callback();
-        }
-      },
-      'error' : console.log, // TODO add error message to the user
-      'async' : true
-    } );
+        callback();
+      }
+    }
+
+    function error( data )
+    {
+      console.log( 'Error during INIT: ', data );
+    }
   }
 
-  function executeQueries( callbackAfter, queries, index )
+  function executeQueries( callbackAfter )
   {
-    var remainingQueries = queries || $( 'div.query-wrapper' ).toArray().reverse();
-    var number = ( index || 0 ) + 1;
-    if ( remainingQueries.length === 0 )
+    var statements = [];
+    var $wrappers = [];
+    var receivedResults = 0;
+    $( 'div.query-wrapper' ).each( function( index, element )
     {
-      if ( callbackAfter )
+      var $wrapper = $( element );
+      var number = index + 1;
+      $wrapper.data( 'number', number );
+      var statement = $wrapper.data( 'query' );
+      statements.push( statement );
+      $wrappers.push( $wrapper );
+    } );
+
+    consolr.query( statements, success, error );
+
+    function success( data, resultNo )
+    {
+      receivedResults++;
+      var $wrapper = $wrappers[resultNo];
+      var showOutput = $wrapper.parent().data( 'show-output' );
+      createQueryResultButton( $QUERY_OK_BUTTON, $wrapper, data.result, !showOutput );
+      $wrapper.data( 'visualization', data['visualization'] );
+      $wrapper.data( 'data', data );
+      if ( callbackAfter && receivedResults === statements.length )
       {
         callbackAfter();
       }
-      return;
     }
-    var $wrapper = $( remainingQueries.pop() );
-    $wrapper.data( 'number', number );
-    var showOutput = $wrapper.parent().data( 'show-output' );
-    var statement = $wrapper.data( 'query' );
-    execute( statement, function( results )
-    {
-      var data = JSON.parse( results );
-      if ( data.error )
-      {
-        createQueryResultButton( $QUERY_ERROR_BUTTON, $wrapper, data.error, false );
-      }
-      else
-      {
-        createQueryResultButton( $QUERY_OK_BUTTON, $wrapper, data.result, !showOutput );
 
-        $wrapper.data( 'visualization', data['visualization'] );
-        $wrapper.data( 'data', data );
-      }
-      executeQueries( callbackAfter, remainingQueries, number );
-    }, function( results )
+    function error( results, resultNo )
     {
-      console.log( 'Could not execute: ' + statement );
-      console.log( 'Execution error', arguments );
-      executeQueries( callbackAfter, remainingQueries, number );
+      receivedResults++;
+      var $wrapper = $wrappers[resultNo];
+      var data = JSON.parse( results );
+      createQueryResultButton( $QUERY_ERROR_BUTTON, $wrapper, data.error, false );
+      if ( callbackAfter && receivedResults === statements.length )
+      {
+        callbackAfter();
+      }
+    }
+  }
+
+  function runSetupQuery()
+  {
+    $( '#content pre.highlight.setup-query' ).first().children( 'div.query-wrapper' ).first().each( function()
+    {
+      var $wrapper = $( this );
+      var query = $wrapper.data( 'query' );
+      if ( query )
+      {
+        consolr.query( [ query ] );
+      }
+      $wrapper.prevAll( 'h5' ).first().each( function()
+      {
+        var $heading = $( this );
+        $heading.text( $heading.text() + ' — this query has been used to initialize the console' );
+      } );
     } );
   }
 
@@ -293,7 +322,86 @@ function GraphGist( $ )
     } );
   }
 
-  function createCypherConsole()
+  function Consolr( consoleWindow )
+  {
+    window.addEventListener( 'message', receiver, false );
+    var receivers = [];
+
+    function init( params, success, error, data )
+    {
+      var index = 0;
+      if ( success || error )
+      {
+        receivers.push( new ResultReceiver( success, error ) );
+        index = receivers.length;
+      }
+      consoleWindow.postMessage( JSON.stringify( {
+        'action' : 'init',
+        'data' : params,
+        'call_id' : index
+      } ), "*" );
+    }
+
+    function query( queries, success, error )
+    {
+      var index = 0;
+      if ( success || error )
+      {
+        receivers.push( new ResultReceiver( success, error, queries.length ) );
+        index = receivers.length;
+      }
+      consoleWindow.postMessage( JSON.stringify( {
+        'action' : 'query',
+        'data' : queries,
+        'call_id' : index
+      } ), '*' );
+    }
+
+    function input( query )
+    {
+      consoleWindow.postMessage( JSON.stringify( {
+        'action' : 'input',
+        'data' : [ query ]
+      } ), '*' );
+    }
+
+    function receiver( event )
+    {
+      var result = event.data;
+      if ( 'call_id' in result )
+      {
+        var rr = receivers[result.call_id - 1];
+        rr( result );
+      }
+    }
+
+    function ResultReceiver( successFunc, errorFunc, numberOfResults )
+    {
+      var expectedResults = numberOfResults || 1;
+
+      function call( result )
+      {
+        if ( expectedResults === 0 )
+        {
+          console.log( 'Unexpected result', result );
+          return;
+        }
+        expectedResults--;
+        var resultNo = numberOfResults - expectedResults - 1;
+        return result.error ? errorFunc( result, resultNo ) : successFunc( result, resultNo );
+      }
+
+      return call;
+    }
+
+    return {
+      'init' : init,
+      'query' : query,
+      'input' : input
+    };
+  }
+
+  function createCypherConsole( ready )
   {
     $( 'p.console' ).first().each( function()
     {
@@ -302,20 +410,11 @@ function GraphGist( $ )
       var $iframe = $IFRAME.clone().attr( 'src', url );
       $iframe.load( function()
       {
-        $( '#content pre.highlight.setup-query' ).first().children( 'div.query-wrapper' ).first().each( function()
+        consolr = new Consolr( $iframe[0].contentWindow );
+        if ( ready )
         {
-          var $wrapper = $( this );
-          var query = $wrapper.data( 'query' );
-          if ( query )
-          {
-            executeInConsole( query );
-          }
-          $wrapper.prevAll( 'h5' ).first().each( function()
-          {
-            var $heading = $( this );
-            $heading.text( $heading.text() + ' — this query has been used to initialize the console' );
-          } );
-        } );
+          ready();
+        }
       } );
       $context.empty();
       var $iframeWrapper = $IFRAME_WRAPPER.clone();
@@ -327,7 +426,7 @@ function GraphGist( $ )
       {
         event.preventDefault();
         var query = $( this ).prevAll( 'div.query-wrapper' ).first().data( 'query' );
-        executeInConsole( query );
+        consolr.query( [ query ] );
       } ) );
       var offset = $iframeWrapper.offset();
       if ( offset && offset.top )
@@ -352,11 +451,6 @@ function GraphGist( $ )
         } );
       }
     } );
-
-    function executeInConsole( query )
-    {
-      $( '#console' )[0].contentWindow.postMessage( query, '*' );
-    }
 
     function getUrl( database, command, message, session )
     {
@@ -428,22 +522,6 @@ function GraphGist( $ )
       $icon.removeClass( EXPAND_ICON ).addClass( COLLAPSE_ICON );
       return 'show';
     }
-  }
-
-  function execute( statement, callback, error, endpoint )
-  {
-    var url = ( endpoint || CONSOLE_AJAX_ENDPOINT );
-    $.ajax( {
-      'xhrFields' : {
-        'withCredentials' : true
-      },
-      'type' : 'POST',
-      'url' : url,
-      'data' : statement,
-      'success' : callback,
-      'error' : error,
-      'async' : true
-    } );
   }
 
   function findQuery( selector, context, operation )
