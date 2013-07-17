@@ -69,7 +69,8 @@ function convertCell(cell) {
 
 function props(cell) {
     var props = [];
-    for (key in cell) {
+    console.log(cell);
+    for (var key in cell) {
         if (cell.hasOwnProperty(key) && key[0] != '_') {
             props.push([ key ] + ':' + JSON.stringify(cell[key]));
         }
