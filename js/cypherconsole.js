@@ -36,7 +36,7 @@ function GraphGist($) {
     var $TABLE_CONTAINER = $('<div/>').addClass('result-table');
     var ASCIIDOCTOR_OPTIONS = Opal.hash('attributes', [ 'notitle!' ]);
     var DEFAULT_SOURCE = '5956219';
-    var VALID_GIST = /^[0-9a-f]{5,32}$/;
+    var VALID_GIST = /^[0-9a-f]{5,32}\/?$/;
 
     var $content = undefined;
     var $gistId = undefined;
@@ -491,7 +491,7 @@ function GraphGist($) {
             return;
         }
 
-        var url = 'https://api.github.com/gists/' + gist;
+        var url = 'https://api.github.com/gists/' + gist.replace("/","");
         $.ajax({
             'url': url,
             'success': function (data) {
