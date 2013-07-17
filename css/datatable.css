@@ -1,28 +1,30 @@
-table.dataTable  {
-/*
-    clear: both;
-*/
+table.dataTable {
+    /*
+        clear: both;
+    */
     color: black;
     border: 1px solid #bbbbbb;
     /*max-width: 75%;*/
     /*min-width: 50%;*/
-/*
-    padding: 5px;
-    min-width: 50%;
-*/
+    /*
+        padding: 5px;
+        min-width: 50%;
+    */
 }
+
 table.dataTable thead {
-/*    border-bottom: 2px dashed white;*/
+    /*    border-bottom: 2px dashed white;*/
 }
 
 table.dataTable th, .dataTable td {
-/*    border-right: 2px dashed white;*/
+    /*    border-right: 2px dashed white;*/
     padding: 5px;
 }
 
 table.dataTable th {
-/*    border-bottom: 2px dashed white;*/
+    /*    border-bottom: 2px dashed white;*/
 }
+
 table.dataTable .odd {
     background: lightgray;
 }
@@ -37,9 +39,11 @@ table.dataTable .odd {
 .dataTables_length {
     float: left;
 }
+
 .dataTables_filter {
     text-align: right;
 }
+
 .dataTables_info {
     float: left;
     margin: 3px;
@@ -49,13 +53,16 @@ table.dataTable .odd {
     margin: 3px;
     text-align: right;
 }
+
 .paging_two_button {
 
 }
+
 .paginate_disabled_previous, .paginate_disabled_next {
     display: none;
     padding: 3px;
 }
+
 .paginate_enabled_previous, .paginate_enabled_next {
     padding: 3px;
     color: #090
@@ -64,22 +71,23 @@ table.dataTable .odd {
 table.dataTable .css_right {
     float: right;
 }
+
 .sorting_asc {
-	background: url('../images/sort_asc.png') no-repeat center right;
+    background: url('../images/sort_asc.png') no-repeat center right;
 }
 
 .sorting_desc {
-	background: url('../images/sort_desc.png') no-repeat center right;
+    background: url('../images/sort_desc.png') no-repeat center right;
 }
 
 .sorting {
-	background: url('../images/sort_both.png') no-repeat center right;
+    background: url('../images/sort_both.png') no-repeat center right;
 }
 
 .sorting_asc_disabled {
-	background: url('../images/sort_asc_disabled.png') no-repeat center right;
+    background: url('../images/sort_asc_disabled.png') no-repeat center right;
 }
 
 .sorting_desc_disabled {
-	background: url('../images/sort_desc_disabled.png') no-repeat center right;
+    background: url('../images/sort_desc_disabled.png') no-repeat center right;
 }
