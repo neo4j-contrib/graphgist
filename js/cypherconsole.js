@@ -223,10 +223,9 @@ function GraphGist($) {
             }
         }
 
-        function error(results, resultNo) {
+        function error(data, resultNo) {
             receivedResults++;
             var $wrapper = $wrappers[resultNo];
-            var data = JSON.parse(results);
             createQueryResultButton($QUERY_ERROR_BUTTON, $wrapper, data.error, false);
             if (callbackAfter && receivedResults === statements.length) {
                 callbackAfter();
@@ -310,7 +309,7 @@ function GraphGist($) {
         }
 
         function receiver(event) {
-            var result = event.data;
+            var result = JSON.parse(event.data);
             if ('call_id' in result) {
                 var rr = receivers[result.call_id - 1];
                 rr(result);
@@ -491,7 +490,7 @@ function GraphGist($) {
             return;
         }
 
-        var url = 'https://api.github.com/gists/' + gist.replace("/","");
+        var url = 'https://api.github.com/gists/' + gist.replace("/", "");
         $.ajax({
             'url': url,
             'success': function (data) {
