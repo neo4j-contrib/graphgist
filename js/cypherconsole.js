@@ -111,7 +111,7 @@ function GraphGist($) {
         var href = window.location.href;
         $('#twitter-share').attr(
             'href',
-            'https://twitter.com/intent/tweet?text=' + encodeURIComponent('Check out this: ' + title) + '&url='
+            'https://twitter.com/intent/tweet?text=' + encodeURIComponent('Check this out: ' + title) + '&url='
                 + encodeURIComponent(href));
     }
 
@@ -214,7 +214,7 @@ function GraphGist($) {
             statements.push(statement);
             $wrappers.push($wrapper);
         });
-
+        console.log(statements);
         consolr.query(statements, success, error);
 
         function success(data, resultNo) {
@@ -300,11 +300,13 @@ function GraphGist($) {
                 receivers.push(new ResultReceiver(success, error, queries.length));
                 index = receivers.length;
             }
-            consoleWindow.postMessage(JSON.stringify({
+            var message = JSON.stringify({
                 'action': 'query',
                 'data': queries,
                 'call_id': index
-            }), '*');
+            });
+            console.log(message);
+            consoleWindow.postMessage(message, '*');
         }
 
         function input(query) {
