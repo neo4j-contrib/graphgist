@@ -92,6 +92,15 @@ becomes:
 
 //table
 
+== Query with error ==
+
+This is what happens if a query causes an error:
+
+[source,cypher]
+----
+CREATE (n{name:'cypher'}
+----
+
 == Basic AsciiDoc formatting
 
 [width="50%",cols="1m,1a"]

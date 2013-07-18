@@ -22,15 +22,15 @@ function GraphGist($) {
     var $WRAPPER = $('<div class="query-wrapper" />');
     var $IFRAME = $('<iframe/>').attr('id', 'console').addClass('cypherdoc-console');
     var $IFRAME_WRAPPER = $('<div/>').attr('id', 'console-wrapper');
-    var COLLAPSE_ICON = 'icon-minus';
-    var EXPAND_ICON = 'icon-plus';
-    var $TOOGLE_BUTTON = $('<span class="query-toggle" title="Show/Hide the query."><i class="' + COLLAPSE_ICON
-        + ' icon-large"></i></span>');
-    var $PLAY_BUTTON = $('<a class="run-query btn btn-small btn-success" title="Execute the query." href="#"><i class="icon-play"></i></a>');
-    var $QUERY_OK_BUTTON = $('<a class="query-info badge badge-success" title="Click to show/hide results">OK <i class="'
-        + COLLAPSE_ICON + '"></i></a >');
-    var $QUERY_ERROR_BUTTON = $('<a class="query-info badge badge-important" title="Click to show/hide results">ERROR <i class="'
-        + COLLAPSE_ICON + '"></i></a >');
+    var COLLAPSE_ICON = 'icon-minus-sign-alt';
+    var EXPAND_ICON = 'icon-plus-sign-alt';
+    var $PLAY_BUTTON = $('<a class="run-query btn btn-small btn-success" data-toggle="tooltip" title="Execute the query." href="#"><i class="icon-play"></i></a>');
+    var $QUERY_OK_LABEL = $('<span class="label label-success query-info">Test run OK</span>');
+    var $QUERY_ERROR_LABEL = $('<span class="label label-important query-info">Test run Error</span>');
+    var $TOGGLE_BUTTON = $('<span data-toggle="tooltip"><i class="' + COLLAPSE_ICON
+        + '"></i></span>');
+    var $QUERY_TOGGLE_BUTTON = $TOGGLE_BUTTON.clone().addClass('query-toggle').attr('title', 'show/hide query');
+    var $RESULT_TOGGLE_BUTTON = $TOGGLE_BUTTON.clone().addClass('result-toggle').attr('title', 'show/hide result');
     var $QUERY_MESSAGE = $('<pre/>').addClass('query-message');
     var $VISUALIZATION = $('<div/>').addClass('visualization');
     var $TABLE_CONTAINER = $('<div/>').addClass('result-table');
@@ -95,9 +95,15 @@ function GraphGist($) {
                     renderGraphs();
                     renderTables();
                     runSetupQuery();
+                    postProcessRendering();
                 });
             });
         });
+    }
+
+    function postProcessRendering() {
+        $('span[data-toggle="tooltip"]').tooltip({'placement': 'left'});
+        $('a.run-query').tooltip({'placement': 'right'});
     }
 
     function twitterShare() {
@@ -141,7 +147,7 @@ function GraphGist($) {
             $el.wrap($WRAPPER).each(function () {
                 $el.parent().data('query', $el.text());
             });
-            var $toggleQuery = $TOOGLE_BUTTON.clone();
+            var $toggleQuery = $QUERY_TOGGLE_BUTTON.clone();
             $parent.append($toggleQuery);
             $toggleQuery.click(function () {
                 var $icon = $('i', this);
@@ -215,7 +221,7 @@ function GraphGist($) {
             receivedResults++;
             var $wrapper = $wrappers[resultNo];
             var showOutput = $wrapper.parent().data('show-output');
-            createQueryResultButton($QUERY_OK_BUTTON, $wrapper, data.result, !showOutput);
+            createQueryResultButton($QUERY_OK_LABEL, $wrapper, data.result, !showOutput);
             $wrapper.data('visualization', data['visualization']);
             $wrapper.data('data', data);
             if (callbackAfter && receivedResults === statements.length) {
@@ -226,7 +232,7 @@ function GraphGist($) {
         function error(data, resultNo) {
             receivedResults++;
             var $wrapper = $wrappers[resultNo];
-            createQueryResultButton($QUERY_ERROR_BUTTON, $wrapper, data.error, false);
+            createQueryResultButton($QUERY_ERROR_LABEL, $wrapper, data.error, false);
             if (callbackAfter && receivedResults === statements.length) {
                 callbackAfter();
             }
@@ -407,9 +413,10 @@ function GraphGist($) {
         return str.replace(/\\n/g, '&#013;');
     }
 
-    function createQueryResultButton($buttonType, $wrapper, message, hide) {
-        var $button = $buttonType.clone();
-        $wrapper.after($button);
+    function createQueryResultButton($labelType, $wrapper, message, hide) {
+        var $label = $labelType.clone();
+        var $button = $RESULT_TOGGLE_BUTTON.clone();
+        $wrapper.after($label).after($button);
         var $message = $QUERY_MESSAGE.clone().text(replaceNewlines(message));
         if (hide) {
             toggler($message, $button, 'hide');
