@@ -106,12 +106,22 @@
             right: 30px;
         }
 
+        a.resize-toggle {
+            position: absolute;
+            right: 0;
+            bottom: -30px;
+        }
+
         #content .syntaxhighlighter, #content .syntaxhighlighter .line.alt1, #content .syntaxhighlighter .line.alt2 {
             background-color: transparent !important;
         }
 
         #console-wrapper, p.console {
             height: 23em;
+        }
+
+        #console-wrapper {
+            position: relative;
         }
 
         #console {
@@ -130,12 +140,25 @@
             position: fixed;
         }
 
+        #console-label {
+            display: none;
+        }
+
+        p.console.fixed-console > #console-label {
+            display: inline;
+        }
+
+        p.console.fixed-console {
+            height: 24px;
+            margin-bottom: 24px;
+        }
+
         #content.internet-explorer #console-wrapper.fixed-console {
             width: 98%;
         }
 
         p.console {
-            margin-bottom: 3.5em;
+            margin-bottom: 48px;
             background: #eeeeee url('images/loading.gif') no-repeat center center;
         }
 

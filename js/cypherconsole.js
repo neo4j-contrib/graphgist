@@ -24,13 +24,15 @@ function GraphGist($) {
     var $IFRAME_WRAPPER = $('<div/>').attr('id', 'console-wrapper');
     var COLLAPSE_ICON = 'icon-minus-sign-alt';
     var EXPAND_ICON = 'icon-plus-sign-alt';
+    var RESIZE_OUT_ICON = 'icon-resize-full';
+    var RESIZE_IN_ICON = 'icon-resize-small';
     var $PLAY_BUTTON = $('<a class="run-query btn btn-small btn-success" data-toggle="tooltip" title="Execute the query." href="#"><i class="icon-play"></i></a>');
     var $QUERY_OK_LABEL = $('<span class="label label-success query-info">Test run OK</span>');
     var $QUERY_ERROR_LABEL = $('<span class="label label-important query-info">Test run Error</span>');
-    var $TOGGLE_BUTTON = $('<span data-toggle="tooltip"><i class="' + COLLAPSE_ICON
-        + '"></i></span>');
+    var $TOGGLE_BUTTON = $('<span data-toggle="tooltip"><i class="' + COLLAPSE_ICON + '"></i></span>');
     var $QUERY_TOGGLE_BUTTON = $TOGGLE_BUTTON.clone().addClass('query-toggle').attr('title', 'show/hide query');
     var $RESULT_TOGGLE_BUTTON = $TOGGLE_BUTTON.clone().addClass('result-toggle').attr('title', 'show/hide result');
+    var $RESIZE_BUTTON = $('<a class="btn btn-small resize-toggle"><i class="' + RESIZE_OUT_ICON + '"></i></a>');
     var $QUERY_MESSAGE = $('<pre/>').addClass('query-message');
     var $VISUALIZATION = $('<div/>').addClass('visualization');
     var $TABLE_CONTAINER = $('<div/>').addClass('result-table');
@@ -361,31 +363,30 @@ function GraphGist($) {
             $context.empty();
             var $iframeWrapper = $IFRAME_WRAPPER.clone();
             $iframeWrapper.append($iframe);
-            $context.append($iframeWrapper);
-            $context.height($iframeWrapper.height());
+            $context.append($iframeWrapper).append('<span id="console-label" class="label">Console expanded</span>');
+            //$context.height($iframeWrapper.height());
             $context.css('background', 'none');
+            var $resizeButton = $RESIZE_BUTTON.clone().appendTo($iframeWrapper).click(function () {
+                var $icon = $('i', $resizeButton);
+                if ($icon.hasClass(RESIZE_OUT_ICON)) {
+                    $icon.removeClass(RESIZE_OUT_ICON).addClass(RESIZE_IN_ICON);
+                    $iframeWrapper.addClass('fixed-console');
+                    $context.addClass('fixed-console');
+                    $('div.navbar').first().css('margin-top', $iframeWrapper.height());
+                    var $window = $(window);
+                }
+                else {
+                    $icon.removeClass(RESIZE_IN_ICON).addClass(RESIZE_OUT_ICON);
+                    $iframeWrapper.removeClass('fixed-console');
+                    $context.removeClass('fixed-console');
+                    $('div.navbar').first().css('margin-top', 0);
+                }
+            });
             $('div.query-wrapper').parent().append($PLAY_BUTTON.clone().click(function (event) {
                 event.preventDefault();
                 var query = $(this).prevAll('div.query-wrapper').first().data('query');
                 consolr.query([ query ]);
             }));
-            var offset = $iframeWrapper.offset();
-            if (offset && offset.top) {
-                var limit = offset.top;
-                var $window = $(window);
-                if ($window.scrollTop() > limit) {
-                    // in case the page is already scrolled-down.
-                    $iframeWrapper.addClass('fixed-console');
-                }
-                $window.scroll(function () {
-                    if ($window.scrollTop() > limit) {
-                        $iframeWrapper.addClass('fixed-console');
-                    }
-                    else {
-                        $iframeWrapper.removeClass('fixed-console');
-                    }
-                });
-            }
         });
 
         function getUrl(database, command, message, session) {
