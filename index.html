@@ -77,18 +77,21 @@
             margin: 6px 0;
         }
 
-        span.query-toggle {
+        span.query-toggle, span.result-toggle {
             position: absolute;
-            top: 0;
             right: 0;
-            padding: 6px 9.5px 9.5px 9.5px;
+            cursor: pointer;
+            padding: 9.5px;
+        }
+
+        span.query-toggle {
+            top: 0;
+            padding-top: 6px;
         }
 
         span.result-toggle {
-            position: absolute;
             bottom: 0;
-            right: 0;
-            padding: 9.5px 9.5px 6px 9.5px;
+            padding-bottom: 6px;
         }
 
         a.run-query {
@@ -142,10 +145,6 @@
             width: 100%;
             padding: 4em 0 0 0;
             text-align: center;
-        }
-
-        span.query-toggle {
-            cursor: pointer;
         }
 
         #gist-id {
