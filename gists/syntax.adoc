@@ -24,14 +24,16 @@ NOTE: The page layout will work best when the console precedes the first query.
 
  [source,cypher]
  ----
- CREATE (n{name:'cypher'})-[r:LIKES]->({name:'icecream'}) return n.name, r
+ CREATE (n{name:'cypher'})-[r:LIKES]->({name:'icecream'})
+ RETURN n.name, r
  ----
 
 becomes:
 
 [source,cypher]
 ----
-CREATE (n{name:'cypher'})-[r:LIKES]->({name:'icecream'}) return n.name, r
+CREATE (n{name:'cypher'})-[r:LIKES]->({name:'icecream'})
+RETURN n.name, r
 ----
 
 _Queries are executed in the order they appear on the page during rendering, so make sure they can be performed in that order._
@@ -58,7 +60,8 @@ Let's try all the settings together, which means this query will be used to init
  //output
  [source,cypher]
  ----
- CREATE (n{name:'neo4j'})-[:LIKES]->({name:'complex data'}) return n.name
+ CREATE (n{name:'neo4j'})-[:LIKES]->({name:'complex data'})
+ RETURN n.name
  ----
 
 which becomes:
@@ -68,7 +71,8 @@ which becomes:
 //output
 [source,cypher]
 ----
-CREATE (n{name:'neo4j'})-[:LIKES]->({name:'complex data'}) return n.name
+CREATE (n{name:'neo4j'})-[:LIKES]->({name:'complex data'})
+RETURN n.name
 ----
 
 
