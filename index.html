@@ -192,25 +192,43 @@
 <body>
 <div class="navbar">
     <div class="navbar-inner">
+
         <a class="brand" href="http://gist.neo4j.org/">
             <img style="height: 40px;" src="images/neo4j-gray_60x80.png"> Neo4j Graph Gist
         </a>
-        <a class="btn btn-small" href=" http://www.neo4j.org/" target="_blank">
-            <i class="icon-home"></i> Neo4j
-        </a>
-        <a class="btn btn-small" href=" http://docs.neo4j.org/chunked/milestone/cypher-query-lang.html" target="_blank">
-            <i class="icon-book"></i> Cypher Manual
-        </a>
-        <a class="btn btn-small" href=" http://docs.neo4j.org/refcard/1.9/" target="_blank">
-            <i class="icon-columns"></i> Cypher Refcard
-        </a>
-        <a class="btn btn-small btn-success disabled" id="gist_link" href="javascript:;" target="_blank">
+
+        <div class="btn-group">
+            <a class="btn dropdown-toggle" data-toggle="dropdown" data-target="#">
+                <i class="icon-external-link"></i> Resources
+                <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                <li><a href=" http://www.neo4j.org/" target="_blank">
+                    <i class="icon-home"></i> Neo4j
+                </a></li>
+                <li><a href=" http://docs.neo4j.org/chunked/milestone/cypher-query-lang.html"
+                       target="_blank">
+                    <i class="icon-book"></i> Cypher Manual
+                </a></li>
+                <li><a href=" http://docs.neo4j.org/refcard/1.9/" target="_blank">
+                    <i class="icon-columns"></i> Cypher Refcard
+                </a></li>
+            </ul>
+        </div>
+        <a class="btn btn-success disabled" id="gist_link" href="javascript:;" target="_blank">
             <i class="icon-file-text"></i> Page Source
         </a>
-        <a id="twitter-share" href="" target="_blank" class="btn btn-small" data-toggle="tooltip"
-           title="Tweet">
-            <i class="icon-twitter"></i>
-        </a>
+
+        <div class="btn-group">
+            <a class="btn dropdown-toggle" data-toggle="dropdown" data-target="#">
+                <i class="icon-share-alt"></i> Share
+                <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                <li><a id="twitter-share" href="" target="_blank" data-toggle="tooltip" title="Tweet">
+                    <i class="icon-twitter"></i> Twitter
+                </a></li>
+        </div>
 
         <form class="navbar-form pull-right">
             <div class="input-prepend">

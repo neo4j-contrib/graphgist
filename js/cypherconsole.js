@@ -26,8 +26,8 @@ function GraphGist($) {
     var EXPAND_ICON = 'icon-plus-sign-alt';
     var RESIZE_OUT_ICON = 'icon-resize-full';
     var RESIZE_IN_ICON = 'icon-resize-small';
-    var $PLAY_BUTTON = $('<a class="run-query btn btn-small btn-success" data-toggle="tooltip" title="Execute in the console." href="javascript:;"><i class="icon-play"></i></a>');
-    var $EDIT_BUTTON = $('<a class="edit-query btn btn-small" data-toggle="tooltip" title="Edit in the console." href="javascript:;"><i class="icon-edit"></i></a>');
+    var $PLAY_BUTTON = $('<a class="run-query btn btn-small btn-success" data-toggle="tooltip" title="Execute in the console." href="#"><i class="icon-play"></i></a>');
+    var $EDIT_BUTTON = $('<a class="edit-query btn btn-small" data-toggle="tooltip" title="Edit in the console." href="#"><i class="icon-edit"></i></a>');
     var $QUERY_OK_LABEL = $('<span class="label label-success query-info">Test run OK</span>');
     var $QUERY_ERROR_LABEL = $('<span class="label label-important query-info">Test run Error</span>');
     var $TOGGLE_BUTTON = $('<span data-toggle="tooltip"><i class="' + COLLAPSE_ICON + '"></i></span>');
@@ -48,6 +48,7 @@ function GraphGist($) {
     $(document).ready(function () {
         $content = $('#content');
         $gistId = $('#gist-id');
+        //$('.dropdown-toggle').dropdown();
         renderPage();
         $gistId.keydown(readSourceId);
     });
