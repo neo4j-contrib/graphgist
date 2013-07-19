@@ -109,13 +109,15 @@ function GraphGist($) {
         $('a.run-query,a.edit-query').tooltip({'placement': 'right'});
     }
 
-    function twitterShare() {
+    function share() {
         var title = document.title;
-        var href = window.location.href;
+        var href = encodeURIComponent(window.location.href);
         $('#twitter-share').attr(
             'href',
-            'https://twitter.com/intent/tweet?text=' + encodeURIComponent('Check this out: ' + title) + '&url='
-                + encodeURIComponent(href));
+            'https://twitter.com/intent/tweet?text=' + encodeURIComponent('Check this out: ' + title) + '&url=' + href);
+        $('#facebook-share').attr(
+            'href',
+            'http://www.facebook.com/share.php?u=' + href);
     }
 
     function preProcessContents(content) {
@@ -183,7 +185,7 @@ function GraphGist($) {
         if (heading.length) {
             document.title = heading.text() + "  -  Neo4j GraphGist";
         }
-        twitterShare();
+        share();
     }
 
     function initConsole(callback) {
