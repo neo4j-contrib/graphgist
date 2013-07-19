@@ -31,11 +31,9 @@ function convertResult(data) {
     for (var col = 0; col < count; col++) {
         width += result.columns[col].sWidth;
     }
-    // var windowWith = $( window ).width() / 2;
+
     for (var col = 0; col < count; col++) {
-        // result.columns[col].sWidth=windowWith * result.columns[col].sWidth / width;
         result.columns[col].sWidth = '' + Math.round(100 * result.columns[col].sWidth / width) + '%';
-        // console.log(result.columns[col].sWidth);
     }
     return result;
 }
@@ -69,7 +67,6 @@ function convertCell(cell) {
 
 function props(cell) {
     var props = [];
-    console.log(cell);
     for (var key in cell) {
         if (cell.hasOwnProperty(key) && key[0] != '_') {
             props.push([ key ] + ':' + JSON.stringify(cell[key]));
@@ -84,7 +81,6 @@ function renderTable(element, data) {
     }
     var result = convertResult(data);
     var table = $TABLE.clone().appendTo($(element));
-    // console.log(1);
     var large = result.data.length > 10;
     var dataTable = table.dataTable({
         'aoColumns': result.columns,

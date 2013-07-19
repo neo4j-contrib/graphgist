@@ -26,13 +26,13 @@ function GraphGist($) {
     var EXPAND_ICON = 'icon-plus-sign-alt';
     var RESIZE_OUT_ICON = 'icon-resize-full';
     var RESIZE_IN_ICON = 'icon-resize-small';
-    var $PLAY_BUTTON = $('<a class="run-query btn btn-small btn-success" data-toggle="tooltip" title="Execute the query." href="javascript:;"><i class="icon-play"></i></a>');
-    var $EDIT_BUTTON = $('<a class="edit-query btn btn-small" data-toggle="tooltip" title="Edit the query in the console." href="javascript:;"><i class="icon-edit"></i></a>');
+    var $PLAY_BUTTON = $('<a class="run-query btn btn-small btn-success" data-toggle="tooltip" title="Execute in the console." href="javascript:;"><i class="icon-play"></i></a>');
+    var $EDIT_BUTTON = $('<a class="edit-query btn btn-small" data-toggle="tooltip" title="Edit in the console." href="javascript:;"><i class="icon-edit"></i></a>');
     var $QUERY_OK_LABEL = $('<span class="label label-success query-info">Test run OK</span>');
     var $QUERY_ERROR_LABEL = $('<span class="label label-important query-info">Test run Error</span>');
     var $TOGGLE_BUTTON = $('<span data-toggle="tooltip"><i class="' + COLLAPSE_ICON + '"></i></span>');
-    var $QUERY_TOGGLE_BUTTON = $TOGGLE_BUTTON.clone().addClass('query-toggle').attr('title', 'show/hide query');
-    var $RESULT_TOGGLE_BUTTON = $TOGGLE_BUTTON.clone().addClass('result-toggle').attr('title', 'show/hide result');
+    var $QUERY_TOGGLE_BUTTON = $TOGGLE_BUTTON.clone().addClass('query-toggle').attr('title', 'Show/hide query.');
+    var $RESULT_TOGGLE_BUTTON = $TOGGLE_BUTTON.clone().addClass('result-toggle').attr('title', 'Show/hide result.');
     var $RESIZE_BUTTON = $('<a class="btn btn-small resize-toggle"><i class="' + RESIZE_OUT_ICON + '"></i></a>');
     var $QUERY_MESSAGE = $('<pre/>').addClass('query-message');
     var $VISUALIZATION = $('<div/>').addClass('visualization');
@@ -105,7 +105,7 @@ function GraphGist($) {
 
     function postProcessRendering() {
         $('span[data-toggle="tooltip"]').tooltip({'placement': 'left'});
-        $('a.run-query').tooltip({'placement': 'right'});
+        $('a.run-query,a.edit-query').tooltip({'placement': 'right'});
     }
 
     function twitterShare() {
