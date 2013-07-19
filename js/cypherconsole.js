@@ -26,7 +26,8 @@ function GraphGist($) {
     var EXPAND_ICON = 'icon-plus-sign-alt';
     var RESIZE_OUT_ICON = 'icon-resize-full';
     var RESIZE_IN_ICON = 'icon-resize-small';
-    var $PLAY_BUTTON = $('<a class="run-query btn btn-small btn-success" data-toggle="tooltip" title="Execute the query." href="#"><i class="icon-play"></i></a>');
+    var $PLAY_BUTTON = $('<a class="run-query btn btn-small btn-success" data-toggle="tooltip" title="Execute the query." href="javascript:;"><i class="icon-play"></i></a>');
+    var $EDIT_BUTTON = $('<a class="edit-query btn btn-small" data-toggle="tooltip" title="Edit the query in the console." href="javascript:;"><i class="icon-edit"></i></a>');
     var $QUERY_OK_LABEL = $('<span class="label label-success query-info">Test run OK</span>');
     var $QUERY_ERROR_LABEL = $('<span class="label label-important query-info">Test run Error</span>');
     var $TOGGLE_BUTTON = $('<span data-toggle="tooltip"><i class="' + COLLAPSE_ICON + '"></i></span>');
@@ -96,7 +97,6 @@ function GraphGist($) {
                 initConsole(function () {
                     renderGraphs();
                     renderTables();
-                    runSetupQuery();
                     postProcessRendering();
                 });
             });
@@ -157,7 +157,7 @@ function GraphGist($) {
                 var action = toggler($queryWrapper, this);
                 if (action === 'hide') {
                     var $queryMessage = $queryWrapper.nextAll('pre.query-message').first();
-                    var $icon = $queryWrapper.nextAll('a.query-info').first();
+                    $icon = $queryWrapper.nextAll('span.result-toggle').first();
                     toggler($queryMessage, $icon, 'hide');
                 }
             });
@@ -186,9 +186,10 @@ function GraphGist($) {
     }
 
     function initConsole(callback) {
+        var query = getSetupQuery();
         consolr.init({
             'init': 'none',
-            'query': 'none',
+            'query': query || 'none',
             'message': 'none',
             'no_root': true
         }, success);
@@ -216,7 +217,6 @@ function GraphGist($) {
             statements.push(statement);
             $wrappers.push($wrapper);
         });
-        console.log(statements);
         consolr.query(statements, success, error);
 
         function success(data, resultNo) {
@@ -241,18 +241,19 @@ function GraphGist($) {
         }
     }
 
-    function runSetupQuery() {
+    function getSetupQuery() {
+        var query = undefined;
         $('#content pre.highlight.setup-query').first().children('div.query-wrapper').first().each(function () {
             var $wrapper = $(this);
-            var query = $wrapper.data('query');
+            query = $wrapper.data('query');
             if (query) {
-                consolr.query([ query ]);
+                $wrapper.prevAll('h5').first().each(function () {
+                    var $heading = $(this);
+                    $heading.text($heading.text() + ' — this query has been used to initialize the console');
+                });
             }
-            $wrapper.prevAll('h5').first().each(function () {
-                var $heading = $(this);
-                $heading.text($heading.text() + ' — this query has been used to initialize the console');
-            });
         });
+        return query;
     }
 
     function renderGraphs() {
@@ -307,7 +308,6 @@ function GraphGist($) {
                 'data': queries,
                 'call_id': index
             });
-            console.log(message);
             consoleWindow.postMessage(message, '*');
         }
 
@@ -383,11 +383,17 @@ function GraphGist($) {
                 }
             });
             $('div.query-wrapper').parent().append($PLAY_BUTTON.clone().click(function (event) {
-                event.preventDefault();
-                var query = $(this).prevAll('div.query-wrapper').first().data('query');
-                consolr.query([ query ]);
-            }));
+                    event.preventDefault();
+                    consolr.query([ getQueryFromButton(this) ]);
+                })).append($EDIT_BUTTON.clone().click(function (event) {
+                    event.preventDefault();
+                    consolr.input(getQueryFromButton(this));
+                }));
         });
+
+        function getQueryFromButton(button) {
+            return $(button).prevAll('div.query-wrapper').first().data('query');
+        }
 
         function getUrl(database, command, message, session) {
             var url = CONSOLE_URL_BASE;
