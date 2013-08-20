@@ -16,30 +16,18 @@
 GraphGist(jQuery);
 
 function GraphGist($) {
-//    var CONSOLE_URL_BASE = 'http://localhost:8080/';
-    var CONSOLE_URL_BASE = 'http://console-test.neo4j.org/';
-    var DROPBOX_BASE_URL = 'https://dl.dropboxusercontent.com/u/';
     var $WRAPPER = $('<div class="query-wrapper" />');
-    var $IFRAME = $('<iframe/>').attr('id', 'console').addClass('cypherdoc-console');
-    var $IFRAME_WRAPPER = $('<div/>').attr('id', 'console-wrapper');
     var COLLAPSE_ICON = 'icon-minus-sign-alt';
     var EXPAND_ICON = 'icon-plus-sign-alt';
-    var RESIZE_OUT_ICON = 'icon-resize-full';
-    var RESIZE_IN_ICON = 'icon-resize-small';
-    var $PLAY_BUTTON = $('<a class="run-query btn btn-small btn-success" data-toggle="tooltip" title="Execute in the console." href="#"><i class="icon-play"></i></a>');
-    var $EDIT_BUTTON = $('<a class="edit-query btn btn-small" data-toggle="tooltip" title="Edit in the console." href="#"><i class="icon-edit"></i></a>');
     var $QUERY_OK_LABEL = $('<span class="label label-success query-info">Test run OK</span>');
     var $QUERY_ERROR_LABEL = $('<span class="label label-important query-info">Test run Error</span>');
     var $TOGGLE_BUTTON = $('<span data-toggle="tooltip"><i class="' + COLLAPSE_ICON + '"></i></span>');
     var $QUERY_TOGGLE_BUTTON = $TOGGLE_BUTTON.clone().addClass('query-toggle').attr('title', 'Show/hide query.');
     var $RESULT_TOGGLE_BUTTON = $TOGGLE_BUTTON.clone().addClass('result-toggle').attr('title', 'Show/hide result.');
-    var $RESIZE_BUTTON = $('<a class="btn btn-small resize-toggle"><i class="' + RESIZE_OUT_ICON + '"></i></a>');
     var $QUERY_MESSAGE = $('<pre/>').addClass('query-message');
     var $VISUALIZATION = $('<div/>').addClass('visualization');
     var $TABLE_CONTAINER = $('<div/>').addClass('result-table');
     var ASCIIDOCTOR_OPTIONS = Opal.hash('attributes', [ 'notitle!' ]);
-    var DEFAULT_SOURCE = '5956219';
-    var VALID_GIST = /^[0-9a-f]{5,32}\/?$/;
 
     var $content = undefined;
     var $gistId = undefined;
@@ -48,36 +36,10 @@ function GraphGist($) {
     $(document).ready(function () {
         $content = $('#content');
         $gistId = $('#gist-id');
-        //$('.dropdown-toggle').dropdown();
-        renderPage();
-        $gistId.keydown(readSourceId);
+        var gist = new Gist($, $content);
+        gist.getGistAndRenderPage(renderContent);
+        $gistId.keydown(gist.readSourceId);
     });
-
-    function renderPage() {
-        var id = window.location.search;
-        if (id.length < 2) {
-            id = DEFAULT_SOURCE;
-        }
-        else {
-            id = id.substr(1);
-        }
-        var fetcher = fetchGithubGist;
-        if (id.length > 8 && id.substr(0, 8) === 'dropbox-') {
-            fetcher = fetchDropboxFile;
-            id = id.substr(8);
-        }
-        else if (!VALID_GIST.test(id)) {
-            if (id.indexOf('%3A%2F%2F') !== -1) {
-                fetcher = fetchAnyUrl;
-            }
-            else {
-                fetcher = fetchLocalSnippet;
-            }
-        }
-        fetcher(id, renderContent, function (message) {
-            errorMessage(message, id);
-        });
-    }
 
     function renderContent(originalContent, link) {
         $('#gist_link').attr('href', link).removeClass('disabled');
@@ -93,7 +55,8 @@ function GraphGist($) {
         }
         $content.html(generatedHtml);
         postProcessPage();
-        createCypherConsole(function () {
+        CypherConsole({}, function (conslr) {
+            consolr = conslr;
             executeQueries(function () {
                 initConsole(function () {
                     renderGraphs();
@@ -283,144 +246,6 @@ function GraphGist($) {
         });
     }
 
-    function Consolr(consoleWindow) {
-        window.addEventListener('message', receiver, false);
-        var receivers = [];
-
-        function init(params, success, error, data) {
-            var index = 0;
-            if (success || error) {
-                receivers.push(new ResultReceiver(success, error));
-                index = receivers.length;
-            }
-            consoleWindow.postMessage(JSON.stringify({
-                'action': 'init',
-                'data': params,
-                'call_id': index
-            }), "*");
-        }
-
-        function query(queries, success, error) {
-            var index = 0;
-            if (success || error) {
-                receivers.push(new ResultReceiver(success, error, queries.length));
-                index = receivers.length;
-            }
-            var message = JSON.stringify({
-                'action': 'query',
-                'data': queries,
-                'call_id': index
-            });
-            consoleWindow.postMessage(message, '*');
-        }
-
-        function input(query) {
-            consoleWindow.postMessage(JSON.stringify({
-                'action': 'input',
-                'data': [ query ]
-            }), '*');
-        }
-
-        function receiver(event) {
-            var result = JSON.parse(event.data);
-            if ('call_id' in result) {
-                var rr = receivers[result.call_id - 1];
-                rr(result);
-            }
-        }
-
-        function ResultReceiver(successFunc, errorFunc, numberOfResults) {
-            var expectedResults = numberOfResults || 1;
-
-            function call(result) {
-                if (expectedResults === 0) {
-                    console.log('Unexpected result', result);
-                    return;
-                }
-                expectedResults--;
-                var resultNo = numberOfResults - expectedResults - 1;
-                return result.error ? errorFunc(result, resultNo) : successFunc(result, resultNo);
-            }
-
-            return call;
-        }
-
-        return {
-            'init': init,
-            'query': query,
-            'input': input
-        };
-    }
-
-    function createCypherConsole(ready) {
-        $('p.console').first().each(function () {
-            var $context = $(this);
-            var url = getUrl('none', 'none', '\n\nClick the play buttons to run the queries!');
-            var $iframe = $IFRAME.clone().attr('src', url);
-            $iframe.load(function () {
-                consolr = new Consolr($iframe[0].contentWindow);
-                if (ready) {
-                    ready();
-                }
-            });
-            $context.empty();
-            var $iframeWrapper = $IFRAME_WRAPPER.clone();
-            $iframeWrapper.append($iframe);
-            $context.append($iframeWrapper).append('<span id="console-label" class="label">Console expanded</span>');
-            //$context.height($iframeWrapper.height());
-            $context.css('background', 'none');
-            var $resizeButton = $RESIZE_BUTTON.clone().appendTo($iframeWrapper).click(function () {
-                var $icon = $('i', $resizeButton);
-                if ($icon.hasClass(RESIZE_OUT_ICON)) {
-                    $icon.removeClass(RESIZE_OUT_ICON).addClass(RESIZE_IN_ICON);
-                    $iframeWrapper.addClass('fixed-console');
-                    $context.addClass('fixed-console');
-                    $('div.navbar').first().css('margin-top', $iframeWrapper.height());
-                    var $window = $(window);
-                }
-                else {
-                    $icon.removeClass(RESIZE_IN_ICON).addClass(RESIZE_OUT_ICON);
-                    $iframeWrapper.removeClass('fixed-console');
-                    $context.removeClass('fixed-console');
-                    $('div.navbar').first().css('margin-top', 0);
-                }
-            });
-            $('div.query-wrapper').parent().append($PLAY_BUTTON.clone().click(function (event) {
-                    event.preventDefault();
-                    consolr.query([ getQueryFromButton(this) ]);
-                })).append($EDIT_BUTTON.clone().click(function (event) {
-                    event.preventDefault();
-                    consolr.input(getQueryFromButton(this));
-                }));
-        });
-
-        function getQueryFromButton(button) {
-            return $(button).prevAll('div.query-wrapper').first().data('query');
-        }
-
-        function getUrl(database, command, message, session) {
-            var url = CONSOLE_URL_BASE;
-
-            if (session !== undefined) {
-                url += ';jsessionid=' + session;
-            }
-            url += '?';
-            if (database !== undefined) {
-                url += 'init=' + encodeURIComponent(database);
-            }
-            if (command !== undefined) {
-                url += '&query=' + encodeURIComponent(command);
-            }
-            if (message !== undefined) {
-                url += '&message=' + encodeURIComponent(message);
-            }
-            if (window.neo4jVersion != undefined) {
-                url += '&version=' + encodeURIComponent(neo4jVersion);
-            }
-            return url + '&no_root=true';
-        }
-    }
-
     function replaceNewlines(str) {
         return str.replace(/\\n/g, '&#013;');
     }
@@ -501,101 +326,6 @@ function GraphGist($) {
             done = true;
         });
         return done;
-    }
-
-    function fetchGithubGist(gist, success, error) {
-        if (!VALID_GIST.test(gist)) {
-            error('The gist id is malformed: ' + gist);
-            return;
-        }
-
-        var url = 'https://api.github.com/gists/' + gist.replace("/", "");
-        $.ajax({
-            'url': url,
-            'success': function (data) {
-                var file = data.files[Object.keys(data.files)[0]];
-                var content = file.content;
-                var link = data.html_url;
-                success(content, link);
-            },
-            'dataType': 'json',
-            'error': function (xhr, status, errorMessage) {
-                error(errorMessage);
-            }
-        });
-    }
-
-    function fetchDropboxFile(id, success, error) {
-        var url = DROPBOX_BASE_URL + decodeURIComponent(id);
-        $.ajax({
-            'url': url,
-            'success': function (data) {
-                success(data, url);
-            },
-            'dataType': 'text',
-            'error': function (xhr, status, errorMessage) {
-                error(errorMessage);
-            }
-        });
-    }
-
-    function fetchAnyUrl(id, success, error) {
-        var url = decodeURIComponent(id);
-        $.ajax({
-            'url': url,
-            'success': function (data) {
-                success(data, url);
-            },
-            'dataType': 'text',
-            'error': function (xhr, status, errorMessage) {
-                error(errorMessage);
-            }
-        });
-    }
-
-    function fetchLocalSnippet(id, success, error) {
-        var url = './gists/' + id + '.adoc';
-        $.ajax({
-            'url': url,
-            'success': function (data) {
-                var link = 'https://github.com/neo4j-contrib/graphgist/tree/master/gists/' + id + '.adoc';
-                success(data, link);
-            },
-            'dataType': 'text',
-            'error': function (xhr, status, errorMessage) {
-                error(errorMessage);
-            }
-        });
-    }
-
-    function readSourceId(event) {
-        var $target = $(event.target);
-        if (event.which === 13 || event.which === 9) {
-            event.preventDefault();
-            $target.blur();
-            var gist = $.trim($target.val());
-            if (gist.indexOf('/') !== -1) {
-                var baseLen = DROPBOX_BASE_URL.length;
-                if (gist.length > baseLen && gist.substr(0, baseLen) === DROPBOX_BASE_URL) {
-                    gist = 'dropbox-' + encodeURIComponent(gist.substr(baseLen));
-                }
-                else {
-                    var pos = gist.lastIndexOf('/');
-                    var endOfUrl = gist.substr(pos + 1);
-                    if (gist.indexOf('://') !== -1 && !VALID_GIST.test(endOfUrl)) {
-                        gist = encodeURIComponent(gist);
-                    }
-                    else {
-                        gist = endOfUrl;
-                    }
-                }
-            }
-            if (gist.charAt(0) === '?') {
-                // in case a GraphGist URL was pasted by mistake!
-                gist = gist.substr(1);
-            }
-            window.location.assign('?' + gist);
-        }
     }
 
     function errorMessage(message, gist) {
