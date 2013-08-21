@@ -27,8 +27,9 @@ function CypherConsole(config, ready) {
     var $EDIT_BUTTON = $('<a class="edit-query btn btn-small" data-toggle="tooltip" title="Edit in the console." href="#"><i class="icon-edit"></i></a>');
 
     var consolr;
-    var consoleClass = 'consoleClass' in config ? config.console : 'console';
-    var contentId = 'contentId' in config ? config.content : 'content';
+    var consoleClass = 'consoleClass' in config ? config.consoleClass : 'console';
+    var contentId = 'contentId' in config ? config.contentId : 'content';
+    var contentMoveSelector = 'contentMoveSelector' in config ? config.contentMoveSelector : 'div.navbar';
 
     createConsole(ready, consoleClass, contentId);
 
@@ -65,13 +66,13 @@ function CypherConsole(config, ready) {
                 $icon.removeClass(RESIZE_OUT_ICON).addClass(RESIZE_IN_ICON);
                 $iframeWrapper.addClass('fixed-console');
                 $context.addClass('fixed-console');
-                $('div.navbar').first().css('margin-top', $iframeWrapper.height());
+                $(contentMoveSelector).first().css('margin-top', $iframeWrapper.height());
             }
             else {
                 $icon.removeClass(RESIZE_IN_ICON).addClass(RESIZE_OUT_ICON);
                 $iframeWrapper.removeClass('fixed-console');
                 $context.removeClass('fixed-console');
-                $('div.navbar').first().css('margin-top', 0);
+                $(contentMoveSelector).first().css('margin-top', 0);
             }
         });
     }
