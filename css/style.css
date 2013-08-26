@@ -98,10 +98,23 @@ a.edit-query {
     right: 30px;
 }
 
-a.resize-toggle {
+a.resize-toggle, a.resize-vertical-handle {
     position: absolute;
     right: 0;
     bottom: -30px;
+}
+
+a.resize-vertical-handle {
+    right: 38px;
+    cursor: s-resize;
+}
+
+#resize-overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
 }
 
 #content .syntaxhighlighter, #content .syntaxhighlighter .line.alt1, #content .syntaxhighlighter .line.alt2 {
