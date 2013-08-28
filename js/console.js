@@ -22,9 +22,8 @@ function CypherConsole(config, ready) {
     var $IFRAME_WRAPPER = $('<div/>').attr('id', 'console-wrapper');
     var RESIZE_OUT_ICON = 'icon-resize-full';
     var RESIZE_IN_ICON = 'icon-resize-small';
-    var RESIZE_VERTICAL_ICON = 'icon-resize-vertical';
     var $RESIZE_BUTTON = $('<a class="btn btn-small resize-toggle"><i class="' + RESIZE_OUT_ICON + '"></i></a>');
-    var $RESIZE_VERTICAL_BUTTON = $('<a class="btn btn-small resize-vertical-handle ui-resizable-handle ui-resizable-s"><i class="' + RESIZE_VERTICAL_ICON + '"></i></a>');
+    var $RESIZE_VERTICAL_BUTTON = $('<span class="resize-vertical-handle ui-resizable-handle ui-resizable-s"><span/></span>');
     var $PLAY_BUTTON = $('<a class="run-query btn btn-small btn-success" data-toggle="tooltip" title="Execute in the console." href="#"><i class="icon-play"></i></a>');
     var $EDIT_BUTTON = $('<a class="edit-query btn btn-small" data-toggle="tooltip" title="Edit in the console." href="#"><i class="icon-edit"></i></a>');
 
@@ -66,7 +65,9 @@ function CypherConsole(config, ready) {
         $context.append($iframeWrapper).append('<span id="console-label" class="label">Console expanded</span>');
         $context.css('background', 'none');
         var latestResizeAmount = 0;
-        var $verticalResizeButton = $RESIZE_VERTICAL_BUTTON.clone().appendTo($iframeWrapper);
+        var $verticalResizeButton = $RESIZE_VERTICAL_BUTTON.clone().appendTo($iframeWrapper).mousedown(function(event){
+            event.preventDefault();
+        });
         $iframeWrapper.resizable({'handles': {'s': $verticalResizeButton}, 'alsoResize': $context, 'minHeight': 80, 'start': function () {
                 $resizeOverlay.appendTo($iframeWrapper);
             }, 'stop': function (event, ui) {
