@@ -161,6 +161,7 @@ function GraphGist($) {
         }, success);
 
         function success(data) {
+            consolr.input('');
             if (callback) {
                 callback();
             }
