@@ -34,6 +34,10 @@ function Gist($, $content) {
             fetcher = fetchDropboxFile;
             id = id.substr(8);
         }
+        else if (id.length > 7 && id.substr(0, 7) === 'github-') {
+            fetcher = fetchGithubFile;
+            id = id.substr(7);
+        }
         else if (!VALID_GIST.test(id)) {
             if (id.indexOf('%3A%2F%2F') !== -1) {
                 fetcher = fetchAnyUrl;
@@ -57,6 +61,15 @@ function Gist($, $content) {
                 var baseLen = DROPBOX_BASE_URL.length;
                 if (gist.length > baseLen && gist.substr(0, baseLen) === DROPBOX_BASE_URL) {
                     gist = 'dropbox-' + encodeURIComponent(gist.substr(baseLen));
+                }
+                else if (gist.length > 30 && (gist.substr(0, 19) === 'https://github.com/' || gist.substr(0, 23) === 'https://raw.github.com/')
+                    ) {
+                    var parts = gist.split('/');
+                    var pathIndex = parts[2] === 'raw.github.com' ? 6 : 7;
+                    if (parts.length >= pathIndex) {
+                        gist = 'github-' + parts[3] + '/' + parts[4] + '/contents/' + parts.slice(pathIndex).join('/');
+                    } // else pretend it's a raw URL - encoding needed in both cases
+                    gist = encodeURIComponent(gist);
                 }
                 else {
                     var pos = gist.lastIndexOf('/');
@@ -89,6 +102,22 @@ function Gist($, $content) {
             'success': function (data) {
                 var file = data.files[Object.keys(data.files)[0]];
                 var content = file.content;
+                var link = data.html_url;
+                success(content, link);
+            },
+            'dataType': 'json',
+            'error': function (xhr, status, errorMessage) {
+                error(errorMessage);
+            }
+        });
+    }
+
+    function fetchGithubFile(gist, success, error) {
+        var url = 'https://api.github.com/repos/' + decodeURIComponent(gist);
+        $.ajax({
+            'url': url,
+            'success': function (data) {
+                var content = Base64.decode(data.content);
                 var link = data.html_url;
                 success(content, link);
             },
