@@ -28,7 +28,7 @@ function GraphGist($) {
     var $VISUALIZATION = $('<div/>').addClass('visualization');
     var $TABLE_CONTAINER = $('<div/>').addClass('result-table');
     var ASCIIDOCTOR_OPTIONS = Opal.hash('attributes', [ 'notitle!' ]);
-    var DEFAULT_SOURCE = 'github-neo4j-contrib%2Fgists%2Fcontents%2Fmeta%2FHome.adoc';
+    var DEFAULT_SOURCE = 'github-neo4j-contrib%2Fgists%2F%2Fmeta%2FHome.adoc';
 
     var $content = undefined;
     var $gistId = undefined;
@@ -42,10 +42,13 @@ function GraphGist($) {
         $gistId.keydown(gist.readSourceId);
     });
 
-    function renderContent(originalContent, link) {
+    function renderContent(originalContent, link, imagesdir) {
         $('#gist_link').attr('href', link).removeClass('disabled');
         var doc = preProcessContents(originalContent);
         $content.empty();
+        if (imagesdir) {
+            //ASCIIDOCTOR_OPTIONS = Opal.hash('attributes', [ 'notitle!', 'imagesdir=' + imagesdir ]);
+        }
         var generatedHtml = undefined;
         try {
             generatedHtml = Opal.Asciidoctor.$render(doc, ASCIIDOCTOR_OPTIONS);

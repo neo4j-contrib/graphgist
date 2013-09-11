@@ -64,9 +64,15 @@ function Gist($, $content) {
                 else if (gist.length > 30 && (gist.substr(0, 19) === 'https://github.com/' || gist.substr(0, 23) === 'https://raw.github.com/')
                     ) {
                     var parts = gist.split('/');
-                    var pathIndex = parts[2] === 'raw.github.com' ? 6 : 7;
+                    var isRaw = parts[2] === 'raw.github.com';
+                    var pathIndex = isRaw ? 6 : 7;
+                    var branchIndex = isRaw ? 5 : 6;
                     if (parts.length >= pathIndex) {
-                        gist = 'github-' + parts[3] + '/' + parts[4] + '/contents/' + parts.slice(pathIndex).join('/');
+                        gist = 'github-' + parts[3] + '/' + parts[4];
+                        if (parts[branchIndex] !== 'master') {
+                            gist += '/' + parts[branchIndex];
+                        }
+                        gist += '//' + parts.slice(pathIndex).join('/');
                     } // else pretend it's a raw URL - encoding needed in both cases
                     gist = encodeURIComponent(gist);
                 }
@@ -112,13 +118,28 @@ function Gist($, $content) {
     }
 
     function fetchGithubFile(gist, success, error) {
-        var url = 'https://api.github.com/repos/' + decodeURIComponent(gist);
+        var decoded = decodeURIComponent(gist);
+        var parts = decoded.split('/');
+        var branch = 'master';
+        var pathPartsIndex = 3;
+        if (decoded.indexOf('/contents/') !== -1) {
+            window.location.assign('?github-' + encodeURIComponent(decoded.replace('/contents/', '//')));
+            return;
+        }
+        if (parts.length >= 4 && parts[3] === '') {
+            branch = parts[2];
+            pathPartsIndex++;
+        }
+        var url = 'https://api.github.com/repos/' + parts[0] + '/' + parts[1] + '/contents/' + parts.slice(pathPartsIndex).join('/');
         $.ajax({
             'url': url,
+            'data': {'ref': branch},
             'success': function (data) {
                 var content = Base64.decode(data.content);
                 var link = data.html_url;
-                success(content, link);
+                var imagesdir = 'https://raw.github.com/' + parts[0] + '/' + parts[1]
+                    + '/' + branch + '/' + data.path.substring(0, -data.name.length);
+                success(content, link, imagesdir);
             },
             'dataType': 'json',
             'error': function (xhr, status, errorMessage) {
