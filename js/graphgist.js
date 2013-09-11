@@ -28,6 +28,7 @@ function GraphGist($) {
     var $VISUALIZATION = $('<div/>').addClass('visualization');
     var $TABLE_CONTAINER = $('<div/>').addClass('result-table');
     var ASCIIDOCTOR_OPTIONS = Opal.hash('attributes', [ 'notitle!' ]);
+    var DEFAULT_SOURCE = 'github-neo4j-contrib%2Fgists%2Fcontents%2Fmeta%2FHome.adoc';
 
     var $content = undefined;
     var $gistId = undefined;
@@ -37,7 +38,7 @@ function GraphGist($) {
         $content = $('#content');
         $gistId = $('#gist-id');
         var gist = new Gist($, $content);
-        gist.getGistAndRenderPage(renderContent);
+        gist.getGistAndRenderPage(renderContent, DEFAULT_SOURCE);
         $gistId.keydown(gist.readSourceId);
     });
 

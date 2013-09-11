@@ -16,15 +16,14 @@
 function Gist($, $content) {
 
     var DROPBOX_BASE_URL = 'https://dl.dropboxusercontent.com/u/';
-    var DEFAULT_SOURCE = '5956219';
     var VALID_GIST = /^[0-9a-f]{5,32}\/?$/;
 
     return {'getGistAndRenderPage': getGistAndRenderPage, 'readSourceId': readSourceId};
 
-    function getGistAndRenderPage(renderer) {
+    function getGistAndRenderPage(renderer, defaultSource) {
         var id = window.location.search;
         if (id.length < 2) {
-            id = DEFAULT_SOURCE;
+            id = defaultSource;
         }
         else {
             id = id.substr(1);
