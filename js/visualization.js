@@ -165,19 +165,25 @@ function GraphVisualization() {
                 return 'translate(' + d.x + ',' + d.y + ')';
             });
 
-            path_text.attr('transform', function (d) {
-                var dx = ( d.target.x - d.source.x ), dy = ( d.target.y - d.source.y );
-                var dr = Math.sqrt(dx * dx + dy * dy);
-                if (dr == 0) dr = 0.1;
-                var sinus = dy / dr;
-                var cosinus = dx / dr;
-                var l = d.type.length * 6;
-                var offset = ( 1 - ( l / dr ) ) / 2;
-                var x = ( d.source.x + dx * offset );
-                var y = ( d.source.y + dy * offset );
-                return 'translate(' + x + ',' + y + ') matrix(' + cosinus + ', ' + sinus + ', ' + -sinus + ', ' + cosinus
-                    + ', 0 , 0)';
-            });
+            if ('chrome' in window && navigator.userAgent.indexOf('Windows NT') !== -1) {
+                // temporary workaround for Chrome under Windows
+                console.log("Current versions of Chrome under Windows can't render the graphs correctly, try a different browser.");
+            }
+            else {
+                path_text.attr('transform', function (d) {
+                    var dx = ( d.target.x - d.source.x ), dy = ( d.target.y - d.source.y );
+                    var dr = Math.sqrt(dx * dx + dy * dy);
+                    if (dr == 0) dr = 0.1;
+                    var sinus = dy / dr;
+                    var cosinus = dx / dr;
+                    var l = d.type.length * 6;
+                    var offset = ( 1 - ( l / dr ) ) / 2;
+                    var x = ( d.source.x + dx * offset );
+                    var y = ( d.source.y + dy * offset );
+                    return 'translate(' + x + ',' + y + ') matrix(' + cosinus + ', ' + sinus + ', ' + -sinus + ', ' + cosinus
+                        + ', 0 , 0)';
+                });
+            }
 
         });
     }
