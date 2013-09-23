@@ -100,7 +100,12 @@ function GraphGist($) {
         return sanitized;
     }
 
+    var processMathJAX = function () {
+        MathJax.Hub.Typeset();
+    };
+
     function postProcessPage() {
+        processMathJAX();
         findQuery('span.hide-query', $content, function (codeElement) {
             $(codeElement.parentNode).addClass('hide-query');
         });
@@ -152,7 +157,9 @@ function GraphGist($) {
         if (heading.length) {
             document.title = heading.text() + "  -  Neo4j GraphGist";
         }
+
         share();
+
     }
 
     function initConsole(callback) {
