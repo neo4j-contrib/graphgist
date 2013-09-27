@@ -192,3 +192,7 @@ p.console>span.loading {
 #gist-id {
     width: 20em;
 }
+
+#disqus_thread {
+    margin-top: 2em;
+}
