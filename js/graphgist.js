@@ -66,7 +66,9 @@ function GraphGist($) {
                     renderGraphs();
                     renderTables();
                     postProcessRendering();
-                    initDisqus($content);
+                    if ('initDisqus' in window) {
+                        initDisqus($content);
+                    }
                 });
             });
         });
