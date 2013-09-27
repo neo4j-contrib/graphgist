@@ -10,7 +10,6 @@ function initDisqus($content) {
     var disqus_title = document.title || 'Neo4j GraphGist';
 
     var disqus_url = window.location.href;
-    console.log(disqus_identifier, disqus_title);
     /* * * DON'T EDIT BELOW THIS LINE * * */
     (function () {
         var dsq = document.createElement('script');
