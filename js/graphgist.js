@@ -240,8 +240,8 @@ function GraphGist($) {
     function renderGraphs() {
         findPreviousQueryWrapper('h5.graph-visualization', $content, function ($heading, $wrapper) {
             var visualization = $wrapper.data('visualization');
-            $heading.text('The graph after query ' + $wrapper.data('number'));
             var $visContainer = $VISUALIZATION.clone().insertAfter($heading);
+            $heading.remove(); // text('The graph after query ' + $wrapper.data('number'));
             if (visualization) {
                 d3graph($visContainer[0], visualization);
             }
@@ -253,8 +253,8 @@ function GraphGist($) {
 
     function renderTables() {
         findPreviousQueryWrapper('h5.result-table', $content, function ($heading, $wrapper) {
-            $heading.text('The results of query ' + $wrapper.data('number'));
             var $tableContainer = $TABLE_CONTAINER.clone().insertAfter($heading);
+            $heading.remove(); // text('The results of query ' + $wrapper.data('number'));
             if (!renderTable($tableContainer, $wrapper.data('data'))) {
                 $tableContainer.text("Couldn't render the result table.").addClass('alert-error');
             }

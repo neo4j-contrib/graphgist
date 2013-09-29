@@ -28,6 +28,12 @@ html, html body {
     font-weight: bold;
 }
 
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'OfficinaSerifStd-Bold', 'Times New Roman', serif;
+    font-weight: bold;
+    color: rgb(51, 51, 51);
+}
+
 iframe {
     border: 1px solid rgba(0, 0, 0, 0.15);
 }
@@ -133,6 +139,12 @@ span.resize-vertical-handle span {
 
 #content .syntaxhighlighter, #content .syntaxhighlighter .line.alt1, #content .syntaxhighlighter .line.alt2 {
     background-color: transparent !important;
+}
+
+code, pre, .syntaxhighlighter a, .syntaxhighlighter div, .syntaxhighlighter code, .syntaxhighlighter table, .syntaxhighlighter table td, .syntaxhighlighter table tr, .syntaxhighlighter table tbody, .syntaxhighlighter table thead, .syntaxhighlighter table caption, .syntaxhighlighter textarea {
+    font-size: 14px !important;
+    font-family: 'Ubuntu Mono', Consolas, 'Bitstream Vera Sans Mono', Menlo, 'Courier New', monospace !important;
+    line-height: 18px !important;
 }
 
 #console-wrapper, p.console {
