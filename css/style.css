@@ -2,14 +2,14 @@
     font-family: "OfficinaSerifStd-Bold";
     font-style: normal;
     font-weight: bold;
-    src: url("http://assets.neo4j.org/new/font/officinaserifstd-bold.eot?#iefix") format("embedded-opentype"), url("http://assets.neo4j.org/new/font/officinaserifstd-bold.woff") format("woff"), url("http://assets.neo4j.org/new/font/officinaserifstd-bold.ttf") format("truetype"), url("http://assets.neo4j.org/new/font/officinaserifstd-bold.svg#officinaserifstd-bold") format("svg");
+    src: url("fonts/officinaserifstd-bold.eot?#iefix") format("embedded-opentype"), url("fonts/officinaserifstd-bold.woff") format("woff"), url("fonts/officinaserifstd-bold.ttf") format("truetype"), url("fonts/officinaserifstd-bold.svg#officinaserifstd-bold") format("svg");
 }
 
 /* Chrome@Windows fix for https://code.google.com/p/chromium/issues/detail?id=137692 */
 @media screen and (-webkit-min-device-pixel-ratio:0) {
     @font-face {
         font-family: 'OfficinaSerifStd-Bold';
-        src: url("http://assets.neo4j.org/new/font/officinaserifstd-bold.svg#officinaserifstd-bold") format('svg');
+        src: url("fonts/officinaserifstd-bold.svg#officinaserifstd-bold") format('svg');
     }
 }
 
@@ -24,12 +24,12 @@ html, html body {
 
 .navbar .brand {
     padding: 2px 14px 2px 8px;
-    font-family: 'OfficinaSerifStd-Bold', 'Times New Roman', serif;
+    font-family: 'OfficinaSerifStd-Bold', 'Baskerville', 'Cambria', 'Constantia', 'Palatino Linotype', 'Palatino', 'Georgia', 'Times', 'Times New Roman', serif;
     font-weight: bold;
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-family: 'OfficinaSerifStd-Bold', 'Times New Roman', serif;
+    font-family: 'OfficinaSerifStd-Bold', 'Baskerville', 'Cambria', 'Constantia', 'Palatino Linotype', 'Palatino', 'Georgia', 'Times', 'Times New Roman', serif;
     font-weight: bold;
     color: rgb(51, 51, 51);
 }
