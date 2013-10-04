@@ -26,7 +26,7 @@ table.dataTable th {
 }
 
 table.dataTable .odd {
-    background: lightgray;
+    background: #f2f2f2;
 }
 
 .dataTables_wrapper {
