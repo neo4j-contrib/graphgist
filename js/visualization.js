@@ -165,9 +165,9 @@ function GraphVisualization() {
                 return 'translate(' + d.x + ',' + d.y + ')';
             });
 
-            if ('chrome' in window && navigator.userAgent.indexOf('Windows NT') !== -1) {
+            if (isBadChromeVersion()) {
                 // temporary workaround for Chrome under Windows
-                console.log("Current versions of Chrome under Windows can't render the graphs correctly, try a different browser.");
+                console.log("Your version of Chrome under Windows can't render the graphs correctly, try a different browser.");
             }
             else {
                 path_text.attr('transform', function (d) {
@@ -186,6 +186,23 @@ function GraphVisualization() {
             }
 
         });
+    }
+
+    function isBadChromeVersion() {
+        if (!('chrome' in window)) return false;
+        if (navigator.userAgent.indexOf('Windows NT') === -1) return false;
+        var versionArray = navigator.userAgent.match(/Chrom(e|ium)\/(.*?) /)[2].split('.');
+        var first = parseInt(versionArray[0]);
+        if (first < 30) return true;
+        if (first > 30) return false;
+        var second = parseInt(versionArray[1]);
+        if (second > 0) return false;
+        var third = parseInt(versionArray[2]);
+        if (third > 1599) return false;
+        if (third < 1599) return true;
+        var fourth = parseInt(versionArray[3]);
+        if (fourth >= 66) return false;
+        return true;
     }
 
     function render(id, w, h, url) {
