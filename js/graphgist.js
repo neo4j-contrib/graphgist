@@ -33,15 +33,29 @@ function GraphGist($) {
     var $content = undefined;
     var $gistId = undefined;
     var consolr = undefined;
+    var statements = [];
 
     $(document).ready(function () {
+        console.log("graphgist doc ready")
+        window.addEventListener("message", handleMessage);
         $content = $('#content');
         $gistId = $('#gist-id');
         var gist = new Gist($, $content);
         gist.getGistAndRenderPage(renderContent, DEFAULT_SOURCE);
+        $("#tell_me_more").attr('href','mailto:info@neotechnology.com?Subject=[Graphgist] More%20info%20about%20'+window.location);
         $gistId.keydown(gist.readSourceId);
     });
 
+    function handleMessage(e) {
+        var source = e.source;
+        console.log( "Livegraph received Message", e, source );
+        var msg = e.data;
+        if ( msg == "queries") {
+            console.log( 'posting',statements );
+            source.postMessage("message",['match (n) return n']);
+        }
+    }
+    
     function renderContent(originalContent, link, imagesdir) {
         $('#gist_link').attr('href', link).removeClass('disabled');
         var doc = preProcessContents(originalContent);
@@ -187,7 +201,6 @@ function GraphGist($) {
     }
 
     function executeQueries(callbackAfter) {
-        var statements = [];
         var $wrappers = [];
         var receivedResults = 0;
         $('div.query-wrapper').each(function (index, element) {
