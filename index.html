@@ -17,15 +17,16 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script type="text/javascript" src="js/jquery-ui-1.10.3.custom.min.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/d3/3.2.2/d3.v3.min.js"></script>
-    
+
     <!--MathJAX-->
     <script type="text/x-mathjax-config;executed=true">
         MathJax.Hub.Config({
         tex2jax: { inlineMath: [['$','$'],['\\(','\\)']] }
         });
     </script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
+    <script type="text/javascript"
+            src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
     <!-- Bootstrap -->
     <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
     <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
@@ -115,6 +116,9 @@
                 <li><a id="facebook-share" href="" target="_blank" data-toggle="tooltip" title="Share link on Facebook">
                     <i class="icon-facebook-sign"></i> Facebook
                 </a></li>
+                <li><a id="google-plus-share" href="" target="_blank" data-toggle="tooltip" title="Share link on Google+">
+                    <i class="icon-google-plus-sign"></i> Google+
+                </a></li>
                 <li>
                     <a target="_blank" href="https://github.com/neo4j-contrib/graphgist/wiki"><i
                             class="icon-github-sign"></i>
@@ -122,10 +126,11 @@
                 </li>
             </ul>
         </div>
-        <div class="btn" title="Contact Neo Technology on this example to get more info about similar Neo4j deployments and customers.">
-            <i class="icon-envelope"></i>
-            <a id="tell_me_more" href="mailto:info@neotechnology.com?Subject=More%20info%20about">Tell me more ...</a>
-        </div>
+
+        <a class="btn" id="tell-me-more"
+           title="Contact Neo Technology on this example to get more info about similar Neo4j deployments and customers."
+           href="mailto:info@neotechnology.com?Subject=More%20info%20about"><i class="icon-envelope"></i> Tell me more
+            ...</a>
 
         <form class="navbar-form pull-right" id="gist-form">
             <div class="input-prepend">

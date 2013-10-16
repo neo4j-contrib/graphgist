@@ -42,7 +42,7 @@ function GraphGist($) {
         $gistId = $('#gist-id');
         var gist = new Gist($, $content);
         gist.getGistAndRenderPage(renderContent, DEFAULT_SOURCE);
-        $("#tell_me_more").attr('href','mailto:info@neotechnology.com?Subject=[Graphgist] More%20info%20about%20'+window.location);
+        $("#tell-me-more").attr('href','mailto:info@neotechnology.com?Subject=[Graphgist] More%20info%20about%20'+window.location);
         $gistId.keydown(gist.readSourceId);
     });
 
@@ -102,6 +102,9 @@ function GraphGist($) {
         $('#facebook-share').attr(
             'href',
             'http://www.facebook.com/share.php?u=' + href);
+        $('#google-plus-share').attr(
+            'href',
+            'https://plus.google.com/share?url=' + href);
     }
 
     function preProcessContents(content) {

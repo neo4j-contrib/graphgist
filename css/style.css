@@ -42,6 +42,18 @@ h2 {
     line-height: 32px;
 }
 
+.subheader, .admonitionblock td.content > .title, .exampleblock > .title, .imageblock > .title, .listingblock > .title, .literalblock > .title, .openblock > .title, .paragraph > .title, .quoteblock > .title, .sidebarblock > .title, .tableblock > .title, .verseblock > .title, .ulist > .title, .olist > .title, .dlist > .title, .qlist > .title, .tableblock > caption {
+    line-height: 1.4;
+    font-weight: 300;
+    margin-top: 0.2em;
+    margin-bottom: 0.5em;
+}
+
+.admonitionblock td.content > .title, .exampleblock > .title, .imageblock > .title, .listingblock > .title, .literalblock > .title, .openblock > .title, .paragraph > .title, .quoteblock > .title, .sidebarblock > .title, .tableblock > .title, .verseblock > .title, .ulist > .title, .olist > .title, .dlist > .title, .qlist > .title {
+    text-align: left;
+    font-weight: bold;
+}
+
 iframe {
     border: 1px solid rgba(0, 0, 0, 0.15);
 }
