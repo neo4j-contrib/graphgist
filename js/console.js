@@ -15,8 +15,8 @@
 
 function CypherConsole(config, ready) {
 
-    var CONSOLE_URL_BASE = 'http://127.0.0.1:8080/';
-//    var CONSOLE_URL_BASE = 'http://console-test.neo4j.org/';
+//    var CONSOLE_URL_BASE = 'http://127.0.0.1:8080/';
+    var CONSOLE_URL_BASE = 'http://console-test.neo4j.org/';
 
     var $IFRAME = $('<iframe/>').attr('id', 'console').addClass('cypherdoc-console');
     console.log("console iframe", $IFRAME);
