@@ -79,8 +79,8 @@ function GraphGist($) {
                 initConsole(function () {
                     renderGraphs();
                     renderTables();
-                    postProcessRendering();
                     hideConsole()
+                    postProcessRendering();
                     if ('initDisqus' in window) {
                         initDisqus($content);
                     }
@@ -90,7 +90,7 @@ function GraphGist($) {
     }
 
     function hideConsole() {
-        var $TOGGLE_CONSOLE_HIDE_BUTTON = $('<a class="btn btn-small show-console-toggle"><i class="icon-chevron-down"></i> Show/Hide Live Console</a>');
+        var $TOGGLE_CONSOLE_HIDE_BUTTON = $('<a class="btn btn-small show-console-toggle" data-toggle="tooltip"  title="Show or hide a Neo4j Console in order to try the examples in the GraphGist live."><i class="icon-chevron-down"></i> Show/Hide Live Console</a>');
         var consolewrapper = $(".console");
         console.log("1", consolewrapper.is(':visible'), consolewrapper);
         var $toggleConsoleShowButton = $TOGGLE_CONSOLE_HIDE_BUTTON.clone();
@@ -111,7 +111,7 @@ function GraphGist($) {
 
     function postProcessRendering() {
         $('span[data-toggle="tooltip"]').tooltip({'placement': 'left'});
-        $('a.run-query,a.edit-query').tooltip({'placement': 'right'});
+        $('a.run-query,a.edit-query,a.show-console-toggle').tooltip({'placement': 'right'});
     }
 
     function share() {

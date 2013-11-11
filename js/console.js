@@ -47,7 +47,6 @@ function CypherConsole(config, ready) {
             $element.addClass("hidden");
             console.log("createConsole", $element);
             $('#' + contentId).append($element);
-//            $element.hide();
         }
         $element.each(function () {
             var $context = $(this);
