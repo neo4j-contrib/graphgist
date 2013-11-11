@@ -16,6 +16,7 @@
 GraphGist(jQuery);
 
 function GraphGist($) {
+    var HAS_ERRORS = false;
     var $WRAPPER = $('<div class="query-wrapper" />');
     var COLLAPSE_ICON = 'icon-minus-sign-alt';
     var EXPAND_ICON = 'icon-plus-sign-alt';
@@ -112,6 +113,18 @@ function GraphGist($) {
     function postProcessRendering() {
         $('span[data-toggle="tooltip"]').tooltip({'placement': 'left'});
         $('a.run-query,a.edit-query,a.show-console-toggle').tooltip({'placement': 'right'});
+        $('.tooltip-below').tooltip({'placement': 'bottom'});
+        var status = $("#status");
+        if (HAS_ERRORS) {
+
+            status.text("Errors.");
+            status.addClass("label-important");
+        } else {
+            status.text("No Errors.");
+            status.addClass("label-success");
+        }
+
+
     }
 
     function share() {
@@ -250,6 +263,7 @@ function GraphGist($) {
         }
 
         function error(data, resultNo) {
+            HAS_ERRORS = true;
             receivedResults++;
             var $wrapper = $wrappers[resultNo];
             createQueryResultButton($QUERY_ERROR_LABEL, $wrapper, data.error, false);
