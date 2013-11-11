@@ -233,6 +233,7 @@ function GraphGist($) {
         }
 
         function error(data) {
+            HAS_ERRORS = true;
             console.log('Error during INIT: ', data);
         }
     }
