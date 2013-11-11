@@ -129,6 +129,10 @@ a.resize-toggle {
     right: 0;
     bottom: -39px;
 }
+a.show-console-toggle {
+    right: 50;
+    bottom: -39px;
+}
 
 span.resize-vertical-handle {
     position: absolute;

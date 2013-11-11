@@ -36,26 +36,26 @@ function GraphGist($) {
     var statements = [];
 
     $(document).ready(function () {
-        console.log("graphgist doc ready")
+//        console.log("graphgist doc ready")
         window.addEventListener("message", handleMessage);
         $content = $('#content');
         $gistId = $('#gist-id');
         var gist = new Gist($, $content);
         gist.getGistAndRenderPage(renderContent, DEFAULT_SOURCE);
-        $("#tell-me-more").attr('href','mailto:info@neotechnology.com?Subject=[Graphgist] More%20info%20about%20'+window.location);
+        $("#tell-me-more").attr('href', 'mailto:info@neotechnology.com?Subject=[Graphgist] More%20info%20about%20' + window.location);
         $gistId.keydown(gist.readSourceId);
     });
 
     function handleMessage(e) {
         var source = e.source;
-        console.log( "Livegraph received Message", e, source );
+        console.log("Livegraph received Message", e, source);
         var msg = e.data;
-        if ( msg == "queries") {
-            console.log( 'posting',statements );
-            source.postMessage("message",['match (n) return n']);
+        if (msg == "queries") {
+            console.log('posting', statements);
+            source.postMessage("message", ['match (n) return n']);
         }
     }
-    
+
     function renderContent(originalContent, link, imagesdir) {
         $('#gist_link').attr('href', link).removeClass('disabled');
         var doc = preProcessContents(originalContent);
@@ -80,12 +80,33 @@ function GraphGist($) {
                     renderGraphs();
                     renderTables();
                     postProcessRendering();
+                    hideConsole()
                     if ('initDisqus' in window) {
                         initDisqus($content);
                     }
                 });
             });
         });
+    }
+
+    function hideConsole() {
+        var $TOGGLE_CONSOLE_HIDE_BUTTON = $('<a class="btn btn-small show-console-toggle"><i class="icon-chevron-down"></i> Show/Hide Live Console</a>');
+        var consolewrapper = $(".console");
+        console.log("1", consolewrapper.is(':visible'), consolewrapper);
+        var $toggleConsoleShowButton = $TOGGLE_CONSOLE_HIDE_BUTTON.clone();
+        $toggleConsoleShowButton.click(function () {
+            console.log("click", consolewrapper.is(':visible'), consolewrapper);
+            if (consolewrapper.is(':visible')) {
+                consolewrapper.hide();
+            } else {
+                consolewrapper.show();
+            }
+        });
+        $toggleConsoleShowButton.insertBefore(consolewrapper);
+        if (consolewrapper.hasClass("hidden")) {
+            consolewrapper.removeClass("hidden");
+            consolewrapper.hide();
+        }
     }
 
     function postProcessRendering() {
