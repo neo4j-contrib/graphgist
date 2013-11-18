@@ -95,3 +95,9 @@ table.dataTable .css_right {
 .result-table input, .result-table select {
   width: auto !important;
 }
+
+.navbar .label.tooltip-below {
+  line-height: 25px;
+  margin-right: 5px;
+  margin-top: 5px;
+}
