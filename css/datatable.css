@@ -92,6 +92,6 @@ table.dataTable .css_right {
     background: url('../images/sort_desc_disabled.png') no-repeat center right;
 }
 
-.result-table input {
+.result-table input, .result-table select {
   width: auto !important;
 }
