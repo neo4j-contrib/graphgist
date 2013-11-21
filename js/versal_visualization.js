@@ -412,7 +412,7 @@ window.Visualization = function ($el, colorManager, width, height) {
         }
         scale = Math.min(scale, 2);
         this.viz.transition().attr("transform", "scale(" + scale + ")translate(" + translate + ")");
-        this.viz.selectAll("text").style("font", 10 / scale + "px sans-serif").style("stroke-width", 0.3 / scale + "px");
+        this.viz.selectAll("text").style("font", 12 / scale + "px sans-serif").style("stroke-width", 0.5 / scale + "px");
         return this.viz.selectAll(".shadow").style("stroke-width", 3 / scale + "px");
     }
     return this;
