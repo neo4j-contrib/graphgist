@@ -49,7 +49,7 @@ function GraphGist($) {
 
     function handleMessage(e) {
         var source = e.source;
-        console.log("Livegraph received Message", e, source);
+//        console.log("Livegraph received Message", e, source);
         var msg = e.data;
         if (msg == "queries") {
             console.log('posting', statements);
@@ -295,7 +295,15 @@ function GraphGist($) {
             var $visContainer = $VISUALIZATION.clone().insertAfter($heading);
             $heading.remove(); // text('The graph after query ' + $wrapper.data('number'));
             if (visualization) {
-                d3graph($visContainer[0], visualization);
+//                d3graph($visContainer[0], visualization);
+//                Visualization.
+                var height = $visContainer.height();
+                setTimeout(function () {
+                    console.log('Viz', height);
+                }, 0);
+                var viz = window.Visualization($visContainer, window.ColorManager(), 700, 300);
+//                viz.create(visualization);
+                viz.draw(visualization, true);
             }
             else {
                 $visContainer.text('There is no graph to render.').addClass('alert-error');

@@ -19,7 +19,7 @@ function CypherConsole(config, ready) {
     var CONSOLE_URL_BASE = 'http://console-test.neo4j.org/';
 
     var $IFRAME = $('<iframe/>').attr('id', 'console').addClass('cypherdoc-console');
-    console.log("console iframe", $IFRAME);
+//    console.log("console iframe", $IFRAME);
     var CLASS_VISIBLE = "visible";
     var CLASS_INVISIBLE = "hidden";
     var $IFRAME_WRAPPER = $('<div/>').attr('id', 'console-wrapper');
@@ -45,7 +45,7 @@ function CypherConsole(config, ready) {
         if ($element.length !== 1) {
             $element = $('<p/>').addClass(elementClass);
             $element.addClass("hidden");
-            console.log("createConsole", $element);
+//            console.log("createConsole", $element);
             $('#' + contentId).append($element);
         }
         $element.each(function () {
