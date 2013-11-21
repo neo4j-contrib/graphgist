@@ -1,7 +1,7 @@
 window.Visualization = function ($el, colorManager, width, height) {
     var _this = this;
     this.$el = $el;
-    console.log("el",this.$el);
+    //console.log("el",this.$el);
     this.colorManager = colorManager;
     this.width = width;
     this.height = height;
@@ -42,21 +42,27 @@ window.Visualization = function ($el, colorManager, width, height) {
         this.nodes = this.viz.append("g").selectAll("g");
         this.nodeTexts = this.viz.append("g").selectAll("g");
         this.graphCreated = true;
-        console.log("Viz create",this);
+        //console.log("Viz create",this);
         return this.draw(graph);
     };
     this.tick = function () {
         var _this = this;
         this.viz.selectAll("circle").attr("cx",function (d) {
-            console.log(_this.width, d);
+            //console.log(_this.width, d);
             return Math.min(_this.width, Math.max(0, d.x));
         }).attr("cy", function (d) {
                 return Math.min(_this.height, Math.max(0, d.y));
             });
-        this.nodeTexts.selectAll("text").attr("x",function (d) {
-            return Math.min(_this.width, Math.max(0, d.x)) + 8;
-        }).attr("y", function (d) {
-                return Math.min(_this.height, Math.max(0, d.y)) + 3;
+
+        this.nodeTexts
+            .select(".node-texts g")
+            .selectAll("text")
+            .attr("y", function(d, i) 
+                { 
+                    return (Math.min(_this.height, Math.max(0, d.y)) + 3) + (i * 12);
+                })
+            .attr("x",function (d) {
+                return Math.min(_this.width, Math.max(0, d.x)) + 12;
             });
         this.links.attr("x1",function (d) {
             return Math.min(_this.width, Math.max(0, d.source.x));
@@ -115,15 +121,30 @@ window.Visualization = function ($el, colorManager, width, height) {
         });
         return toAdd.length || toRemove.length;
     };
-    function getNodeText(d) {
-        var text = "";
-        _.each(d, function (value, key) {
-            //filter out internal properties on nodes
-            if (["px", "py", "x", "y", "index", "weight", "labels"].indexOf(key) === -1)
-                text = text + key + ":" + value + ",";
-        });
-        text = text.substr(0, text.lastIndexOf(","))
-        return text;
+    function getNodeText(gs) {
+            var propCountGroup = 0;
+            gs.each(function(gsd) {
+                
+                var lg = d3.select(d3.select("body")
+                            .selectAll(".node-texts")[0][propCountGroup])
+                            .append("g");
+
+
+                _.each(gsd, function (value, key) {
+                    if (["px", "py", "x", "y", "index", "weight", "labels"].indexOf(key) === -1)
+                    {
+                        text = (key + ": " + value);
+                        
+                            lg.append("text")
+                            .text(function(d, i) 
+                            { 
+                                return text; 
+                            })
+                    }
+                });
+
+                propCountGroup += 1;
+            });
     }
 
     this.draw = function (graph, forceUnselective) {
@@ -180,11 +201,11 @@ window.Visualization = function ($el, colorManager, width, height) {
         _this.pathTexts = _this.pathTexts.data([]);
         _this.pathTexts.exit().remove();
         _this.nodes = _this.nodes.data(_this.force.nodes());
-        console.log("graphcreated",this.nodes)
-        this.nodes.enter().append("circle").attr("r", 5).call(this.force.drag).each(function (d) {
+        //console.log("graphcreated",this.nodes)
+        this.nodes.enter().append("circle").attr("r", 10).call(this.force.drag).each(function (d) {
             d.x = (Math.random() + 0.5) * _this.width / 2;
             d.y = (Math.random() + 0.5) * _this.height / 2;
-            console.log("circle",_this,d);
+            //console.log("circle",_this,d);
             return d;
         }).on("mouseover",function (d) {
                 return _this.onNodeHover(d);
@@ -211,9 +232,7 @@ window.Visualization = function ($el, colorManager, width, height) {
         nt = this.nodeTexts.exit();
         this.nodes.exit().remove();
         nt.remove();
-        gs.append("text").attr("class", "shadow").text(function (d) {
-            return getNodeText(d);
-        });
+        
         this.nodeTexts.attr("opacity", function (d) {
             if (_this.selective && _this.selectedNodes[d.id]) {
                 return 1;
@@ -221,9 +240,9 @@ window.Visualization = function ($el, colorManager, width, height) {
                 return 0;
             }
         });
-        gs.append("text").text(function (d) {
-            return getNodeText(d);
-        });
+
+        getNodeText(gs);
+
         if (didChange) {
             this.force.start();
         }
