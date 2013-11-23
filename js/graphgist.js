@@ -301,7 +301,7 @@ function GraphGist($) {
                 setTimeout(function () {
                     console.log('Viz', height);
                 }, 0);
-                var viz = window.Visualization($visContainer, window.ColorManager(), 700, 300);
+                var viz = window.Visualization($visContainer, window.ColorManager(), 840, 300);
 //                viz.create(visualization);
                 viz.draw(visualization, true);
             }

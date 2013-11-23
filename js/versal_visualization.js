@@ -7,7 +7,7 @@ window.Visualization = function ($el, colorManager, width, height) {
     this.height = height;
     this.svg = d3.select(this.$el[0]).append("svg").attr("width", this.width).attr("height", this.height);
     this.viz = this.svg.append("g");
-    this.viz.append("defs").selectAll("marker").data(["arrowhead", "faded-arrowhead"]).enter().append("marker").attr("id", String).attr("viewBox", "0 0 10 10").attr("refX", 17).attr("refY", 5).attr("markerUnits", "strokeWidth").attr("markerWidth", 4).attr("markerHeight", 3.5).attr("orient", "auto").attr("preserveAspectRatio", "xMinYMin").append("path").attr("d", "M 0 0 L 10 5 L 0 10 z");
+    this.viz.append("defs").selectAll("marker").data(["arrowhead", "faded-arrowhead"]).enter().append("marker").attr("id", String).attr("viewBox", "0 0 10 10").attr("refX", 25).attr("refY", 5).attr("markerUnits", "strokeWidth").attr("markerWidth", 4).attr("markerHeight", 3.5).attr("orient", "auto").attr("preserveAspectRatio", "xMinYMin").append("path").attr("d", "M 0 0 L 10 5 L 0 10 z");
     this.emptyMsg = this.svg.append("text").text("Graph database is empty.").attr("class", "emptyMsg").attr("x", 350).attr("y", 200).attr("opacity", 0);
     this.force = d3.layout.force().charge(-1380).linkDistance(100).friction(0.3).gravity(0.5).size([this.width, this.height]);
     this.force.on("tick", function () {
