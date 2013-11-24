@@ -28,7 +28,7 @@ function GraphGist($) {
     var $QUERY_MESSAGE = $('<pre/>').addClass('query-message');
     var $VISUALIZATION = $('<div/>').addClass('visualization');
     var $TABLE_CONTAINER = $('<div/>').addClass('result-table');
-    var ASCIIDOCTOR_OPTIONS = Opal.hash('attributes', [ 'notitle!' ]);
+    var ASCIIDOCTOR_OPTIONS = Opal.hash('attributes', [ 'notitle!' ], 'attribute-missing','drop');
     var DEFAULT_SOURCE = 'github-neo4j-contrib%2Fgists%2F%2Fmeta%2FHome.adoc';
 
     var $content = undefined;
@@ -151,7 +151,8 @@ function GraphGist($) {
         sanitized = sanitized.replace(/^\/\/\s*?graph.*/gm, '++++\n<h5 class="graph-visualization"></h5>\n++++\n');
         sanitized = sanitized.replace(/^\/\/\s*?output.*/gm, '++++\n<span class="query-output"></span>\n++++\n');
         sanitized = sanitized.replace(/^\/\/\s*?table.*/gm, '++++\n<h5 class="result-table"></h5>\n++++\n');
-        sanitized += '++++\n<span id="meta" author="{author}" version="{neo4j-version}" twitter="{twitter}" tags="{tags}"></span>\n++++\n';
+        sanitized += '\n++++\n<span class="meta" author="{author}" version="{neo4j-version}" twitter="{twitter}"></span>\n';
+        sanitized += '<span class="meta" tags="{tags}"></span>\n++++\n';
         return sanitized;
     }
 
@@ -161,7 +162,7 @@ function GraphGist($) {
 
 
     function postProcessPage() {
-        var $meta = $("#meta",$content);
+        var $meta = $("span.meta",$content);
         var version = $meta.attr("version") || DEFAULT_VERSION;
         CONSOLE_URL_BASE=CONSOLE_VERSIONS[version];
         if ($meta.attr("tags")) {
