@@ -1,4 +1,9 @@
 = Develop a Graph
+Anders Nawroth <anders@neotechnology.com>
+v0.1, 2013-09-01
+:neo4j-version: 2.0.0-RC1
+:author: Anders Nawroth
+:twitter: @nawroth
 
 == There are Three APIs...
 
@@ -41,7 +46,7 @@ Now find the node representing Emil:
 
 [source,cypher]
 ----
-MATCH (ee:Person) WHERE ee.name = "Emil"
+MATCH (ee:Person {name:"Emil"})
 RETURN ee;
 ----
 
@@ -74,8 +79,7 @@ Cypher uses patterns to describe how to find things in the graph. For instance, 
 
 [source,cypher]
 ----
-MATCH (ee:Person)-[:KNOWS]->(friends:Person) 
-WHERE ee.name = "Emil"
+MATCH (ee:Person {name:"Emil"})-[:KNOWS]->(friends:Person) 
 RETURN friends;
 ----
 
@@ -91,9 +95,8 @@ Johan is learning to surf, so he may want to find a new friend who already does:
 
 [source,cypher]
 ----
-MATCH (js:Person)-[:KNOWS]->()-[:KNOWS]->(surfer:Person) 
-WHERE js.name = "Johan" 
-AND has(surfer.hobby) AND surfer.hobby = "surfing"
+MATCH (js:Person {name:"Johan"})-[:KNOWS]->()-[:KNOWS]->(surfer:Person) 
+WHERE surfer.hobby = "surfing"
 RETURN DISTINCT surfer;
 ----
 

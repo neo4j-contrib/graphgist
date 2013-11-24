@@ -1,4 +1,9 @@
 = How to create a GraphGist
+Anders Nawroth <anders@neotechnology.com>
+v0.1, 2013-09-01
+:neo4j-version: 2.0.0-RC1
+:author: Anders Nawroth
+:twitter: @nawroth
 
 You create a GraphGist by creating a https://gist.github.com/[GitHub Gist] in http://asciidoctor.org/docs/asciidoc-quick-reference/[AsciiDoc] and enter the URL to it in the form on this page.
 Alternatively, you can put an AsciiDoc document in https://www.dropbox.com/[Dropbox] and enter the public URL in the form.
