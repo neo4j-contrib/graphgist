@@ -153,7 +153,7 @@ function GraphGist($) {
         sanitized = sanitized.replace(/^\/\/\s*?graph.*/gm, '++++\n<h5 class="graph-visualization"></h5>\n++++\n');
         sanitized = sanitized.replace(/^\/\/\s*?output.*/gm, '++++\n<span class="query-output"></span>\n++++\n');
         sanitized = sanitized.replace(/^\/\/\s*?table.*/gm, '++++\n<h5 class="result-table"></h5>\n++++\n');
-        sanitized += '++++\n<span id="meta" author="{author}" version="{neo4j-version}" twitter="{twitter}"></span>\n++++\n';
+        sanitized += '++++\n<span id="meta" author="{author}" version="{neo4j-version}" twitter="{twitter}" tags="{tags}"></span>\n++++\n';
         return sanitized;
     }
 
@@ -166,11 +166,14 @@ function GraphGist($) {
         var $meta = $("#meta",$content);
         var version = $meta.attr("version") || DEFAULT_VERSION;
         CONSOLE_URL_BASE=CONSOLE_VERSIONS[version];
+        if ($meta.attr("tags")) {
+            $("footer").prepend('Tags <em>'+$meta.attr("tags")+'</a> ');
+        }
         if ($meta.attr("author")) {
             var twitter=$meta.attr("twitter").replace("@","");
-            $("footer").prepend('<i class="icon-twitter-sign"></i> Author <a target="_blank" href="http://twitter.com/'+twitter+'">'+$meta.attr("author")+'</a> ')
+            $("footer").prepend('<i class="icon-twitter-sign"></i> Author <a target="_blank" href="http://twitter.com/'+twitter+'">'+$meta.attr("author")+'</a> ');
         }
-        $("footer").prepend('Uses Neo4j Version <a target="_blank" href="http://docs.neo4j.org/chunked/'+version+'/cypher-query-lang.html">'+version+'</a> ')
+        $("footer").prepend('Uses Neo4j Version <a target="_blank" href="http://docs.neo4j.org/chunked/'+version+'/cypher-query-lang.html">'+version+'</a> ');
         $("h2[id]").css({cursor:"pointer"}).click(function(){ window.location.href = window.location.href.replace(/($|#.+?$)/,"#"+$(this).attr("id")) });
     
         processMathJAX();
