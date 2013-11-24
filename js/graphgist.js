@@ -43,10 +43,13 @@ function GraphGist($) {
         $gistId = $('#gist-id');
         var gist = new Gist($, $content);
         gist.getGistAndRenderPage(renderContent, DEFAULT_SOURCE);
-        $("#tell-me-more").attr('href', 'mailto:info@neotechnology.com?Subject=[Graphgist] More%20info%20about%20' + window.location);
+        postProcess();
         $gistId.keydown(gist.readSourceId);
     });
 
+    function postProcess() {
+        $("#tell-me-more").attr('href', 'mailto:info@neotechnology.com?Subject=[Graphgist] More%20info%20about%20' + window.location);
+    }
     function handleMessage(e) {
         var source = e.source;
 //        console.log("Livegraph received Message", e, source);
@@ -118,15 +121,12 @@ function GraphGist($) {
         $('.tooltip-below').tooltip({'placement': 'bottom'});
         var status = $("#status");
         if (HAS_ERRORS) {
-
             status.text("Errors.");
             status.addClass("label-important");
         } else {
             status.text("No Errors.");
             status.addClass("label-success");
         }
-
-
     }
 
     function share() {
@@ -153,6 +153,7 @@ function GraphGist($) {
         sanitized = sanitized.replace(/^\/\/\s*?graph.*/gm, '++++\n<h5 class="graph-visualization"></h5>\n++++\n');
         sanitized = sanitized.replace(/^\/\/\s*?output.*/gm, '++++\n<span class="query-output"></span>\n++++\n');
         sanitized = sanitized.replace(/^\/\/\s*?table.*/gm, '++++\n<h5 class="result-table"></h5>\n++++\n');
+        sanitized += '++++\n<span id="meta" author="{author}" version="{neo4j-version}" twitter="{twitter}"></span>\n++++\n';
         return sanitized;
     }
 
@@ -160,7 +161,18 @@ function GraphGist($) {
         MathJax.Hub.Typeset();
     };
 
+
     function postProcessPage() {
+        var $meta = $("#meta",$content);
+        var version = $meta.attr("version") || DEFAULT_VERSION;
+        CONSOLE_URL_BASE=CONSOLE_VERSIONS[version];
+        if ($meta.attr("author")) {
+            var twitter=$meta.attr("twitter").replace("@","");
+            $("footer").prepend('<i class="icon-twitter-sign"></i> Author <a target="_blank" href="http://twitter.com/'+twitter+'">'+$meta.attr("author")+'</a> ')
+        }
+        $("footer").prepend('Uses Neo4j Version <a target="_blank" href="http://docs.neo4j.org/chunked/'+version+'/cypher-query-lang.html">'+version+'</a> ')
+        $("h2[id]").css({cursor:"pointer"}).click(function(){ window.location.href = window.location.href.replace(/($|#.+?$)/,"#"+$(this).attr("id")) });
+    
         processMathJAX();
         findQuery('span.hide-query', $content, function (codeElement) {
             $(codeElement.parentNode).addClass('hide-query');
