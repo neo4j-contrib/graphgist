@@ -117,6 +117,12 @@ CREATE (n{name:'cypher'}
 | `link:./?5956246[Link to a GraphGist]` | link:./?5956246[Link to a GraphGist]
 |===
 
+Document Info:
+ = Graph Gist Title
+ :neo4j-version: 2.0.0-M06
+ :author: Author Name
+ :twitter: twitterhandle
+
 Headings:
 
  = Heading 1

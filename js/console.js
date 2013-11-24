@@ -13,10 +13,17 @@
 
 'use strict';
 
+var DEFAULT_VERSION = "2.0.0-M06";
+var CONSOLE_VERSIONS = { "2.0.0-M06" : 'http://neo4j-console-20m06.herokuapp.com/', 
+                         "2.0.0-RC1" : 'http://neo4j-console-20rc1.herokuapp.com/', 
+                         "default"   : 'http://neo4j-console-20m06.herokuapp.com/', 
+                       }
+var CONSOLE_URL_BASE = 'http://neo4j-console-20rc1.herokuapp.com/';
+
 function CypherConsole(config, ready) {
 
 //    var CONSOLE_URL_BASE = 'http://127.0.0.1:8080/';
-    var CONSOLE_URL_BASE = 'http://console-test.neo4j.org/';
+//    var CONSOLE_URL_BASE = 'http://neo4j-console-20m06.herokuapp.com/';
 
     var $IFRAME = $('<iframe/>').attr('id', 'console').addClass('cypherdoc-console');
     console.log("console iframe", $IFRAME);
