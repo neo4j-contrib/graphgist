@@ -291,19 +291,22 @@ function GraphGist($) {
 
     function renderGraphs() {
         findPreviousQueryWrapper('h5.graph-visualization', $content, function ($heading, $wrapper) {
+            //
             var visualization = $wrapper.data('visualization');
             var $visContainer = $VISUALIZATION.clone().insertAfter($heading);
             $heading.remove(); // text('The graph after query ' + $wrapper.data('number'));
             if (visualization) {
+                console.log("wrapper", $visContainer);
 //                d3graph($visContainer[0], visualization);
 //                Visualization.
                 var height = $visContainer.height();
                 setTimeout(function () {
                     console.log('Viz', height);
                 }, 0);
-                var viz = window.Visualization($visContainer, window.ColorManager(), 840, 300);
-//                viz.create(visualization);
-                viz.draw(visualization, true);
+
+                var myChart = graphVisualizer($visContainer, window.ColorManager(), 840, 300, visualization, true);
+
+                myChart();
             }
             else {
                 $visContainer.text('There is no graph to render.').addClass('alert-error');

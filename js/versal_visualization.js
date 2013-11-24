@@ -1,10 +1,14 @@
-window.Visualization = function ($el, colorManager, width, height) {
+function graphVisualizer($el, colorManager, width, height, visualization, forceUnselective) {
+
+    return function()
+    {
     var _this = this;
     this.$el = $el;
     //console.log("el",this.$el);
     this.colorManager = colorManager;
     this.width = width;
     this.height = height;
+    console.log("el", $el[0]);
     this.svg = d3.select(this.$el[0]).append("svg").attr("width", this.width).attr("height", this.height);
     this.viz = this.svg.append("g");
     this.viz.append("defs").selectAll("marker").data(["arrowhead", "faded-arrowhead"]).enter().append("marker").attr("id", String).attr("viewBox", "0 0 10 10").attr("refX", 25).attr("refY", 5).attr("markerUnits", "strokeWidth").attr("markerWidth", 4).attr("markerHeight", 3.5).attr("orient", "auto").attr("preserveAspectRatio", "xMinYMin").append("path").attr("d", "M 0 0 L 10 5 L 0 10 z");
@@ -47,10 +51,13 @@ window.Visualization = function ($el, colorManager, width, height) {
     };
     this.tick = function () {
         var _this = this;
-        this.viz.selectAll("circle").attr("cx",function (d) {
-            //console.log(_this.width, d);
-            return Math.min(_this.width, Math.max(0, d.x));
-        }).attr("cy", function (d) {
+
+        this.nodes
+            .select("circle")
+            .attr("cx",function (d) {
+                //console.log(_this.width, d);
+                return Math.min(_this.width, Math.max(0, d.x));
+            }).attr("cy", function (d) {
                 return Math.min(_this.height, Math.max(0, d.y));
             });
 
@@ -121,11 +128,11 @@ window.Visualization = function ($el, colorManager, width, height) {
         });
         return toAdd.length || toRemove.length;
     };
-    function getNodeText(gs) {
+    function getNodeText(gs, viz) {
             var propCountGroup = 0;
             gs.each(function(gsd) {
                 
-                var lg = d3.select(d3.select("body")
+                var lg = d3.select(viz
                             .selectAll(".node-texts")[0][propCountGroup])
                             .append("g");
 
@@ -154,9 +161,14 @@ window.Visualization = function ($el, colorManager, width, height) {
         } else {
             _this.emptyMsg.attr("opacity", 0);
         }
+
+        
+
         if (!_this.graphCreated) {
+            console.log("created", _this.graphCreated);
             _this.create(graph);
         }
+
         didChange1 = this.syncGraphData(graph.nodes, _this.force.nodes());
         didChange2 = this.syncGraphData(graph.links, _this.force.links());
         didChange = didChange1 || didChange2;
@@ -201,8 +213,11 @@ window.Visualization = function ($el, colorManager, width, height) {
         _this.pathTexts = _this.pathTexts.data([]);
         _this.pathTexts.exit().remove();
         _this.nodes = _this.nodes.data(_this.force.nodes());
+
         //console.log("graphcreated",this.nodes)
-        this.nodes.enter().append("circle").attr("r", 10).call(this.force.drag).each(function (d) {
+       //.append("circle").exit();
+
+        this.nodes.enter().append("g").attr("class", "node-circle").append("circle").attr("r", 10).call(this.force.drag).each(function (d) {
             d.x = (Math.random() + 0.5) * _this.width / 2;
             d.y = (Math.random() + 0.5) * _this.height / 2;
             //console.log("circle",_this,d);
@@ -212,7 +227,7 @@ window.Visualization = function ($el, colorManager, width, height) {
             }).on("mouseout", function () {
                 return _this.onNodeUnhover();
             });
-        this.nodes.attr("class",function (d) {
+        this.nodes.select("circle").attr("class",function (d) {
             if (_this.selective && _this.selectedNodes[d.id]) {
                 return "node";
             } else {
@@ -241,7 +256,7 @@ window.Visualization = function ($el, colorManager, width, height) {
             }
         });
 
-        getNodeText(gs);
+        getNodeText(gs, this.viz);
 
         if (didChange) {
             this.force.start();
@@ -272,7 +287,7 @@ window.Visualization = function ($el, colorManager, width, height) {
     this.onNodeHover = function (d) {
         var filtered,
             _this = this;
-        this.nodes.style("fill",function (n) {
+        this.nodes.select("circle").style("fill",function (n) {
             if (_.indexOf(_this.indexLinkRef, d.id + "," + n.id) > -1 || _.indexOf(_this.indexLinkRef, n.id + "," + d.id) > -1 || n.id === d.id || (_this.selective && _this.selectedNodes[n.id])) {
                 return colorManager.getColorForLabels(n.labels).bright;
             } else {
@@ -315,7 +330,7 @@ window.Visualization = function ($el, colorManager, width, height) {
 
     this.onNodeUnhover = function () {
         var _this = this;
-        this.nodes.style("fill", function (d) {
+        this.nodes.select("circle").style("fill", function (d) {
             var col;
             col = colorManager.getColorForLabels(d.labels);
             if (!_this.selective || _this.selectedNodes[d.id]) {
@@ -371,9 +386,9 @@ window.Visualization = function ($el, colorManager, width, height) {
     this.frame = function () {
         var nodes, xMax, xMin, yMax, yMin,
             _this = this;
-        nodes = this.selectove ? this.nodes.filter(function (n) {
+        nodes = this.selectove ? this.nodes.select("circle").filter(function (n) {
             return _this.selectedNodes[n.id];
-        }) : this.nodes;
+        }) : this.nodes.select("circle");
         xMax = 0;
         xMin = Infinity;
         yMax = 0;
@@ -415,5 +430,7 @@ window.Visualization = function ($el, colorManager, width, height) {
         this.viz.selectAll("text").style("font", 12 / scale + "px sans-serif").style("stroke-width", 0.5 / scale + "px");
         return this.viz.selectAll(".shadow").style("stroke-width", 3 / scale + "px");
     }
-    return this;
+
+        this.draw(visualization, forceUnselective);
+    };
 }
