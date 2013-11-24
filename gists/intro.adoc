@@ -1,4 +1,9 @@
 = Neo4j Graph Gist =
+Anders Nawroth <anders@neotechnology.com>
+v0.1, 2013-09-01
+:neo4j-version: 2.0.0-RC1
+:author: Anders Nawroth
+:twitter: @nawroth
 
 Neo4j GraphGists are a way to share documents including Cypher queries.
 The queries can be executed in an online console.
@@ -21,7 +26,7 @@ A first simple query to just create a node:
 
 [source,cypher]
 ----
-CREATE (n{name:'first node'});
+CREATE (n {name:'first node'}) RETURN n;
 ----
 
 NOTE: This document is a GraphGist, use the Page Source button on top of the page to see the Gist behind it.
