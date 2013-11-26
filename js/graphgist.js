@@ -80,6 +80,8 @@ function GraphGist($) {
                 initConsole(function () {
                     renderGraphs();
                     renderTables();
+                    
+                }, function(){
                     hideConsole()
                     postProcessRendering();
                     if ('initDisqus' in window) {
@@ -216,25 +218,31 @@ function GraphGist($) {
 
     }
 
-    function initConsole(callback) {
+    function initConsole(callback, always) {
         var query = getSetupQuery();
         consolr.init({
             'init': 'none',
             'query': query || 'none',
             'message': 'none',
             'no_root': true
-        }, success);
+        }, success, error);
 
         function success(data) {
             consolr.input('');
             if (callback) {
                 callback();
             }
+            if(always) {
+                always();
+            }
         }
 
         function error(data) {
             HAS_ERRORS = true;
             console.log('Error during INIT: ', data);
+            if(always){
+                always();
+            }
         }
     }
 
