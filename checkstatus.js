@@ -4,6 +4,8 @@ var webpage = require('webpage'),
     url = system.args[1] || 'http://gist.neo4j.org',
     fs = require('fs');
 
+var EVALUATING = /Executing queries/;
+
 page.onLoadFinished = function (status) {
 //    var slideCount;
 
@@ -17,7 +19,6 @@ page.onLoadFinished = function (status) {
         width: 1024,
         height: 768
     };
-    var evaluating = "Executing queries ...";
     checkStatus = function () {
         var status = page.evaluate(function () {
             var $ = window.jQuery;
@@ -33,14 +34,17 @@ page.onLoadFinished = function (status) {
         console.log('Rendered page to ' + src);
     }
 
-    console.log("status: " + checkStatus());
-    if (checkStatus() == evaluating) {
-        console.log("waiting for 1 sec.");
-        window.setTimeout(render, 1000);
-    } else {
-        render();
+    var assertOk = function() {
+        if (checkStatus().match(EVALUATING)) {
+            console.log("waiting for 1 sec.");
+            window.setTimeout(assertOk, 1000);
+        } else {
+            console.log("status: " + checkStatus());
+            phantom.exit();
+        }
     }
-    phantom.exit();
+    render();
+    assertOk();
 }
 ;
 
