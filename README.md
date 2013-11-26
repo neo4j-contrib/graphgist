@@ -11,12 +11,4 @@ Building
     git clone git@github.com:neo4j-contrib/graphgist.git
     cd graphgist
     
-    
-Checking a graphgists build status
-----------------------------------
-
-    brew install phantomjs
-    phantomjs ./js/checkstatus.js {gist-url}
-    
-    
 This is a static site, not further deployment needed. It is hosted via gh-pages.
