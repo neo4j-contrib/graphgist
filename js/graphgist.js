@@ -312,9 +312,8 @@ function GraphGist($) {
                     console.log('Viz', height);
                 }, 0);
 
-                var myChart = graphVisualizer($visContainer, window.ColorManager(), 840, 300, visualization, true);
-
-                myChart();
+                var myChart = new GraphVisualizer($visContainer, window.ColorManager(), 840, 300);
+                myChart.draw(visualization, true);
             }
             else {
                 $visContainer.text('There is no graph to render.').addClass('alert-error');

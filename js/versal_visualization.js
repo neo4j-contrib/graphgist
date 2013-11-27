@@ -1,14 +1,14 @@
-function graphVisualizer($el, colorManager, width, height, visualization, forceUnselective) {
+function GraphVisualizer($el, colorManager, width, height) {
 
-    return function()
-    {
     var _this = this;
+    console.log("_this",_this,"this",this);
     this.$el = $el;
     //console.log("el",this.$el);
     this.colorManager = colorManager;
     this.width = width;
     this.height = height;
     console.log("el", $el[0]);
+
     this.svg = d3.select(this.$el[0]).append("svg").attr("width", this.width).attr("height", this.height);
     this.viz = this.svg.append("g");
     this.viz.append("defs").selectAll("marker").data(["arrowhead", "faded-arrowhead"]).enter().append("marker").attr("id", String).attr("viewBox", "0 0 10 10").attr("refX", 25).attr("refY", 5).attr("markerUnits", "strokeWidth").attr("markerWidth", 4).attr("markerHeight", 3.5).attr("orient", "auto").attr("preserveAspectRatio", "xMinYMin").append("path").attr("d", "M 0 0 L 10 5 L 0 10 z");
@@ -17,8 +17,10 @@ function graphVisualizer($el, colorManager, width, height, visualization, forceU
     this.force.on("tick", function () {
         return _this.tick();
     });
+
     this.create = function (graph) {
         var d;
+//        console.log("_this",_this,"this",this);
         if (graph.nodes.length === 0 && graph.links.length === 0) {
             this.emptyMsg.attr("opacity", 1);
             return;
@@ -46,7 +48,7 @@ function graphVisualizer($el, colorManager, width, height, visualization, forceU
         this.nodes = this.viz.append("g").selectAll("g");
         this.nodeTexts = this.viz.append("g").selectAll("g");
         this.graphCreated = true;
-        //console.log("Viz create",this);
+//        console.log("Viz create",this);
         return this.draw(graph);
     };
     this.tick = function () {
@@ -64,8 +66,8 @@ function graphVisualizer($el, colorManager, width, height, visualization, forceU
         this.nodeTexts
             .select(".node-texts g")
             .selectAll("text")
-            .attr("y", function(d, i) 
-                { 
+            .attr("y", function(d, i)
+                {
                     return (Math.min(_this.height, Math.max(0, d.y)) + 3) + (i * 12);
                 })
             .attr("x",function (d) {
@@ -128,25 +130,30 @@ function graphVisualizer($el, colorManager, width, height, visualization, forceU
         });
         return toAdd.length || toRemove.length;
     };
+
+
+    function isSelected(d) {
+        return (_this.selective && _this.selectedNodes[d.id]);
+    }
+
     function getNodeText(gs, viz) {
             var propCountGroup = 0;
             gs.each(function(gsd) {
-                
+
                 var lg = d3.select(viz
                             .selectAll(".node-texts")[0][propCountGroup])
                             .append("g");
 
-
+                var propCount = 0;
                 _.each(gsd, function (value, key) {
-                    if (["px", "py", "x", "y", "index", "weight", "labels"].indexOf(key) === -1)
+                    if (["px", "py", "x", "y", "index", "weight", "labels","id"].indexOf(key) === -1)
                     {
-                        text = (key + ": " + value);
-                        
-                            lg.append("text")
-                            .text(function(d, i) 
-                            { 
-                                return text; 
-                            })
+                        var text = (key + ": " + value);
+
+                        lg.append("text").text(function (d, i) {
+                            return isSelected(d) || propCount == 0? text : null;
+                        });
+                        propCount += 1;
                     }
                 });
 
@@ -155,17 +162,19 @@ function graphVisualizer($el, colorManager, width, height, visualization, forceU
     }
 
     this.draw = function (graph, forceUnselective) {
-        var didChange, didChange1, didChange2, gs, nt, _this = this;
+        var didChange, didChange1, didChange2, gs, nt;
+        var _this = this;
+//        console.log("_this",_this,"this",this);
         if (graph.nodes.length === 0 && graph.links.length === 0) {
             _this.emptyMsg.attr("opacity", 1);
         } else {
             _this.emptyMsg.attr("opacity", 0);
         }
 
-        
+
 
         if (!_this.graphCreated) {
-            console.log("created", _this.graphCreated);
+//            console.log("created", _this.graphCreated);
             _this.create(graph);
         }
 
@@ -234,8 +243,7 @@ function graphVisualizer($el, colorManager, width, height, visualization, forceU
                 return "faded-node";
             }
         }).style("fill", function (d) {
-                var color;
-                color = colorManager.getColorForLabels(d.labels);
+                var color = colorManager.getColorForLabels(d.labels);
                 if (!_this.selective || _this.selectedNodes[d.id]) {
                     return color.bright;
                 } else {
@@ -247,14 +255,8 @@ function graphVisualizer($el, colorManager, width, height, visualization, forceU
         nt = this.nodeTexts.exit();
         this.nodes.exit().remove();
         nt.remove();
-        
-        this.nodeTexts.attr("opacity", function (d) {
-            if (_this.selective && _this.selectedNodes[d.id]) {
-                return 1;
-            } else {
-                return 0;
-            }
-        });
+
+//        this.nodeTexts.attr("opacity", function (d) { return isSelected(d) ? 1 : 0 });
 
         getNodeText(gs, this.viz);
 
@@ -352,13 +354,13 @@ function graphVisualizer($el, colorManager, width, height, visualization, forceU
                     return "url(#faded-arrowhead)";
                 }
             });
-        this.nodeTexts.attr("opacity", function (d) {
-            if (_this.selective && _this.selectedNodes[d.id]) {
-                return 1;
-            } else {
-                return 0;
-            }
-        });
+//        this.nodeTexts.attr("opacity", function (d) {
+//            if (_this.selective && _this.selectedNodes[d.id]) {
+//                return 1;
+//            } else {
+//                return 0;
+//            }
+//        });
         this.pathTexts = this.pathTexts.data([]);
         this.pathTexts.exit().remove();
         return this.tick();
@@ -430,7 +432,4 @@ function graphVisualizer($el, colorManager, width, height, visualization, forceU
         this.viz.selectAll("text").style("font", 12 / scale + "px sans-serif").style("stroke-width", 0.5 / scale + "px");
         return this.viz.selectAll(".shadow").style("stroke-width", 3 / scale + "px");
     }
-
-        this.draw(visualization, forceUnselective);
-    };
 }
