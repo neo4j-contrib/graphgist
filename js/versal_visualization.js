@@ -13,7 +13,8 @@ function GraphVisualizer($el, colorManager, width, height) {
     this.viz = this.svg.append("g");
     this.viz.append("defs").selectAll("marker").data(["arrowhead", "faded-arrowhead"]).enter().append("marker").attr("id", String).attr("viewBox", "0 0 10 10").attr("refX", 25).attr("refY", 5).attr("markerUnits", "strokeWidth").attr("markerWidth", 4).attr("markerHeight", 3.5).attr("orient", "auto").attr("preserveAspectRatio", "xMinYMin").append("path").attr("d", "M 0 0 L 10 5 L 0 10 z");
     this.emptyMsg = this.svg.append("text").text("Graph database is empty.").attr("class", "emptyMsg").attr("x", 350).attr("y", 200).attr("opacity", 0);
-    this.force = d3.layout.force().charge(-1380).linkDistance(100).friction(0.3).gravity(0.5).size([this.width, this.height]);
+    this.force = d3.layout.force().charge(-1500).linkDistance(300).friction(0.2).gravity(0.3).size([this.width, this.height]);
+//    this.force = d3.layout.force().charge(-1380).linkDistance(100).friction(0.3).gravity(0.5).size([this.width, this.height]);
     this.force.on("tick", function () {
         return _this.tick();
     });
@@ -28,11 +29,12 @@ function GraphVisualizer($el, colorManager, width, height) {
             this.emptyMsg.attr("opacity", 0);
         }
         d = 2 * (this.width || 725) / graph.nodes.length;
-        this.force.linkDistance(Math.min(200, d));
+        console.log("linkDistance",d);
+        this.force.linkDistance(Math.min(300, d));
         if (graph.nodes.length < 25) {
-//                        this.height = 400;
+            this.height = 400;
         } else if (graph.nodes.length > 100) {
-//                        this.height = 600;
+            this.height = 600;
         } else {
             this.height = (graph.nodes.length - 25) * 200 / 75 + 400;
         }
@@ -146,12 +148,12 @@ function GraphVisualizer($el, colorManager, width, height) {
 
                 var propCount = 0;
                 _.each(gsd, function (value, key) {
-                    if (["px", "py", "x", "y", "index", "weight", "labels","id"].indexOf(key) === -1)
+                    if (["px", "py", "x", "y", "index", "weight", "labels","id","selected"].indexOf(key) === -1)
                     {
-                        var text = (key + ": " + value);
+                        var text = (key + ": " + ""+value).substr(0,30);
 
                         lg.append("text").text(function (d, i) {
-                            return isSelected(d) || propCount == 0? text : null;
+                            return text; // isSelected(d) || ["title","name"].indexOf(key)!=-1 || propCount == 0? text : null;
                         });
                         propCount += 1;
                     }
@@ -260,6 +262,7 @@ function GraphVisualizer($el, colorManager, width, height) {
 
         getNodeText(gs, this.viz);
 
+        this.nodeTexts.attr("opacity",0.2);
         if (didChange) {
             this.force.start();
         }
@@ -289,6 +292,7 @@ function GraphVisualizer($el, colorManager, width, height) {
     this.onNodeHover = function (d) {
         var filtered,
             _this = this;
+        _this.selectedId = d.id;
         this.nodes.select("circle").style("fill",function (n) {
             if (_.indexOf(_this.indexLinkRef, d.id + "," + n.id) > -1 || _.indexOf(_this.indexLinkRef, n.id + "," + d.id) > -1 || n.id === d.id || (_this.selective && _this.selectedNodes[n.id])) {
                 return colorManager.getColorForLabels(n.labels).bright;
@@ -306,10 +310,13 @@ function GraphVisualizer($el, colorManager, width, height) {
                 return this.parentNode.appendChild(this);
             });
         this.nodeTexts.attr("opacity",function (n) {
-            if (_.indexOf(_this.indexLinkRef, d.id + "," + n.id) > -1 || _.indexOf(_this.indexLinkRef, n.id + "," + d.id) > -1 || n.id === d.id || (_this.selective && _this.selectedNodes[n.id])) {
+            if (n.id === d.id) {
+                return 1;
+            }
+            if (_.indexOf(_this.indexLinkRef, d.id + "," + n.id) > -1 || _.indexOf(_this.indexLinkRef, n.id + "," + d.id) > -1 || (_this.selective && _this.selectedNodes[n.id])) {
                 return 0.5;
             } else {
-                return 0;
+                return 0.2;
             }
         }).each(function (l) {
                 if (l.id === d.id) {
