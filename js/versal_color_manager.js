@@ -26,21 +26,22 @@ window.ColorManager = function () {
             dim: "#CEEDEC"
         }
     ];
-    this.defaultColor = {bright:"#525864", dim:"#ccc"}
+    this.defaultColor = {bright:"#525864", dim:"#DDD"}
     this.getColorForLabels = function (labels) {
-        var color, labelToUse;
-        if (!(labels && labels.length > 0)) {
+        if (!labels || labels.length == 0) {
             return this.defaultColor;
         }
-        labelToUse = labels[labels.length - 1];
+        var labelToUse = labels[labels.length - 1];
         if (!this.registeredLabelColors[labelToUse]) {
             if (this.prettyColors.length === 0) {
-                return this.defaultColor;
+                this.registeredLabelColors[labelToUse] = this.defaultColor;
+            } else {
+                var color = labelToUse.charCodeAt(0) % this.prettyColors.length; // _.random(0, this.prettyColors.length-1);
+                this.registeredLabelColors[labelToUse] = this.prettyColors[color];
+                this.prettyColors.splice(color, 1);
             }
-            color = this.prettyColors[_.random(0, this.prettyColors.length - 1)];
-            this.prettyColors.splice(_.indexOf(this.prettyColors, color), 1);
-            this.registeredLabelColors[labelToUse] = color;
         }
+//        console.log("labels",labels,labelToUse,"color",this.registeredLabelColors[labelToUse]);
         return this.registeredLabelColors[labelToUse];
     };
     return this;
