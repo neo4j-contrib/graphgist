@@ -1,0 +1,257 @@
+= Network and Data Center Management
+
+This interactive Neo4j graph tutorial covers Network and Data Center Management scenarios.
+
+== Introduction to Problem
+
+Explain the problem here. Be specific.
+
+== Explanation of Scenario
+
+Explain the scenario you are about to cover.
+
+== Explanation of Solution
+
+Explain the Neo4j solution to the scenario as a brief summary.
+
+== Network Dependency Graph
+
+image::http://raw.github.com/neo4j-contrib/gists/master/other/images/datacenter-management-1.PNG[Network Dependency Graph]
+
+== Cypher Query Setup
+
+//setup
+//hide
+[source,cypher]
+----
+// Create CRM
+CREATE (crm1:CRM:Resource { 
+			ip:'10.10.32.1', 
+			host:'AM-CRM-01'
+		}) 
+
+// Create ERP
+CREATE (erp1:ERP:Resource { 
+			ip:'10.10.33.1', 
+			host:'AM-ERP-01'
+		}) 
+
+// Create Data Warehouse
+CREATE (datawarehouse1:DataWarehouse:Resource { 
+			ip:'10.10.34.1', 
+			host:'AM-DW-01'
+		}) 
+
+// Create Public Website 1
+CREATE (publicwebsite1:PublicWebsite:Resource { 
+			ip:'10.10.35.1', 
+			host:'AM-PW-01'
+		}) 
+
+// Create Public Website 2
+CREATE (publicwebsite2:PublicWebsite:Resource { 
+			ip:'10.10.35.2', 
+			host:'AM-PW-02'
+		}) 
+
+// Create Public Website 3
+CREATE (publicwebsite3:PublicWebsite:Resource { 
+			ip:'10.10.35.3', 
+			host:'AM-PW-03'
+		}) 
+
+// Create Public Website 4
+CREATE (publicwebsite4:PublicWebsite:Resource { 
+			ip:'10.10.35.4', 
+			host:'AM-PW-04'
+		}) 
+
+// Create Public Website 5
+CREATE (publicwebsite5:PublicWebsite:Resource { 
+			ip:'10.10.35.1', 
+			host:'AM-PW-05'
+		}) 
+
+// Create Internal Website 1
+CREATE (internalwebsite1:InternalWebsite:Resource { 
+			ip:'10.10.32.1', 
+			host:'AM-IW-01'
+		}) 
+
+// Create Internal Website 2
+CREATE (internalwebsite2:InternalWebsite:Resource { 
+			ip:'10.10.32.1', 
+			host:'AM-IW-02'
+		}) 
+
+// Create Internal Website 3
+CREATE (internalwebsite3:InternalWebsite:Resource { 
+			ip:'10.10.32.1', 
+			host:'AM-IW-03'
+		}) 
+
+// Create Webserver VM 1
+CREATE (webservervm1:WebserverVM:Resource { 
+			ip:'10.10.32.1', 
+			host:'AM-WSVM-01'
+		}) 
+
+// Create Webserver VM 2
+CREATE (webservervm2:WebserverVM:Resource { 
+			ip:'10.10.32.1', 
+			host:'AM-WSVM-02'
+		}) 
+
+// Create Database VM 1
+CREATE (databasevm1:DatabaseVM:Resource { 
+			ip:'10.10.32.1', 
+			host:'AM-DBVM-01'
+		}) 
+
+// Create Database VM 2
+CREATE (databasevm2:DatabaseVM:Resource { 
+			ip:'10.10.32.1', 
+			host:'AM-DBVM-02'
+		}) 
+
+// Create Database VM 3
+CREATE (databasevm3:DatabaseVM:Resource { 
+			ip:'10.10.32.1', 
+			host:'AM-DBVM-03'
+		}) 
+
+// Create Database VM 4
+CREATE (databasevm4:DatabaseVM:Resource { 
+			ip:'10.10.32.1', 
+			host:'AM-DBVM-04'
+		}) 
+
+// Create Server 1
+CREATE (server1:Server:Resource { 
+			ip:'10.10.32.1', 
+			host:'AM-SRV-01'
+		}) 
+
+// Create Server 2
+CREATE (server2:Server:Resource { 
+			ip:'10.10.32.1', 
+			host:'AM-SRV-02'
+		}) 
+
+// Create Server 3
+CREATE (server3:Server:Resource { 
+			ip:'10.10.32.1', 
+			host:'AM-SRV-03'
+		}) 
+
+// Create SAN 1
+CREATE (san1:SAN:Resource { 
+			ip:'10.10.32.1', 
+			host:'AM-SAN-01'
+		}) 
+
+// Connect CRM to Database VM 1
+CREATE (crm1)-[:DEPENDS_ON]->(databasevm1)
+
+// Connect Public Websites 1-3 to Database VM 1
+CREATE 	(publicwebsite1)-[:DEPENDS_ON]->(databasevm1),
+	   	(publicwebsite2)-[:DEPENDS_ON]->(databasevm1),
+	   	(publicwebsite3)-[:DEPENDS_ON]->(databasevm1)
+
+// Connect Database VM 1 to Server 1
+CREATE 	(databasevm1)-[:DEPENDS_ON]->(server1)
+
+// Connect Public Websites 1-3 to Webserver VM 1
+CREATE 	(webservervm1)<-[:DEPENDS_ON]-(publicwebsite1),
+		(webservervm1)<-[:DEPENDS_ON]-(publicwebsite2),
+		(webservervm1)<-[:DEPENDS_ON]-(publicwebsite3)
+
+// Connect Internal Websites 1-3 to Webserver VM 1
+CREATE 	(webservervm1)<-[:DEPENDS_ON]-(internalwebsite1),
+		(webservervm1)<-[:DEPENDS_ON]-(internalwebsite2),
+		(webservervm1)<-[:DEPENDS_ON]-(internalwebsite3)
+
+// Connect Webserver VM 1 to Server 2
+CREATE 	(webservervm1)-[:DEPENDS_ON]->(server2)
+
+// Connect Server 2 to SAN 1
+CREATE 	(server2)-[:DEPENDS_ON]->(san1)
+
+// Connect Webserver VM 2 to Server 2
+CREATE 	(webservervm2)-[:DEPENDS_ON]->(server2)
+
+// Connect Public Websites 4-6 to Webserver VM 2
+CREATE 	(webservervm2)<-[:DEPENDS_ON]-(publicwebsite4),
+		(webservervm2)<-[:DEPENDS_ON]-(publicwebsite5)
+
+
+// Connect Public Websites 4-5 to Database VM 2
+CREATE 	(publicwebsite4)-[:DEPENDS_ON]->(databasevm2),
+	   	(publicwebsite5)-[:DEPENDS_ON]->(databasevm2)
+
+// Connect Server 3 to SAN 1
+CREATE 	(server3)-[:DEPENDS_ON]->(san1)
+
+// Connect Database VM 3 to Server 3
+CREATE 	(server3)<-[:DEPENDS_ON]-(databasevm3)
+
+// Connect ERP 1 to Database VM 3
+CREATE 	(erp1)-[:DEPENDS_ON]->(databasevm3)
+
+// Connect Database VM 4 to Server 3
+CREATE 	(server3)<-[:DEPENDS_ON]-(databasevm4)
+
+// Connect Data Warehouse 1 to Database VM 4
+CREATE 	(datawarehouse1)-[:DEPENDS_ON]->(databasevm4)
+
+RETURN *
+
+----
+
+//graph
+
+=== Overview by Type
+
+Shows a quick overview over the datacenter content grouped by server type.
+
+[source,cypher]
+----
+MATCH (n) 
+RETURN labels(n)[1] as type, count(*) as count, collect(n.host) as names
+----
+
+//table
+
+=== Find direct dependencies of all public websites
+[source,cypher]
+----
+MATCH 	(website:PublicWebsite)-[:DEPENDS_ON]->(downstream)
+RETURN 	labels(website)[1] + ": " + website.host as Host, 
+		collect(labels(downstream)[1] + ": " + downstream.host) as Dependencies
+ORDER BY Host
+----
+
+//table
+
+=== Find direct dependencies of all internal websites
+[source,cypher]
+----
+MATCH 	(website:InternalWebsite)-[:DEPENDS_ON]->(downstream)
+RETURN 	labels(website)[1] + ": " + website.host as Host, 
+		collect(labels(downstream)[1] + ": " + downstream.host) as Dependencies
+ORDER BY Host
+----
+
+//table
+
+=== Find the most depended-upon component
+[source,cypher]
+----
+MATCH 		(n:Resource)<-[:DEPENDS_ON*]-(dependent)
+RETURN 		labels(n)[1] + ": " + n.host as Host, 
+			count(DISTINCT dependent) AS Dependents
+ORDER BY 	Dependents DESC
+LIMIT 		1
+----
+
+//table
