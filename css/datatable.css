@@ -30,9 +30,7 @@ table.dataTable .odd {
 }
 
 .dataTables_wrapper {
-    display: inline-block;
-    max-width: 75%;
-    min-width: 50%;
+    margin: 1.5em 0;
     z-index: 100;
 }
 
@@ -101,3 +99,4 @@ table.dataTable .css_right {
   margin-right: 5px;
   margin-top: 5px;
 }
+
