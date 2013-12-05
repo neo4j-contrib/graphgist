@@ -13,7 +13,7 @@
 
 'use strict';
 
-var DEFAULT_VERSION = "2.0.0-M06";
+var DEFAULT_VERSION = "2.0.0-RC1";
 var CONSOLE_VERSIONS = { "2.0.0-M06" : 'http://neo4j-console-20m06.herokuapp.com/', 
                          "2.0.0-RC1" : 'http://neo4j-console-20rc1.herokuapp.com/', 
                          "1.9"       : "http://neo4j-console-19.herokuapp.com/",
