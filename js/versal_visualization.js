@@ -1,23 +1,26 @@
 function GraphVisualizer($el, colorManager, width, height) {
 
     var _this = this;
-    console.log("_this",_this,"this",this);
     this.$el = $el;
     //console.log("el",this.$el);
     this.colorManager = colorManager;
     this.width = width;
     this.height = height;
-    console.log("el", $el[0]);
 
+    var LINK_DISTANCE = 200;
+    var CHARGE = -1000;
+    var GRAVITY = 0.3;
+    var FRICTION = 0.1;
     this.svg = d3.select(this.$el[0]).append("svg").attr("width", this.width).attr("height", this.height);
     this.viz = this.svg.append("g");
     this.viz.append("defs").selectAll("marker").data(["arrowhead", "faded-arrowhead"]).enter().append("marker").attr("id", String).attr("viewBox", "0 0 10 10").attr("refX", 25).attr("refY", 5).attr("markerUnits", "strokeWidth").attr("markerWidth", 4).attr("markerHeight", 3.5).attr("orient", "auto").attr("preserveAspectRatio", "xMinYMin").append("path").attr("d", "M 0 0 L 10 5 L 0 10 z");
     this.emptyMsg = this.svg.append("text").text("Graph database is empty.").attr("class", "emptyMsg").attr("x", 350).attr("y", 200).attr("opacity", 0);
-    this.force = d3.layout.force().charge(-1500).linkDistance(300).friction(0.2).gravity(0.3).size([this.width, this.height]);
-//    this.force = d3.layout.force().charge(-1380).linkDistance(100).friction(0.3).gravity(0.5).size([this.width, this.height]);
+    this.force = d3.layout.force().charge(CHARGE).linkDistance(LINK_DISTANCE).friction(FRICTION).gravity(GRAVITY).size([this.width, this.height]);
+//    this.force = d3.layout.force().charge(CHARGE).linkDistance(LINK_DISTANCE).friction(0.2).gravity(0.3).size([this.width, this.height]);
     this.force.on("tick", function () {
         return _this.tick();
     });
+
 
     this.create = function (graph) {
         var d;
@@ -29,8 +32,8 @@ function GraphVisualizer($el, colorManager, width, height) {
             this.emptyMsg.attr("opacity", 0);
         }
         d = 2 * (this.width || 725) / graph.nodes.length;
-        console.log("linkDistance",d);
-        this.force.linkDistance(Math.min(300, d));
+//        console.log("linkDistance",d);
+        this.force.linkDistance(Math.min(LINK_DISTANCE, d));
         if (graph.nodes.length < 25) {
             this.height = 400;
         } else if (graph.nodes.length > 100) {
@@ -133,6 +136,25 @@ function GraphVisualizer($el, colorManager, width, height) {
         return toAdd.length || toRemove.length;
     };
 
+
+    function accelerateLayout(force, render) {
+        var maxStepsPerTick = 100;
+        var maxAnimationFramesPerSecond = 60;
+        var maxComputeTime = 1000 / maxAnimationFramesPerSecond;
+        var d3Tick = force.tick;
+        return force.tick = function() {
+            var startTick = Date.now();
+            var step = maxStepsPerTick;
+            while (step-- && Date.now() - startTick < maxComputeTime) {
+                if (d3Tick()) {
+                    maxStepsPerTick = 2;
+                    return true;
+                }
+            }
+            render();
+            return false;
+        };
+    }
 
     function isSelected(d) {
         return (_this.selective && _this.selectedNodes[d.id]);
