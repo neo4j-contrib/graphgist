@@ -1,7 +1,7 @@
 = A simple GraphGist
 Anders Nawroth <anders@neotechnology.com>
 v0.1, 2013-09-01
-:neo4j-version: 2.0.0-RC1
+:neo4j-version: 2.0.0
 :author: Anders Nawroth
 :twitter: @nawroth
 

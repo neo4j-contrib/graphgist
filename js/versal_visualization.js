@@ -7,9 +7,9 @@ function GraphVisualizer($el, colorManager, width, height) {
     this.width = width;
     this.height = height;
 
-    var LINK_DISTANCE = 200;
-    var CHARGE = -1000;
-    var GRAVITY = 0.3;
+    var LINK_DISTANCE = 75;
+    var CHARGE = -2000;
+    var GRAVITY = 0.1;
     var FRICTION = 0.1;
     this.svg = d3.select(this.$el[0]).append("svg").attr("width", this.width).attr("height", this.height);
     this.viz = this.svg.append("g");
@@ -251,8 +251,10 @@ function GraphVisualizer($el, colorManager, width, height) {
        //.append("circle").exit();
 
         this.nodes.enter().append("g").attr("class", "node-circle").append("circle").attr("r", 10).call(this.force.drag).each(function (d) {
-            d.x = (Math.random() + 0.5) * _this.width / 2;
-            d.y = (Math.random() + 0.5) * _this.height / 2;
+//            d.x = (Math.random() + 0.5) * _this.width / 2;
+//            d.y = (Math.random() + 0.5) * _this.height / 2;
+            d.x = Math.random() * _this.width;
+            d.y = Math.random() * _this.height;
             //console.log("circle",_this,d);
             return d;
         }).on("mouseover",function (d) {
