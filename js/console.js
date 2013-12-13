@@ -13,24 +13,9 @@
 
 'use strict';
 
-var DEFAULT_VERSION = "2.0.0";
-var CONSOLE_VERSIONS = { "2.0.0-M06" : 'http://neo4j-console-20m06.herokuapp.com/', 
-                         "2.0.0-RC1" : 'http://neo4j-console-20rc1.herokuapp.com/', 
-                         "2.0.0"     : 'http://neo4j-console-20.herokuapp.com/', 
-                         "1.9"       : "http://neo4j-console-19.herokuapp.com/",
-                         "default"   : 'http://neo4j-console-20.herokuapp.com/', 
-                       }
-var CONSOLE_URL_BASE = 'http://neo4j-console-20.herokuapp.com/';
-
 function CypherConsole(config, ready) {
 
-//    var CONSOLE_URL_BASE = 'http://127.0.0.1:8080/';
-//    var CONSOLE_URL_BASE = 'http://neo4j-console-20m06.herokuapp.com/';
-
     var $IFRAME = $('<iframe/>').attr('id', 'console').addClass('cypherdoc-console');
-//    console.log("console iframe", $IFRAME);
-    var CLASS_VISIBLE = "visible";
-    var CLASS_INVISIBLE = "hidden";
     var $IFRAME_WRAPPER = $('<div/>').attr('id', 'console-wrapper');
     var RESIZE_OUT_ICON = 'icon-resize-full';
     var RESIZE_IN_ICON = 'icon-resize-small';
@@ -45,6 +30,7 @@ function CypherConsole(config, ready) {
     var consoleClass = 'consoleClass' in config ? config.consoleClass : 'console';
     var contentId = 'contentId' in config ? config.contentId : 'content';
     var contentMoveSelector = 'contentMoveSelector' in config ? config.contentMoveSelector : 'div.navbar';
+    var consoleUrl = config.url;
 
     createConsole(ready, consoleClass, contentId);
 
@@ -119,7 +105,7 @@ function CypherConsole(config, ready) {
                 $gistForm.css('margin-right', 0);
             }
         });
-        
+
         var $resizeIcon = $('i', $resizeButton);
     }
 
@@ -138,7 +124,7 @@ function CypherConsole(config, ready) {
     }
 
     function getUrl(database, command, message, session) {
-        var url = CONSOLE_URL_BASE;
+        var url = consoleUrl;
 
         if (session !== undefined) {
             url += ';jsessionid=' + session;

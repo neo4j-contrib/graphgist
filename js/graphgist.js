@@ -28,8 +28,15 @@ function GraphGist($) {
     var $QUERY_MESSAGE = $('<pre/>').addClass('query-message');
     var $VISUALIZATION = $('<div/>').addClass('visualization');
     var $TABLE_CONTAINER = $('<div/>').addClass('result-table');
-    var ASCIIDOCTOR_OPTIONS = Opal.hash('attributes', [ 'notitle!' ], 'attribute-missing','drop');
-    var DEFAULT_SOURCE = 'github-neo4j-contrib%2Fgists%2F%2Fmeta%2FHome.adoc';
+    var ASCIIDOCTOR_OPTIONS = Opal.hash('attributes', [ 'notitle!' ], 'attribute-missing', 'drop');
+    var DEFAULT_SOURCE = 'github-neo4j-contrib%2Fgists%2F%2Fmeta%2FHome.adoc'
+
+    var DEFAULT_VERSION = '2.0.0';
+    var CONSOLE_VERSIONS = { '2.0.0-M06': 'http://neo4j-console-20m06.herokuapp.com/',
+        '2.0.0-RC1': 'http://neo4j-console-20rc1.herokuapp.com/',
+        '2.0.0': 'http://neo4j-console-20.herokuapp.com/',
+        '1.9': 'http://neo4j-console-19.herokuapp.com/'
+    }
 
     var $content = undefined;
     var $gistId = undefined;
@@ -37,22 +44,17 @@ function GraphGist($) {
     var statements = [];
 
     $(document).ready(function () {
-//        console.log("graphgist doc ready")
         window.addEventListener("message", handleMessage);
         $content = $('#content');
         $gistId = $('#gist-id');
         var gist = new Gist($, $content);
         gist.getGistAndRenderPage(renderContent, DEFAULT_SOURCE);
-        postProcess();
         $gistId.keydown(gist.readSourceId);
+        $("#tell-me-more").attr('href', 'mailto:info@neotechnology.com?Subject=[Graphgist] More%20info%20about%20' + window.location);
     });
 
-    function postProcess() {
-        $("#tell-me-more").attr('href', 'mailto:info@neotechnology.com?Subject=[Graphgist] More%20info%20about%20' + window.location);
-    }
     function handleMessage(e) {
         var source = e.source;
-//        console.log("Livegraph received Message", e, source);
         var msg = e.data;
         if (msg == "queries") {
             console.log('posting', statements);
@@ -65,6 +67,7 @@ function GraphGist($) {
         var doc = preProcessContents(originalContent);
         $content.empty();
         if (imagesdir) {
+            // probably not supported yet due to a bug
             //ASCIIDOCTOR_OPTIONS = Opal.hash('attributes', [ 'notitle!', 'imagesdir=' + imagesdir ]);
         }
         var generatedHtml = undefined;
@@ -76,15 +79,16 @@ function GraphGist($) {
             return;
         }
         $content.html(generatedHtml);
-        postProcessPage();
-        CypherConsole({}, function (conslr) {
+        var version = postProcessPage();
+        var consoleUrl = CONSOLE_VERSIONS[version in CONSOLE_VERSIONS ? version : DEFAULT_VERSION];
+        CypherConsole({'url': consoleUrl}, function (conslr) {
             consolr = conslr;
             executeQueries(function () {
                 initConsole(function () {
                     renderGraphs();
                     renderTables();
-                    
-                }, function(){
+
+                }, function () {
                     hideConsole()
                     postProcessRendering();
                     if ('initDisqus' in window) {
@@ -153,8 +157,7 @@ function GraphGist($) {
         sanitized = sanitized.replace(/^\/\/\s*?graph.*/gm, '++++\n<h5 class="graph-visualization"></h5>\n++++\n');
         sanitized = sanitized.replace(/^\/\/\s*?output.*/gm, '++++\n<span class="query-output"></span>\n++++\n');
         sanitized = sanitized.replace(/^\/\/\s*?table.*/gm, '++++\n<h5 class="result-table"></h5>\n++++\n');
-        sanitized += '\n++++\n<span class="meta" author="{author}" version="{neo4j-version}" twitter="{twitter}"></span>\n';
-        sanitized += '<span class="meta" tags="{tags}"></span>\n++++\n';
+        sanitized += '\n++++\n<span id="metadata"\n author="{author}"\n version="{neo4j-version}"\n twitter="{twitter}"\n tags="{tags}"\n/>\n++++\n';
         return sanitized;
     }
 
@@ -164,19 +167,24 @@ function GraphGist($) {
 
 
     function postProcessPage() {
-        var $meta = $("span.meta",$content);
-        var version = $meta.attr("version") || DEFAULT_VERSION;
-        CONSOLE_URL_BASE=CONSOLE_VERSIONS[version];
-        if ($meta.attr("tags")) {
-            $("footer").prepend('Tags <em>'+$meta.attr("tags")+'</a> ');
+        var $meta = $('#metadata', $content);
+        var version = $meta.attr('version');
+        if (typeof version === 'undefined' || !(version in CONSOLE_VERSIONS)) {
+            version = DEFAULT_VERSION;
         }
-        if ($meta.attr("author")) {
-            var twitter=$meta.attr("twitter").replace("@","");
-            $("footer").prepend('<i class="icon-twitter-sign"></i> Author <a target="_blank" href="http://twitter.com/'+twitter+'">'+$meta.attr("author")+'</a> ');
+        var $footer = $('footer');
+        if ($meta.attr('tags')) {
+            $footer.prepend('Tags <em>' + $meta.attr('tags') + '</a> ');
         }
-        $("footer").prepend('Uses Neo4j Version <a target="_blank" href="http://docs.neo4j.org/chunked/'+version+'/cypher-query-lang.html">'+version+'</a> ');
-        $("h2[id]").css({cursor:"pointer"}).click(function(){ window.location.href = window.location.href.replace(/($|#.+?$)/,"#"+$(this).attr("id")) });
-    
+        if ($meta.attr('author')) {
+            var twitter = $meta.attr('twitter').replace('@', '');
+            $footer.prepend('<i class="icon-twitter-sign"></i> Author <a target="_blank" href="http://twitter.com/' + twitter + '">' + $meta.attr('author') + '</a> ');
+        }
+        $footer.prepend('Uses Neo4j Version <a target="_blank" href="http://docs.neo4j.org/chunked/' + version + '/cypher-query-lang.html">' + version + '</a> ');
+        $("h2[id]").css({cursor: "pointer"}).click(function () {
+            window.location.href = window.location.href.replace(/($|#.+?$)/, "#" + $(this).attr("id"))
+        });
+
         processMathJAX();
         findQuery('span.hide-query', $content, function (codeElement) {
             $(codeElement.parentNode).addClass('hide-query');
@@ -232,6 +240,7 @@ function GraphGist($) {
 
         share();
 
+        return version;
     }
 
     function initConsole(callback, always) {
@@ -248,7 +257,7 @@ function GraphGist($) {
             if (callback) {
                 callback();
             }
-            if(always) {
+            if (always) {
                 always();
             }
         }
@@ -256,7 +265,7 @@ function GraphGist($) {
         function error(data) {
             HAS_ERRORS = true;
             console.log('Error during INIT: ', data);
-            if(always){
+            if (always) {
                 always();
             }
         }
