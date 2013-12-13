@@ -131,6 +131,7 @@ function GraphGist($) {
             status.text("No Errors.");
             status.addClass("label-success");
         }
+        DotWrapper($).scan();
     }
 
     function share() {
