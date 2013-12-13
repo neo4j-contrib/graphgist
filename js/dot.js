@@ -20,7 +20,7 @@ function DotWrapper($) {
     var queue = [];
 
     function scanForScriptBlocks() {
-        if ($('#content').hasClass('internet-explorer')) {
+        if (!document.createElementNS && !!document.createElementNS('http://www.w3.org/2000/svg', "svg").createSVGRect) {
             return;
         }
         $('script[type="text/vnd.graphviz"]').each(function () {
