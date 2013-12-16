@@ -59,8 +59,8 @@ iframe {
 }
 
 #content {
-    max-width: 60em;
-    margin: 0 auto;
+    /*max-width: 60em;*/
+    /*margin: 0 auto;*/
 }
 
 footer {
@@ -231,4 +231,10 @@ p.console>span.loading {
 
 #disqus_thread {
     margin-top: 2em;
+}
+
+#sidebar_left {
+}
+
+#sidebar_right {
 }

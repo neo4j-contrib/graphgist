@@ -125,7 +125,7 @@
         </a>
 
 
-        <div class="btn-group">
+        <!--<div class="btn-group">
             <a class="btn dropdown-toggle" data-toggle="dropdown" data-target="#">
                 <i class="icon-share-alt"></i> Share
                 <span class="caret"></span>
@@ -147,10 +147,8 @@
                         Add to the GraphGist Collection wiki</a>
                 </li>
             </ul>
-        </div>
-        
-        <a href="https://github.com/neo4j-contrib/graphgist/wiki" title="Neo4j GraphGist Challenge" target="_blank"><span
-                class="badge badge-warning"><i class="icon-beaker"></i> Challenge!</span></a>
+        </div>-->
+
 
         <form class="navbar-form pull-right" id="gist-form">
             <div class="input-prepend">
@@ -160,24 +158,32 @@
                 <input type="text" class="span2" id="gist-id" placeholder="GitHub Gist/File / Dropbox URL">
             </div>
         </form>
-        <div class="pull-right">
-            <a id="status" class="label tooltip-below"
-               title="Displays the overall status of all queries in this example.">Executing queries ...</a>
 
-        </div>
-        <div style="display: inline" class="pull-right">
-            <div style="width:100px">
-                <div class="g-plusone" data-size="small"><i class="fa fa-google-plus"></i></div>
-                <div class="fb-like"
-                     data-layout="button_count" data-action="like" data-show-faces="true" data-share="false"></div>
-                <div id="twitter-share-button"><a class="twitter-share-button" data-lang="en">Tweet</a></div>
-            </div>
-        </div>
 
     </div>
 </div>
-<div id="content">
-    <img alt="loading" src="images/loading.gif" style="margin: 5em;">
+
+<div class="row">
+    <div id="content" class="span10 offset1">
+        <img alt="loading" src="images/loading.gif" style="margin: 5em;">
+    </div>
+    <div class="span1" id="sidebar_right">
+
+        <div style="padding-bottom: 1em">
+            <a id="status" class="label tooltip-below"
+               title="Displays the overall status of all queries in this example.">Executing queries ...</a>
+        </div>
+        <div style="padding-bottom: 1em">
+            <a href="https://github.com/neo4j-contrib/graphgist/wiki" title="Neo4j GraphGist Challenge"
+               target="_blank"><span
+                    class="badge badge-warning"><i class="icon-beaker"></i> Challenge!</span></a></div>
+        <div style="width:100px">
+            <div class="g-plusone" data-size="small"><i class="fa fa-google-plus"></i></div>
+            <div class="fb-like"
+                 data-layout="button_count" data-action="like" data-show-faces="true" data-share="false"></div>
+            <div id="twitter-share-button"><a class="twitter-share-button" data-lang="en">Tweet</a></div>
+        </div>
+    </div>
 </div>
 <footer>
     <i class="icon-github-sign"></i> The GraphGist <a href="https://github.com/neo4j-contrib/graphgist">project</a>.
@@ -201,6 +207,14 @@
         s.parentNode.insertBefore(po, s);
     })();
 </script>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+<script>!function (d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (!d.getElementById(id)) {
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "https://platform.twitter.com/widgets.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }
+}(document, "script", "twitter-wjs");</script>
 </body>
 </html>
