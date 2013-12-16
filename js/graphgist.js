@@ -137,9 +137,14 @@ function GraphGist($) {
     function share() {
         var title = document.title;
         var href = encodeURIComponent(window.location.href);
+        var twitter_url = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent('Check this out: ' + title) + '&url=' + href;
         $('#twitter-share').attr(
             'href',
-            'https://twitter.com/intent/tweet?text=' + encodeURIComponent('Check this out: ' + title) + '&url=' + href);
+            twitter_url);
+        var twitter = $('#twitter-share-button');
+        console.log("twitter", twitter);
+        twitter.html('<a href="'+twitter_url+'" class="twitter-share-button" data-lang="en">Tweet</a>');
+        twttr.widgets.load();
         $('#facebook-share').attr(
             'href',
             'http://www.facebook.com/share.php?u=' + href);
