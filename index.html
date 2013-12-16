@@ -69,6 +69,16 @@
 </head>
 
 <body>
+<div id="fb-root"></div>
+
+<script>(function (d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s);
+    js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=442180952526716";
+    fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
 <div class="navbar">
     <div class="navbar-inner">
 
@@ -137,12 +147,7 @@
                 </li>
             </ul>
         </div>
-
-        <a class="btn" id="tell-me-more"
-           title="Contact Neo Technology on this example to get more info about similar Neo4j deployments and customers."
-           href="mailto:info@neotechnology.com?Subject=More%20info%20about"><i class="icon-envelope"></i> Tell me more
-            ...</a>
-
+        
         <a href="http://www.neo4j.org/learn/graphgist_challenge" title="Neo4j GraphGist Challenge" target="_blank"><span
                 class="badge badge-warning"><i class="icon-beaker"></i> Challenge!</span></a>
 
@@ -159,6 +164,15 @@
                title="Displays the overall status of all queries in this example.">Executing queries ...</a>
 
         </div>
+        <div style="display: inline" class="pull-right">
+            <div style="width:100px">
+                <div class="g-plusone" data-size="small"><i class="fa fa-google-plus"></i></div>
+                <div class="fb-like" data-href="https://developers.facebook.com/docs/plugins/"
+                     data-layout="button_count" data-action="like" data-show-faces="true" data-share="false"></div>
+
+            </div>
+        </div>
+
     </div>
 </div>
 <div id="content">
@@ -175,6 +189,16 @@
      $( '#content' ).addClass( 'internet-explorer' );
      @*/
 </script>
-
+<!-- Place this tag after the last +1 button tag. -->
+<script type="text/javascript">
+    (function () {
+        var po = document.createElement('script');
+        po.type = 'text/javascript';
+        po.async = true;
+        po.src = 'https://apis.google.com/js/platform.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(po, s);
+    })();
+</script>
 </body>
 </html>
