@@ -185,6 +185,13 @@ function Consolr(consoleWindow) {
     }
 
     function receiver(event) {
+        var origin = event.origin;
+        if (typeof origin !== 'string') {
+            return;
+        }
+        if (origin.indexOf('neo4j') === -1 && origin.indexOf('localhost') === -1) {
+            return;
+        }
         var result = JSON.parse(event.data);
         if ('call_id' in result) {
             var rr = receivers[result.call_id - 1];
