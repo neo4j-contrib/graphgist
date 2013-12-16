@@ -142,7 +142,6 @@ function GraphGist($) {
             'href',
             twitter_url);
         var twitter = $('#twitter-share-button');
-        console.log("twitter", twitter);
         twitter.html('<a href="'+twitter_url+'" class="twitter-share-button" data-lang="en">Tweet</a>');
         twttr.widgets.load();
         $('#facebook-share').attr(
