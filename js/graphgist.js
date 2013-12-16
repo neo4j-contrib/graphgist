@@ -162,26 +162,41 @@ function GraphGist($) {
         return sanitized;
     }
 
-    var processMathJAX = function () {
+    function processMathJAX() {
         MathJax.Hub.Typeset();
-    };
-
+    }
 
     function postProcessPage() {
         var $meta = $('#metadata', $content);
-        var version = $meta.attr('version');
+        var version = $meta.attr('version'), tags = $meta.attr('tags'), author = $meta.attr('author'), twitter = $meta.attr('twitter');
         if (typeof version === 'undefined' || !(version in CONSOLE_VERSIONS)) {
             version = DEFAULT_VERSION;
         }
         var $footer = $('footer');
-        if ($meta.attr('tags')) {
-            $footer.prepend('Tags <em>' + $meta.attr('tags') + '</a> ');
+        if (tags) {
+            $footer.prepend('<i class="icon-tags"></i> Tags <em>' + tags + '</a> ');
         }
-        if ($meta.attr('author')) {
-            var twitter = $meta.attr('twitter').replace('@', '');
-            $footer.prepend('<i class="icon-twitter-sign"></i> Author <a target="_blank" href="http://twitter.com/' + twitter + '">' + $meta.attr('author') + '</a> ');
+        if (twitter) {
+            twitter = twitter.replace('@', '');
         }
-        $footer.prepend('Uses Neo4j Version <a target="_blank" href="http://docs.neo4j.org/chunked/' + version + '/cypher-query-lang.html">' + version + '</a> ');
+        if (twitter && !author) {
+            author = twitter;
+        }
+        if (author) {
+            var authorHtml = '<i class=' + (twitter ? '"icon-twitter-sign"' : '"icon-user"') + '></i> Author ';
+            if (twitter) {
+                authorHtml += '<a target="_blank" href="http://twitter.com/' + twitter + '">';
+            }
+            authorHtml += author;
+            if (twitter) {
+                authorHtml += '</a>';
+            }
+
+            authorHtml += ' ';
+            $footer.prepend(authorHtml);
+        }
+
+        $footer.prepend('<i class="icon-cogs"></i> Uses Neo4j Version <a target="_blank" href="http://docs.neo4j.org/chunked/' + version + '/cypher-query-lang.html">' + version + '</a> ');
         $("h2[id]").css({cursor: "pointer"}).click(function () {
             window.location.href = window.location.href.replace(/($|#.+?$)/, "#" + $(this).attr("id"))
         });
