@@ -137,7 +137,8 @@ function GraphGist($) {
     function share() {
         var title = document.title;
         var href = encodeURIComponent(window.location.href);
-        var twitter_url = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent('Check this out: ' + title) + '&url=' + href;
+        var text = encodeURIComponent('Check this out: ' + title + " #neo4j #graphgist") 
+        var twitter_url = 'https://twitter.com/intent/tweet?text=' + text + '&url=' + href;
         $('#twitter-share').attr(
             'href',
             twitter_url);
