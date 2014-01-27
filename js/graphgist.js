@@ -171,6 +171,9 @@ function GraphGist($) {
         MathJax.Hub.Typeset();
     }
 
+	function formUrl(url,title,author,twitter) {
+		return "https://docs.google.com/a/neopersistence.com/forms/d/1BhtdunQd9QqLmIl01sK49curYY1dj2OPxXFgvf8HPAE/viewform?entry.718349727="+encodeURIComponent(url)+"&entry.1981612324="+encodeURIComponent(title)+"&entry.1328778537="+encodeURIComponent(author)+"&entry.507462214="+encodeURIComponent(twitter);
+	}
     function postProcessPage() {
         var $meta = $('#metadata', $content);
         var version = $meta.attr('version'), tags = $meta.attr('tags'), author = $meta.attr('author'), twitter = $meta.attr('twitter');
@@ -201,6 +204,8 @@ function GraphGist($) {
             $footer.prepend(authorHtml);
         }
 
+
+		$footer.prepend('<i class="icon-check"></i><a target="_blank" title="Submit to GraphGist Challenge" href="'+formUrl(window.location.href,document.title,author,twitter)+'"> Submit</a> ');
         $footer.prepend('<i class="icon-cogs"></i> Uses Neo4j Version <a target="_blank" href="http://docs.neo4j.org/chunked/' + version + '/cypher-query-lang.html">' + version + '</a> ');
         $("h2[id]").css({cursor: "pointer"}).click(function () {
             window.location.href = window.location.href.replace(/($|#.+?$)/, "#" + $(this).attr("id"))
