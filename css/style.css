@@ -81,6 +81,8 @@ li>p {
 
 pre, pre code {
     font-size: 12px;
+    background-color: #fcfcfc;
+    border-color: #dddddd;
 }
 
 pre.highlight {
