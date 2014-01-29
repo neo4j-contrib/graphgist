@@ -230,7 +230,7 @@ function GraphGist($) {
             var number = ( index + 1 );
             var $el = $(el);
             var $parent = $el.parent();
-            $el.attr('class', 'brush: cypher');
+            $el.attr('data-lang', 'cypher');
             $parent.prepend('<h5>Query ' + number + '</h5>');
             $el.wrap($WRAPPER).each(function () {
                 $el.parent().data('query', $el.text());
@@ -253,11 +253,7 @@ function GraphGist($) {
             }
         });
 
-        SyntaxHighlighter.config['tagName'] = 'code';
-        SyntaxHighlighter.defaults['tab-size'] = 4;
-        SyntaxHighlighter.defaults['gutter'] = false;
-        SyntaxHighlighter.defaults['toolbar'] = false;
-        SyntaxHighlighter.highlight();
+        CodeMirror.colorize();
 
         $('table').addClass('table'); // bootstrap formatting
 
