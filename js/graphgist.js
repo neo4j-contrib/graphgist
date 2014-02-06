@@ -137,13 +137,13 @@ function GraphGist($) {
     function share() {
         var title = document.title;
         var href = encodeURIComponent(window.location.href);
-        var text = encodeURIComponent('Check this out: ' + title + " #neo4j #graphgist") 
+        var text = encodeURIComponent('Check this out: ' + title + " #neo4j #graphgist")
         var twitter_url = 'https://twitter.com/intent/tweet?text=' + text + '&url=' + href;
         $('#twitter-share').attr(
             'href',
             twitter_url);
         var twitter = $('#twitter-share-button');
-        twitter.html('<a href="'+twitter_url+'" class="twitter-share-button" data-lang="en">Tweet</a>');
+        twitter.html('<a href="' + twitter_url + '" class="twitter-share-button" data-lang="en">Tweet</a>');
         twttr.widgets.load();
         $('#facebook-share').attr(
             'href',
@@ -171,9 +171,10 @@ function GraphGist($) {
         MathJax.Hub.Typeset();
     }
 
-	function formUrl(url,title,author,twitter) {
-		return "https://docs.google.com/a/neopersistence.com/forms/d/1BhtdunQd9QqLmIl01sK49curYY1dj2OPxXFgvf8HPAE/viewform?entry.718349727="+encodeURIComponent(url)+"&entry.1981612324="+encodeURIComponent(title)+"&entry.1328778537="+encodeURIComponent(author)+"&entry.507462214="+encodeURIComponent(twitter);
-	}
+    function formUrl(url, title, author, twitter) {
+        return "https://docs.google.com/a/neopersistence.com/forms/d/1BhtdunQd9QqLmIl01sK49curYY1dj2OPxXFgvf8HPAE/viewform?entry.718349727=" + encodeURIComponent(url) + "&entry.1981612324=" + encodeURIComponent(title) + "&entry.1328778537=" + encodeURIComponent(author) + "&entry.507462214=" + encodeURIComponent(twitter);
+    }
+
     function postProcessPage() {
         var heading = $('h1').first();
         if (!heading.length) {
@@ -182,6 +183,15 @@ function GraphGist($) {
 
         var $meta = $('#metadata', $content);
         var version = $meta.attr('version'), tags = $meta.attr('tags'), author = $meta.attr('author'), twitter = $meta.attr('twitter');
+        if (tags === '{tags}') {
+            tags = false;
+        }
+        if (author === '{author}') {
+            author = false;
+        }
+        if (twitter === '{twitter}') {
+            twitter = false;
+        }
         if (typeof version === 'undefined' || !(version in CONSOLE_VERSIONS)) {
             version = DEFAULT_VERSION;
         }
@@ -210,7 +220,7 @@ function GraphGist($) {
         }
 
 
-		$footer.prepend('<i class="icon-check"></i><a target="_blank" title="Submit to GraphGist Challenge" href="'+formUrl(window.location.href,heading.text(),author,twitter)+'"> Submit</a> ');
+        //$footer.prepend('<i class="icon-check"></i><a target="_blank" title="Submit to GraphGist Challenge" href="' + formUrl(window.location.href, heading.text(), author, twitter) + '"> Submit</a> ');
         $footer.prepend('<i class="icon-cogs"></i> Uses Neo4j Version <a target="_blank" href="http://docs.neo4j.org/chunked/' + version + '/cypher-query-lang.html">' + version + '</a> ');
         $("h2[id]").css({cursor: "pointer"}).click(function () {
             window.location.href = window.location.href.replace(/($|#.+?$)/, "#" + $(this).attr("id"))
