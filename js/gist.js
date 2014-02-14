@@ -27,6 +27,10 @@ function Gist($, $content) {
         }
         else {
             id = id.substr(1);
+            var idCut = id.indexOf('&');
+            if (idCut !== -1) {
+                id = id.substring(0, idCut);
+            }
         }
         var fetcher = fetchGithubGist;
         if (id.length > 8 && id.substr(0, 8) === 'dropbox-') {
