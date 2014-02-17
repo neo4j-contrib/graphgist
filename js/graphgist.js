@@ -236,10 +236,11 @@ function GraphGist($) {
         findQuery('span.query-output', $content, function (codeElement) {
             $(codeElement.parentNode).data('show-output', true);
         });
+        var number = 0;
         $('code', $content).each(function (index, el) {
             var $el = $(el);
             if ($el.hasClass('cypher')) {
-                var number = ( index + 1 );
+                number++;
                 var $parent = $el.parent();
                 $parent.addClass('with-buttons');
                 $el.attr('data-lang', 'cypher');
