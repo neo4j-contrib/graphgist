@@ -236,30 +236,35 @@ function GraphGist($) {
         findQuery('span.query-output', $content, function (codeElement) {
             $(codeElement.parentNode).data('show-output', true);
         });
-        $('code.cypher', $content).each(function (index, el) {
-            var number = ( index + 1 );
+        $('code', $content).each(function (index, el) {
             var $el = $(el);
-            var $parent = $el.parent();
-            $el.attr('data-lang', 'cypher');
-            $parent.prepend('<h5>Query ' + number + '</h5>');
-            $el.wrap($WRAPPER).each(function () {
-                $el.parent().data('query', $el.text());
-            });
-            var $toggleQuery = $QUERY_TOGGLE_BUTTON.clone();
-            $parent.append($toggleQuery);
-            $toggleQuery.click(function () {
-                var $icon = $('i', this);
-                var $queryWrapper = $icon.parent().prevAll('div.query-wrapper').first();
-                var action = toggler($queryWrapper, this);
-                if (action === 'hide') {
-                    var $queryMessage = $queryWrapper.nextAll('pre.query-message').first();
-                    $icon = $queryWrapper.nextAll('span.result-toggle').first();
-                    toggler($queryMessage, $icon, 'hide');
+            if ($el.hasClass('cypher')) {
+                var number = ( index + 1 );
+                var $parent = $el.parent();
+                $parent.addClass('with-buttons');
+                $el.attr('data-lang', 'cypher');
+                $parent.prepend('<h5>Query ' + number + '</h5>');
+                $el.wrap($WRAPPER).each(function () {
+                    $el.parent().data('query', $el.text());
+                });
+                var $toggleQuery = $QUERY_TOGGLE_BUTTON.clone();
+                $parent.append($toggleQuery);
+                $toggleQuery.click(function () {
+                    var $icon = $('i', this);
+                    var $queryWrapper = $icon.parent().prevAll('div.query-wrapper').first();
+                    var action = toggler($queryWrapper, this);
+                    if (action === 'hide') {
+                        var $queryMessage = $queryWrapper.nextAll('pre.query-message').first();
+                        $icon = $queryWrapper.nextAll('span.result-toggle').first();
+                        toggler($queryMessage, $icon, 'hide');
+                    }
+                });
+                if ($parent.hasClass('hide-query')) {
+                    var $wrapper = $toggleQuery.prevAll('div.query-wrapper').first();
+                    toggler($wrapper, $toggleQuery, 'hide');
                 }
-            });
-            if ($parent.hasClass('hide-query')) {
-                var $wrapper = $toggleQuery.prevAll('div.query-wrapper').first();
-                toggler($wrapper, $toggleQuery, 'hide');
+            } else if ($el.hasClass('sql')) {
+                $el.attr('data-lang', 'sql');
             }
         });
 

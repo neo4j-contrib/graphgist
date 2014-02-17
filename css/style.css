@@ -87,8 +87,10 @@ pre, pre code {
 
 pre.highlight {
     position: relative;
+}
+
+pre.with-buttons {
     padding-bottom: 40px;
-    padding-top: 0;
 }
 
 pre.highlight h5 {
