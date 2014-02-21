@@ -75,7 +75,7 @@ function GraphGist($) {
             generatedHtml = Opal.Asciidoctor.$render(doc, ASCIIDOCTOR_OPTIONS);
         }
         catch (e) {
-            errorMessage(e.name + ':' + '<p>' + e.message + '</p>');
+            errorMessage('Error while parsing the AsciiDoc source - ' + e.name + ':' + '<p>' + e.message + '</p>');
             return;
         }
         $content.html(generatedHtml);
