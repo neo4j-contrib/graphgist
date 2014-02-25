@@ -23,6 +23,11 @@
         MathJax.Hub.Config({
         tex2jax: { inlineMath: [['$','$'],['\\(','\\)']] }
         });
+
+
+
+
+
     </script>
     <script type="text/javascript"
             src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
@@ -72,16 +77,7 @@
 </head>
 
 <body>
-<div id="fb-root"></div>
 
-<script>(function (d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) return;
-    js = d.createElement(s);
-    js.id = id;
-    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=442180952526716";
-    fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
 <div class="navbar">
     <div class="navbar-inner">
 
@@ -126,32 +122,6 @@
             <i class="icon-file-text"></i> Page Source
         </a>
 
-
-        <!--<div class="btn-group">
-            <a class="btn dropdown-toggle" data-toggle="dropdown" data-target="#">
-                <i class="icon-share-alt"></i> Share
-                <span class="caret"></span>
-            </a>
-            <ul class="dropdown-menu">
-                <li><a id="twitter-share" href="" target="_blank" data-toggle="tooltip" title="Tweet">
-                    <i class="icon-twitter-sign"></i> Twitter
-                </a></li>
-                <li><a id="facebook-share" href="" target="_blank" data-toggle="tooltip" title="Share link on Facebook">
-                    <i class="icon-facebook-sign"></i> Facebook
-                </a></li>
-                <li><a id="google-plus-share" href="" target="_blank" data-toggle="tooltip"
-                       title="Share link on Google+">
-                    <i class="icon-google-plus-sign"></i> Google+
-                </a></li>
-                <li>
-                    <a target="_blank" href="https://github.com/neo4j-contrib/graphgist/wiki"><i
-                            class="icon-github-sign"></i>
-                        Add to the GraphGist Collection wiki</a>
-                </li>
-            </ul>
-        </div>-->
-
-
         <form class="navbar-form pull-right" id="gist-form">
             <div class="input-prepend">
           <span class="add-on">
@@ -171,52 +141,35 @@
     </div>
     <div class="span1" id="sidebar_right">
 
-        <div style="padding-bottom: 1em">
+        <div>
             <a id="status" class="label tooltip-below"
                title="Displays the overall status of all queries in this example.">Executing queries ...</a>
         </div>
-        <div style="padding-bottom: 1em">
+        <div>
             <a href="https://github.com/neo4j-contrib/graphgist/wiki" title="Neo4j GraphGist Challenge"
                target="_blank"><span
-                    class="badge badge-warning"><i class="icon-beaker"></i> Challenge!</span></a></div>
-        <div style="width:100px">
+                    class="badge badge-warning"><i class="icon-beaker"></i> Challenge!</span></a>
+        </div>
+        <div id="social-container">
             <div class="g-plusone" data-size="small"><i class="fa fa-google-plus"></i></div>
             <div class="fb-like"
                  data-layout="button_count" data-action="like" data-show-faces="true" data-share="false"></div>
             <div id="twitter-share-button"><a class="twitter-share-button" data-lang="en">Tweet</a></div>
+            <div class="rw-ui-container"></div>
         </div>
     </div>
 </div>
 <footer>
     <i class="icon-github-sign"></i> The GraphGist <a href="https://github.com/neo4j-contrib/graphgist">project</a>.
 </footer>
+<div id="fb-root"></div>
+<script type="text/javascript" src="js/social.js"></script>
 <script type="text/javascript" src="js/ga.js"></script>
-<script type="text/javascript" src="js/disqus.js"></script>
 <script type="text/javascript">
     /*@cc_on @*/
     /*@
      $( '#content' ).addClass( 'internet-explorer' );
      @*/
 </script>
-<!-- Place this tag after the last +1 button tag. -->
-<script type="text/javascript">
-    (function () {
-        var po = document.createElement('script');
-        po.type = 'text/javascript';
-        po.async = true;
-        po.src = 'https://apis.google.com/js/platform.js';
-        var s = document.getElementsByTagName('script')[0];
-        s.parentNode.insertBefore(po, s);
-    })();
-</script>
-<script>!function (d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (!d.getElementById(id)) {
-        js = d.createElement(s);
-        js.id = id;
-        js.src = "https://platform.twitter.com/widgets.js";
-        fjs.parentNode.insertBefore(js, fjs);
-    }
-}(document, "script", "twitter-wjs");</script>
 </body>
 </html>

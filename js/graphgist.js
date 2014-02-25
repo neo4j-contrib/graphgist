@@ -79,6 +79,11 @@ function GraphGist($) {
             return;
         }
         $content.html(generatedHtml);
+        if ('initSocial' in window) {
+            initSocial();
+            share();
+            initDisqus($content);
+        }
         var version = postProcessPage();
         var consoleUrl = CONSOLE_VERSIONS[version in CONSOLE_VERSIONS ? version : DEFAULT_VERSION];
         CypherConsole({'url': consoleUrl}, function (conslr) {
@@ -91,9 +96,6 @@ function GraphGist($) {
                 }, function () {
                     hideConsole()
                     postProcessRendering();
-                    if ('initDisqus' in window) {
-                        initDisqus($content);
-                    }
                 });
             });
         });
@@ -102,7 +104,6 @@ function GraphGist($) {
     function hideConsole() {
         var $TOGGLE_CONSOLE_HIDE_BUTTON = $('<a class="btn btn-small show-console-toggle" data-toggle="tooltip"  title="Show or hide a Neo4j Console in order to try the examples in the GraphGist live."><i class="icon-chevron-down"></i> Show/Hide Live Console</a>');
         var consolewrapper = $(".console");
-        console.log("1", consolewrapper.is(':visible'), consolewrapper);
         var $toggleConsoleShowButton = $TOGGLE_CONSOLE_HIDE_BUTTON.clone();
         $toggleConsoleShowButton.click(function () {
             console.log("click", consolewrapper.is(':visible'), consolewrapper);
@@ -132,25 +133,6 @@ function GraphGist($) {
             status.addClass("label-success");
         }
         DotWrapper($).scan();
-    }
-
-    function share() {
-        var title = document.title;
-        var href = encodeURIComponent(window.location.href);
-        var text = encodeURIComponent('Check this out: ' + title + " #neo4j #graphgist")
-        var twitter_url = 'https://twitter.com/intent/tweet?text=' + text + '&url=' + href;
-        $('#twitter-share').attr(
-            'href',
-            twitter_url);
-        var twitter = $('#twitter-share-button');
-        twitter.html('<a href="' + twitter_url + '" class="twitter-share-button" data-lang="en">Tweet</a>');
-        twttr.widgets.load();
-        $('#facebook-share').attr(
-            'href',
-            'http://www.facebook.com/share.php?u=' + href);
-        $('#google-plus-share').attr(
-            'href',
-            'https://plus.google.com/share?url=' + href);
     }
 
     function preProcessContents(content) {
@@ -276,8 +258,6 @@ function GraphGist($) {
         if (heading.length) {
             document.title = heading.text() + "  -  Neo4j GraphGist";
         }
-
-        share();
 
         return version;
     }

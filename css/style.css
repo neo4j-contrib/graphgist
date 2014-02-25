@@ -231,6 +231,18 @@ p.console>span.loading {
     margin-top: 2em;
 }
 
+#social-container {
+    width: 100px;
+}
+
+#social-container > div {
+    margin-top: 4px;
+}
+
+#sidebar_right > div {
+    padding-bottom: 1em;
+}
+
 #sidebar_left {
 }
 
