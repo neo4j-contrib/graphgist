@@ -158,15 +158,17 @@ function GraphGist($) {
     }
 
     function initAndGetHeading() {
+        var headingText = "Neo4j GraphGist";
         var heading = $('h1').first();
         if (!heading.length) {
             heading = $('h2').first();
         }
         if (heading.length) {
-            document.title = heading.text() + "  -  Neo4j GraphGist";
+            headingText = heading.text();
+            document.title = headingText + "  -  Neo4j GraphGist";
         }
 
-        return heading;
+        return headingText;
     }
 
     function postProcessPage() {
