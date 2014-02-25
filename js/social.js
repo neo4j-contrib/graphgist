@@ -29,7 +29,7 @@ function share() {
     twttr.widgets.load();
 }
 
-function initSocial() {
+function initSocial(heading) {
 (function () {
     var po = document.createElement('script');
     po.type = 'text/javascript';
@@ -58,40 +58,26 @@ function initSocial() {
     fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));
 
-(function(d, t, e, m){
-    // Async Rating-Widget initialization.
-    window.RW_Async_Init = function(){
-        RW.init({
-            huid: "159749",
-            uid: "b237436c0f337413a9d814a338402305",
-            source: "website",
-            options: {
-                "advanced": {
-                    "layout": {
-                        "align": {
-                            "hor": "center",
-                            "ver": "top"
-                        }
-                    }
-                },
-                "size": "tiny",
-                "style": "quartz"
-            }
-        });
-        RW.render();
-    };
+var location = window.location.href;
+var index = location.indexOf('#');
+if ( index !== -1) {
+    location = location.substr(0, index);
+}
+PDRTJS_settings_7478365 = {
+    "id" : "7478365",
+    "unique_id" : window.location.search,
+    "title" : heading,
+    "permalink" : location
+};
 
-    // Append Rating-Widget JavaScript library.
-    var rw, s = d.getElementsByTagName(e)[0], id = "rw-js",
-        l = d.location, ck = "Y" + t.getFullYear() +
-            "M" + t.getMonth() + "D" + t.getDate(), p = l.protocol,
-        f = (-1 < l.search.indexOf("DBG=") ? "" : ".min"),
-        a = ("https:" == p ? "secure." + m + "js/" : "js." + m);
+(function (d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
     if (d.getElementById(id)) return;
-    rw = d.createElement(e);
-    rw.id = id; rw.async = true; rw.type = "text/javascript";
-    rw.src = p + "//" + a + "external" + f + ".js?ck=" + ck;
-    s.parentNode.insertBefore(rw, s);
-}(document, new Date(), "script", "rating-widget.com/"));
+    js = d.createElement(s);
+    js.id = id;
+    js.src = "http://i0.poll.fm/js/rating/rating.js";
+    fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'polldaddy-rating'));
 
 }
+
