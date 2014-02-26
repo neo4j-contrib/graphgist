@@ -63,9 +63,13 @@ var index = location.indexOf('#');
 if ( index !== -1) {
     location = location.substr(0, index);
 }
+var uniqueId = window.location.search;
+if (typeof uniqueId === 'undefined' || (!uniqueId) || uniqueId === '?') {
+    uniqueId = 'graphgist-home';
+}
 PDRTJS_settings_7478426 = {
     "id" : "7478426",
-    "unique_id" : window.location.search,
+    "unique_id" : uniqueId,
     "title" : heading,
     "permalink" : location
 };
