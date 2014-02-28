@@ -7,8 +7,8 @@ function GraphVisualizer($el, colorManager, width, height) {
     this.width = width;
     this.height = height;
 
-    var LINK_DISTANCE = 75;
-    var CHARGE = -2000;
+    var LINK_DISTANCE = 75; // 75
+    var CHARGE = -1380; // -2000;
     var GRAVITY = 0.1;
     var FRICTION = 0.1;
     this.svg = d3.select(this.$el[0]).append("svg").attr("width", this.width).attr("height", this.height);
@@ -31,9 +31,9 @@ function GraphVisualizer($el, colorManager, width, height) {
         } else {
             this.emptyMsg.attr("opacity", 0);
         }
-        d = 2 * (this.width || 725) / graph.nodes.length;
+        d = 5 * (this.width || 725) / graph.nodes.length;
 //        console.log("linkDistance",d);
-        this.force.linkDistance(Math.min(LINK_DISTANCE, d));
+        this.force.linkDistance(Math.max(LINK_DISTANCE, d));
         if (graph.nodes.length < 25) {
             this.height = 400;
         } else if (graph.nodes.length > 100) {
