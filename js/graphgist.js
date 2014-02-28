@@ -35,6 +35,8 @@ function GraphGist($) {
     var CONSOLE_VERSIONS = { '2.0.0-M06': 'http://neo4j-console-20m06.herokuapp.com/',
         '2.0.0-RC1': 'http://neo4j-console-20rc1.herokuapp.com/',
         '2.0.0': 'http://neo4j-console-20.herokuapp.com/',
+        '2.1.0': 'http://neo4j-console-21.herokuapp.com/',
+        'local': 'http://localhost:8080/',
         '1.9': 'http://neo4j-console-19.herokuapp.com/'
     }
 
