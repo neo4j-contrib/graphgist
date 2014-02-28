@@ -54,13 +54,14 @@ function convertCell(cell) {
             return '(' + cell['_start'] + ')-[' + cell['_id'] + ':' + cell['_type'] + props(cell) + ']->(' + cell['_end']
                 + ')';
         }
-        else {
+        else if (cell['_id']) {
             var labels = '';
             if (cell['_labels']) {
                 labels = ':' + cell['_labels'].join(':');
             }
             return '(' + cell['_id'] + labels + props(cell) + ')';
         }
+        return props(cell);
     }
     return cell;
 }
