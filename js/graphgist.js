@@ -140,8 +140,8 @@ function GraphGist($) {
     function preProcessContents(content) {
         var sanitized = content
             .replace(
-                /^\/\/\s*?console/m,
-                '++++\n<p class="console"><span class="loading"><i class="icon-cogs"></i> Running queries, preparing the console!</span></p>\n++++\n');
+            /^\/\/\s*?console/m,
+            '++++\n<p class="console"><span class="loading"><i class="icon-cogs"></i> Running queries, preparing the console!</span></p>\n++++\n');
         sanitized = sanitized.replace(/^\/\/\s*?hide/gm, '++++\n<span class="hide-query"></span>\n++++\n');
         sanitized = sanitized.replace(/^\/\/\s*?setup/m, '++++\n<span id="setup-query"></span>\n++++\n');
         sanitized = sanitized.replace(/^\/\/\s*?graph.*/gm, '++++\n<h5 class="graph-visualization"></h5>\n++++\n');
@@ -156,7 +156,14 @@ function GraphGist($) {
     }
 
     function formUrl(url, title, author, twitter) {
-        return "https://docs.google.com/a/neopersistence.com/forms/d/1BhtdunQd9QqLmIl01sK49curYY1dj2OPxXFgvf8HPAE/viewform?entry.718349727=" + encodeURIComponent(url) + "&entry.1981612324=" + encodeURIComponent(title) + "&entry.1328778537=" + encodeURIComponent(author) + "&entry.507462214=" + encodeURIComponent(twitter);
+        return "https://docs.google.com/a/neopersistence.com/forms/d/1BhtdunQd9QqLmIl01sK49curYY1dj2OPxXFgvf8HPAE/viewform?entry.718349727="
+            + encodeURIComponent(url)
+            + "&entry.1981612324="
+            + encodeURIComponent(title.length > 18 ? title.substr(0, title.length - 18) : title)
+            + "&entry.1328778537="
+            + encodeURIComponent(author)
+            + "&entry.507462214="
+            + encodeURIComponent(twitter);
     }
 
     function initAndGetHeading() {
@@ -167,7 +174,7 @@ function GraphGist($) {
         }
         if (heading.length) {
             headingText = heading.text();
-            document.title = headingText + "  -  Neo4j GraphGist";
+            document.title = headingText + " - Neo4j GraphGist";
         }
 
         return headingText;
@@ -212,7 +219,7 @@ function GraphGist($) {
             $footer.prepend(authorHtml);
         }
 
-
+        $footer.prepend('<i class="icon-check"></i><a target="_blank" title="Submit an original GraphGist and get a Neo4j t-shirt" href="' + formUrl(window.location.href, document.title, author, twitter) + '"> Submit</a> ');
         $footer.prepend('<i class="icon-cogs"></i> Uses Neo4j Version <a target="_blank" href="http://docs.neo4j.org/chunked/' + version + '/cypher-query-lang.html">' + version + '</a> ');
         $("h2[id]").css({cursor: "pointer"}).click(function () {
             window.location.href = window.location.href.replace(/($|#.+?$)/, "#" + $(this).attr("id"))
