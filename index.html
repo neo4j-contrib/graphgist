@@ -23,6 +23,7 @@
         MathJax.Hub.Config({
         tex2jax: { inlineMath: [['$','$'],['\\(','\\)']] }
         });
+
     </script>
     <script type="text/javascript"
             src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
@@ -64,6 +65,15 @@
     <script src="js/codemirror-cypher.js"></script>
     <script src="js/colorize.js"></script>
 
+    <!--Coffeescript-->
+    <script src="js/coffee-script.js"></script>
+    <script type="text/coffeescript">
+        window.learning = ->
+            "Coffeescript is working"
+    </script>
+    <script type="text/javascript">
+        setTimeout(function(){ console.log(window.learning()); }, 1000);
+    </script>
     <link href="css/style.css" rel="stylesheet">
 
     <link rel="icon" href="favicon.ico"/>
@@ -72,7 +82,6 @@
 </head>
 
 <body>
-
 <div class="navbar">
     <div class="navbar-inner">
 
