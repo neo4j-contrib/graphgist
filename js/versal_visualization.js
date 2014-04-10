@@ -8,7 +8,7 @@ function GraphVisualizer($el, colorManager, width, height) {
     this.height = height;
 
     var LINK_DISTANCE = 75;
-    var CHARGE = -2000;
+    var CHARGE = -5000;
     var GRAVITY = 0.1;
     var FRICTION = 0.1;
     this.svg = d3.select(this.$el[0]).append("svg").attr("width", this.width).attr("height", this.height);
