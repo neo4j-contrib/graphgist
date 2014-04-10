@@ -31,7 +31,7 @@ window.ColorManager = function () {
         if (!labels || labels.length == 0) {
             return this.defaultColor;
         }
-        var labelToUse = labels[labels.length - 1];
+        var labelToUse = labels.sort()[0];
         if (!this.registeredLabelColors[labelToUse]) {
             if (this.prettyColors.length === 0) {
                 this.registeredLabelColors[labelToUse] = this.defaultColor;

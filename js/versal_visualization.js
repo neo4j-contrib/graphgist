@@ -9,7 +9,7 @@ function GraphVisualizer($el, colorManager, width, height) {
 
     var LINK_DISTANCE = 75;
     var CHARGE = -5000;
-    var GRAVITY = 0.1;
+    var GRAVITY = 0.05;
     var FRICTION = 0.1;
     this.svg = d3.select(this.$el[0]).append("svg").attr("width", this.width).attr("height", this.height);
     this.viz = this.svg.append("g");
@@ -62,7 +62,6 @@ function GraphVisualizer($el, colorManager, width, height) {
         this.nodes
             .select("circle")
             .attr("cx",function (d) {
-                //console.log(_this.width, d);
                 return Math.min(_this.width, Math.max(0, d.x));
             }).attr("cy", function (d) {
                 return Math.min(_this.height, Math.max(0, d.y));
@@ -136,6 +135,13 @@ function GraphVisualizer($el, colorManager, width, height) {
         return toAdd.length || toRemove.length;
     };
 
+	function dblclick(d) {
+	  d3.select(this).classed("fixed", d.fixed = false);
+	}
+
+	function dragstart(d) {
+	  d3.select(this).classed("fixed", d.fixed = true);
+	}
 
     function accelerateLayout(force, render) {
         var maxStepsPerTick = 100;
@@ -169,8 +175,13 @@ function GraphVisualizer($el, colorManager, width, height) {
                             .append("g");
 
                 var propCount = 0;
+                if (gsd["labels"]) {
+                    lg.append("text").text(function (d, i) {
+                        return ":"+gsd["labels"].join(':'); 
+                    }); 
+                }
                 _.each(gsd, function (value, key) {
-                    if (["px", "py", "x", "y", "index", "weight", "labels","id","selected"].indexOf(key) === -1)
+                    if (["px", "py", "x", "y", "index", "weight","labels","id","selected","fixed"].indexOf(key) === -1)
                     {
                         var text = (key + ": " + ""+value).substr(0,30);
 
@@ -208,6 +219,9 @@ function GraphVisualizer($el, colorManager, width, height) {
         _.each(graph.nodes, function (n) {
             return _this.selectedNodes[n.id] = n.selected ? true : false;
         });
+        var labels = _.map(graph.nodes, function(n) { return n.labels ? n.labels.sort() : null; });
+        labels = _.filter(_.uniq(labels), function(l) { return l != null}).sort();
+        _.each(labels, function(l) { colorManager.getColorForLabels(l); });
         _.each(graph.links, function (n) {
             return _this.selectedLinks[n.id] = n.selected ? true : false;
         });
@@ -249,19 +263,30 @@ function GraphVisualizer($el, colorManager, width, height) {
 
         //console.log("graphcreated",this.nodes)
        //.append("circle").exit();
+        var drag = _this.force.drag().on("dragstart", dragstart);
 
-        this.nodes.enter().append("g").attr("class", "node-circle").append("circle").attr("r", 10).call(this.force.drag).each(function (d) {
+        var nodeCount = graph.nodes.length;
+		var minWidth = Math.min(_this.width,_this.height);
+        var step = minWidth / Math.sqrt(nodeCount);
+        var pos = [0,0];
+        this.nodes.enter().append("g").attr("class", "node-circle").append("circle").attr("r", 10).call(drag).each(function (d) {
 //            d.x = (Math.random() + 0.5) * _this.width / 2;
 //            d.y = (Math.random() + 0.5) * _this.height / 2;
-            d.x = Math.random() * _this.width;
-            d.y = Math.random() * _this.height;
-            //console.log("circle",_this,d);
+//            d.x = d.x != null ? d.x : Math.random() * _this.width;
+//            d.y = d.y != null ? d.y : Math.random() * _this.height;
+            d.x = pos[0]; // Math.random() * _this.width;
+            d.y = pos[1]; // Math.random() * _this.height;
+            pos[0] += step;
+            if (pos[0] >= minWidth) {pos[0]=0;pos[1]+=step;}
+// console.log("########",step,pos[0],pos[1]);
             return d;
         }).on("mouseover",function (d) {
                 return _this.onNodeHover(d);
-            }).on("mouseout", function () {
+            })
+          .on("mouseout", function () {
                 return _this.onNodeUnhover();
-            });
+            })
+		  .on("dblclick", dblclick);
         this.nodes.select("circle").attr("class",function (d) {
             if (_this.selective && _this.selectedNodes[d.id]) {
                 return "node";
