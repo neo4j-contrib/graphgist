@@ -15,7 +15,9 @@
 
 function Gist($, $content) {
 
-    var DROPBOX_BASE_URL = 'https://dl.dropboxusercontent.com/u/';
+    /*var DROPBOX_BASE_URL = 'https://dl.dropboxusercontent.com/u/';*/
+    var DROPBOX_BASE_URL = 'https://www.dropbox.com/s/';
+    
     var VALID_GIST = /^[0-9a-f]{5,32}\/?$/;
 
     return {'getGistAndRenderPage': getGistAndRenderPage, 'readSourceId': readSourceId};
