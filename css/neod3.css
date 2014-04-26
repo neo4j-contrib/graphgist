@@ -1,0 +1,8 @@
+path.link{fill:none;stroke:#7f8c8d;stroke-width:2px}
+text{font-family:sans-serif;pointer-events:none}
+marker{fill:#d8dadc}
+text .faded{fill:#333}
+.node .outline{-webkit-transform:scale(1);-moz-transform:scale(1);-o-transform:scale(1);-ms-transform:scale(1);transform:scale(1);-webkit-transition:all .15s;-moz-transition:all .15s;-o-transition:all .15s;-ms-transition:all .15s;transition:all .15s;-webkit-transition-timing-function:cubic-bezier(.694,.0482,.335,1);-moz-transition-timing-function:cubic-bezier(.694,.0482,.335,1);-o-transition-timing-function:cubic-bezier(.694,.0482,.335,1);-ms-transition-timing-function:cubic-bezier(.694,.0482,.335,1);transition-timing-function:cubic-bezier(.694,.0482,.335,1)}
+.node:hover .outline{-webkit-transform:scale(1.4);-moz-transform:scale(1.4);-o-transform:scale(1.4);-ms-transform:scale(1.4);transform:scale(1.4)}
+.relationship:hover{stroke:#3498db}
+.outline,.overlay{cursor:pointer}

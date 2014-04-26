@@ -354,28 +354,33 @@ function GraphGist($) {
     }
 
     function renderGraphs() {
+        var counter=0;
         findPreviousQueryWrapper('h5.graph-visualization', $content, function ($heading, $wrapper) {
             //
             var visualization = $wrapper.data('visualization');
-            var $visContainer = $VISUALIZATION.clone().insertAfter($heading);
+            var id="graph-visualization-"+(counter++);
+            var $visContainer = $VISUALIZATION.clone().attr("id",id).insertAfter($heading);
             $heading.remove(); // text('The graph after query ' + $wrapper.data('number'));
             if (visualization) {
-                console.log("wrapper", $visContainer);
-//                d3graph($visContainer[0], visualization);
-//                Visualization.
-                var height = $visContainer.height();
+                $visContainer.height(400);
                 setTimeout(function () {
+                    var height = $visContainer.height();
                     console.log('Viz', height);
                 }, 0);
-
-                var myChart = new GraphVisualizer($visContainer, window.ColorManager(), 840, 300);
-                myChart.draw(visualization, true);
+//                renderVersal(id,visualization);
+                  renderNeod3(id,visualization);
             }
             else {
                 $visContainer.text('There is no graph to render.').addClass('alert-error');
             }
         });
     }
+
+    function renderVersal(id,visualization) {
+        var myChart = new GraphVisualizer($("#"+id), window.ColorManager(), 840, 300);
+        myChart.draw(visualization, true);
+    }
+
 
     function renderTables() {
         findPreviousQueryWrapper('h5.result-table', $content, function ($heading, $wrapper) {
