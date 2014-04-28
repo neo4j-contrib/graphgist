@@ -143,6 +143,7 @@ function GraphGist($) {
             '++++\n<p class="console"><span class="loading"><i class="icon-cogs"></i> Running queries, preparing the console!</span></p>\n++++\n');
         sanitized = sanitized.replace(/^\/\/\s*?hide/gm, '++++\n<span class="hide-query"></span>\n++++\n');
         sanitized = sanitized.replace(/^\/\/\s*?setup/m, '++++\n<span id="setup-query"></span>\n++++\n');
+        sanitized = sanitized.replace(/^\/\/\s*?graph_result.*/gm, '++++\n<h5 class="graph-visualization" graph-mode="result"></h5>\n++++\n');
         sanitized = sanitized.replace(/^\/\/\s*?graph.*/gm, '++++\n<h5 class="graph-visualization"></h5>\n++++\n');
         sanitized = sanitized.replace(/^\/\/\s*?output.*/gm, '++++\n<span class="query-output"></span>\n++++\n');
         sanitized = sanitized.replace(/^\/\/\s*?table.*/gm, '++++\n<h5 class="result-table"></h5>\n++++\n');
@@ -360,6 +361,7 @@ function GraphGist($) {
             var visualization = $wrapper.data('visualization');
             var id="graph-visualization-"+(counter++);
             var $visContainer = $VISUALIZATION.clone().attr("id",id).insertAfter($heading);
+			var show_result_only = $heading.attr("graph-mode") && $heading.attr("graph-mode").indexOf("result") != -1;
             $heading.remove(); // text('The graph after query ' + $wrapper.data('number'));
             if (visualization) {
                 $visContainer.height(400);
@@ -368,12 +370,34 @@ function GraphGist($) {
                     console.log('Viz', height);
                 }, 0);
 //                renderVersal(id,visualization);
-                  renderNeod3(id,visualization);
+                  renderNeod3(id,handleSelection(visualization,show_result_only));
             }
             else {
                 $visContainer.text('There is no graph to render.').addClass('alert-error');
             }
         });
+    }
+
+    function handleSelection(data, show_result_only) {
+	    if (!show_result_only) return data;
+		var nodes = [];
+		var links = [];
+		for (var i=0;i<data.nodes.length;i++) {
+			var node=data.nodes[i];
+			if (node.selected) {
+				node["$index"]=nodes.length;
+				nodes.push(node);
+			}
+		}
+		for (var i=0;i<data.links.length;i++) {
+			var link=data.links[i];
+			if (link.selected ||data.nodes[link.source].selected && data.nodes[link.target].selected) {
+				link.source = data.nodes[link.source]["$index"];
+				link.target = data.nodes[link.target]["$index"];
+				links.push(link);
+			}
+		}	
+		return {nodes:nodes, links:links};
     }
 
     function renderVersal(id,visualization) {

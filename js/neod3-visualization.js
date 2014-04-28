@@ -51,7 +51,11 @@ function renderNeod3(id,visualization) {
     for (var k in style) {
         var color = colors[c];
         c = (c + 1) % colors.length
-        styleSheet += k + " {caption: '{"+style[k]+"}'; color: "+color.color+"; border-color: "+color['border-color']+"; text-color-internal: "+color['text-color-internal']+"; }\n";
+        styleSheet += k + " {caption: '{"+style[k]+"}'; color: "+color.color+
+			"; border-color: "+color['border-color']+
+			"; text-color-internal: "+color['text-color-internal']+
+			"; text-color-external: "+color['text-color-internal']+
+			"; }\n";
     }
     return styleContents + styleSheet;
   }
