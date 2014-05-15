@@ -52,7 +52,6 @@ function GraphGist($) {
         var gist = new Gist($, $content);
         gist.getGistAndRenderPage(renderContent, DEFAULT_SOURCE);
         $gistId.keydown(gist.readSourceId);
-        $("#tell-me-more").attr('href', 'mailto:info@neotechnology.com?Subject=[Graphgist] More%20info%20about%20' + window.location);
     });
 
     function handleMessage(e) {
