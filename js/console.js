@@ -54,10 +54,26 @@ function CypherConsole(config, ready) {
         var url = getUrl('none', 'none', '\n\nUse the play/edit buttons to run the queries!');
         var $iframe = $IFRAME.clone().attr('src', url);
         $iframe.load(function () {
+            var iframeWindow = $iframe[0].contentWindow;
+            if (!iframeWindow) {
+                return;
+            }
             consolr = new Consolr($iframe[0].contentWindow);
             if (ready) {
                 ready(consolr);
             }
+            window.setTimeout(function () {
+                try {
+                    if (iframeWindow.location && iframeWindow.location.href) {
+                        var consoleLocation = iframeWindow.location.href;
+                        if (consoleLocation.indexOf('neo4j') === -1 && consoleLocation.indexOf('localhost') === -1) {
+                            $iframe.replaceWith('<div class="alert alert-error"><h4>Error!</h4>The console can not be loaded. Please turn off ad blockers and reload the page!</div>');
+                        }
+                    }
+                } catch (err) {
+                    console.log(err)
+                }
+            }, 2000);
         });
         $context.empty();
         var $iframeWrapper = $IFRAME_WRAPPER.clone();
@@ -111,12 +127,12 @@ function CypherConsole(config, ready) {
 
     function addPlayButtons() {
         $('div.query-wrapper').parent().append($PLAY_BUTTON.clone().click(function (event) {
-                event.preventDefault();
-                consolr.query([ getQueryFromButton(this) ]);
-            })).append($EDIT_BUTTON.clone().click(function (event) {
-                event.preventDefault();
-                consolr.input(getQueryFromButton(this));
-            }));
+            event.preventDefault();
+            consolr.query([ getQueryFromButton(this) ]);
+        })).append($EDIT_BUTTON.clone().click(function (event) {
+            event.preventDefault();
+            consolr.input(getQueryFromButton(this));
+        }));
     }
 
     function getQueryFromButton(button) {
