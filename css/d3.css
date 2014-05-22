@@ -3,6 +3,11 @@ div.visualization {
     border-radius: 4px;
 }
 
+div.visualization > svg {
+    width: 100%;
+    height: 100%;
+}
+
 .d3-shadow {
     stroke: #000;
     stroke-width: 1.5px;
