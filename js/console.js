@@ -19,10 +19,11 @@ function CypherConsole(config, ready) {
     var $IFRAME_WRAPPER = $('<div/>').attr('id', 'console-wrapper');
     var RESIZE_OUT_ICON = 'icon-resize-full';
     var RESIZE_IN_ICON = 'icon-resize-small';
-    var $RESIZE_BUTTON = $('<a class="btn btn-small resize-toggle"><i class="' + RESIZE_OUT_ICON + '"></i></a>');
+    var $RESIZE_BUTTON = $('<a class="btn btn-small btn-primary resize-toggle"><i class="' + RESIZE_OUT_ICON + '"></i></a>');
     var $RESIZE_VERTICAL_BUTTON = $('<span class="resize-vertical-handle ui-resizable-handle ui-resizable-s"><span/></span>');
     var $PLAY_BUTTON = $('<a class="run-query btn btn-small btn-success" data-toggle="tooltip" title="Execute in the console." href="#"><i class="icon-play"></i></a>');
     var $EDIT_BUTTON = $('<a class="edit-query btn btn-small" data-toggle="tooltip" title="Edit in the console." href="#"><i class="icon-edit"></i></a>');
+    var $TOGGLE_CONSOLE_HIDE_BUTTON = $('<a class="btn btn-small show-console-toggle" data-toggle="tooltip"  title="Show or hide a Neo4j Console in order to try the examples in the GraphGist live."><i class="icon-edit-sign"></i> Show/Hide Live Console</a>');
 
     var $resizeOverlay = $('<div id="resize-overlay"/>');
 
@@ -36,12 +37,11 @@ function CypherConsole(config, ready) {
 
     function createConsole(ready, elementClass, contentId) {
         var $element = $('p.' + elementClass).first();
-        //no console defined
         if ($element.length !== 1) {
+            //no console defined in the document
             $element = $('<p/>').addClass(elementClass);
-            $element.addClass("hidden");
-//            console.log("createConsole", $element);
             $('#' + contentId).append($element);
+            $element.hide();
         }
         $element.each(function () {
             var $context = $(this);
@@ -81,7 +81,6 @@ function CypherConsole(config, ready) {
         var $contentMoveSelector = $(contentMoveSelector).first();
         $context.append($iframeWrapper).append('<span id="console-label" class="label">Console expanded</span>');
         $context.css('background', 'none');
-        var latestResizeAmount = 0;
         var $verticalResizeButton = $RESIZE_VERTICAL_BUTTON.clone().appendTo($iframeWrapper).mousedown(function (event) {
             event.preventDefault();
         });
@@ -89,10 +88,9 @@ function CypherConsole(config, ready) {
                 $resizeOverlay.appendTo($iframeWrapper);
             }, 'stop': function (event, ui) {
                 $resizeOverlay.detach();
-                latestResizeAmount = ui.size.height - ui.originalSize.height;
             }, 'resize': function (event, ui) {
                 if (!$resizeIcon.hasClass(RESIZE_OUT_ICON)) {
-                    $contentMoveSelector.css('margin-top', ui.size.height);
+                    $contentMoveSelector.css('margin-top', ui.size.height + 11);
                 }
             }}
         );
@@ -105,14 +103,11 @@ function CypherConsole(config, ready) {
                 $resizeIcon.removeClass(RESIZE_OUT_ICON).addClass(RESIZE_IN_ICON);
                 $iframeWrapper.addClass('fixed-console');
                 $context.addClass('fixed-console');
-                $contentMoveSelector.css('margin-top', $iframeWrapper.height());
+                $contentMoveSelector.css('margin-top', $iframeWrapper.height() + 11);
                 $iframeWrapper.resizable('option', 'alsoResize', null);
                 $gistForm.css('margin-right', 56);
-                latestResizeAmount = 0;
             } else {
-                if (latestResizeAmount) {
-                    $context.height(contextHeight + latestResizeAmount);
-                }
+                $context.height($iframeWrapper.height());
                 $resizeIcon.removeClass(RESIZE_IN_ICON).addClass(RESIZE_OUT_ICON);
                 $iframeWrapper.removeClass('fixed-console');
                 $context.removeClass('fixed-console');
@@ -121,8 +116,25 @@ function CypherConsole(config, ready) {
                 $gistForm.css('margin-right', 0);
             }
         });
-
         var $resizeIcon = $('i', $resizeButton);
+
+        var $toggleConsoleShowButton = $TOGGLE_CONSOLE_HIDE_BUTTON;
+        $toggleConsoleShowButton.insertAfter($context);
+        if (!$context.is(':visible')) {
+            $toggleConsoleShowButton.addClass('btn-success show-console-toggle-hidden-console');
+        }
+        $toggleConsoleShowButton.click(function () {
+            if ($context.is(':visible')) {
+                if (!$resizeIcon.hasClass(RESIZE_OUT_ICON)) {
+                    $resizeButton.click();
+                }
+                $context.hide();
+                $toggleConsoleShowButton.addClass('show-console-toggle-hidden-console');
+            } else {
+                $context.show();
+                $toggleConsoleShowButton.removeClass('show-console-toggle-hidden-console');
+            }
+        });
     }
 
     function addPlayButtons() {

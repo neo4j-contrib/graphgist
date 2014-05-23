@@ -35,6 +35,9 @@ function GraphGist($) {
     var CONSOLE_VERSIONS = { '2.0.0-M06': 'http://neo4j-console-20m06.herokuapp.com/',
         '2.0.0-RC1': 'http://neo4j-console-20rc1.herokuapp.com/',
         '2.0.0': 'http://neo4j-console-20.herokuapp.com/',
+        '2.0.1': 'http://neo4j-console-20.herokuapp.com/',
+        '2.0.2': 'http://neo4j-console-20.herokuapp.com/',
+        '2.0.3': 'http://neo4j-console-20.herokuapp.com/',
         '2.1.0': 'http://neo4j-console-21.herokuapp.com/',
         'local': 'http://localhost:8080/',
         '1.9': 'http://neo4j-console-19.herokuapp.com/'
@@ -43,25 +46,14 @@ function GraphGist($) {
     var $content = undefined;
     var $gistId = undefined;
     var consolr = undefined;
-    var statements = [];
 
     $(document).ready(function () {
-        window.addEventListener("message", handleMessage);
         $content = $('#content');
         $gistId = $('#gist-id');
         var gist = new Gist($, $content);
         gist.getGistAndRenderPage(renderContent, DEFAULT_SOURCE);
         $gistId.keydown(gist.readSourceId);
     });
-
-    function handleMessage(e) {
-        var source = e.source;
-        var msg = e.data;
-        if (msg == "queries") {
-            console.log('posting', statements);
-            source.postMessage("message", ['match (n) return n']);
-        }
-    }
 
     function renderContent(originalContent, link, imagesdir) {
         $('#gist_link').attr('href', link).removeClass('disabled');
@@ -83,8 +75,7 @@ function GraphGist($) {
         if ('initSocial' in window) {
             initSocial(initAndGetHeading());
             share();
-            initDisqus($content);
-        }
+            }
         var version = postProcessPage();
         var consoleUrl = CONSOLE_VERSIONS[version in CONSOLE_VERSIONS ? version : DEFAULT_VERSION];
         CypherConsole({'url': consoleUrl}, function (conslr) {
@@ -93,45 +84,25 @@ function GraphGist($) {
                 initConsole(function () {
                     renderGraphs();
                     renderTables();
-
                 }, function () {
-                    hideConsole()
                     postProcessRendering();
+                    initDisqus($content);
                 });
             });
         });
-    }
-
-    function hideConsole() {
-        var $TOGGLE_CONSOLE_HIDE_BUTTON = $('<a class="btn btn-small show-console-toggle" data-toggle="tooltip"  title="Show or hide a Neo4j Console in order to try the examples in the GraphGist live."><i class="icon-chevron-down"></i> Show/Hide Live Console</a>');
-        var consolewrapper = $(".console");
-        var $toggleConsoleShowButton = $TOGGLE_CONSOLE_HIDE_BUTTON.clone();
-        $toggleConsoleShowButton.click(function () {
-            console.log("click", consolewrapper.is(':visible'), consolewrapper);
-            if (consolewrapper.is(':visible')) {
-                consolewrapper.hide();
-            } else {
-                consolewrapper.show();
-            }
-        });
-        $toggleConsoleShowButton.insertBefore(consolewrapper);
-        if (consolewrapper.hasClass("hidden")) {
-            consolewrapper.removeClass("hidden");
-            consolewrapper.hide();
-        }
     }
 
     function postProcessRendering() {
         $('span[data-toggle="tooltip"]').tooltip({'placement': 'left'});
         $('a.run-query,a.edit-query,a.show-console-toggle').tooltip({'placement': 'right'});
         $('.tooltip-below').tooltip({'placement': 'bottom'});
-        var status = $("#status");
+        var $status = $("#status");
         if (HAS_ERRORS) {
-            status.text("Errors.");
-            status.addClass("label-important");
+            $status.text("Errors.");
+            $status.addClass("label-important");
         } else {
-            status.text("No Errors.");
-            status.addClass("label-success");
+            $status.text("No Errors.");
+            $status.addClass("label-success");
         }
         DotWrapper($).scan();
     }
@@ -304,6 +275,7 @@ function GraphGist($) {
     }
 
     function executeQueries(callbackAfter) {
+        var statements = [];
         var $wrappers = [];
         var receivedResults = 0;
         $('div.query-wrapper').each(function (index, element) {
@@ -355,13 +327,13 @@ function GraphGist($) {
     }
 
     function renderGraphs() {
-        var counter=0;
+        var counter = 0;
         findPreviousQueryWrapper('h5.graph-visualization', $content, function ($heading, $wrapper) {
             //
             var visualization = $wrapper.data('visualization');
-            var id="graph-visualization-"+(counter++);
-            var $visContainer = $VISUALIZATION.clone().attr("id",id).insertAfter($heading);
-			var show_result_only = $heading.attr("graph-mode") && $heading.attr("graph-mode").indexOf("result") != -1;
+            var id = "graph-visualization-" + (counter++);
+            var $visContainer = $VISUALIZATION.clone().attr("id", id).insertAfter($heading);
+            var show_result_only = $heading.attr("graph-mode") && $heading.attr("graph-mode").indexOf("result") != -1;
             $heading.remove(); // text('The graph after query ' + $wrapper.data('number'));
             if (visualization) {
                 $visContainer.height(400);
@@ -370,7 +342,7 @@ function GraphGist($) {
                     console.log('Viz', height);
                 }, 0);
 //                renderVersal(id,visualization);
-                  renderNeod3(id,handleSelection(visualization,show_result_only));
+                renderNeod3(id, handleSelection(visualization, show_result_only));
             }
             else {
                 $visContainer.text('There is no graph to render.').addClass('alert-error');
@@ -379,29 +351,30 @@ function GraphGist($) {
     }
 
     function handleSelection(data, show_result_only) {
-	    if (!show_result_only) return data;
-		var nodes = [];
-		var links = [];
-		for (var i=0;i<data.nodes.length;i++) {
-			var node=data.nodes[i];
-			if (node.selected) {
-				node["$index"]=nodes.length;
-				nodes.push(node);
-			}
-		}
-		for (var i=0;i<data.links.length;i++) {
-			var link=data.links[i];
-			if (link.selected ||data.nodes[link.source].selected && data.nodes[link.target].selected) {
-				link.source = data.nodes[link.source]["$index"];
-				link.target = data.nodes[link.target]["$index"];
-				links.push(link);
-			}
-		}	
-		return {nodes:nodes, links:links};
+        if (!show_result_only) return data;
+        var nodes = [];
+        var links = [];
+        var i;
+        for (i = 0; i < data.nodes.length; i++) {
+            var node = data.nodes[i];
+            if (node.selected) {
+                node["$index"] = nodes.length;
+                nodes.push(node);
+            }
+        }
+        for (i = 0; i < data.links.length; i++) {
+            var link = data.links[i];
+            if (link.selected || data.nodes[link.source].selected && data.nodes[link.target].selected) {
+                link.source = data.nodes[link.source]["$index"];
+                link.target = data.nodes[link.target]["$index"];
+                links.push(link);
+            }
+        }
+        return {nodes: nodes, links: links};
     }
 
-    function renderVersal(id,visualization) {
-        var myChart = new GraphVisualizer($("#"+id), window.ColorManager(), 840, 300);
+    function renderVersal(id, visualization) {
+        var myChart = new GraphVisualizer($("#" + id), window.ColorManager(), 840, 300);
         myChart.draw(visualization, true);
     }
 
