@@ -96,13 +96,13 @@ function GraphGist($) {
         $('span[data-toggle="tooltip"]').tooltip({'placement': 'left'});
         $('a.run-query,a.edit-query,a.show-console-toggle').tooltip({'placement': 'right'});
         $('.tooltip-below').tooltip({'placement': 'bottom'});
-        var $status = $("#status");
+        var $status = $('#status');
         if (HAS_ERRORS) {
-            $status.text("Errors.");
-            $status.addClass("label-important");
+            $status.text('Errors.');
+            $status.addClass('label-important');
         } else {
-            $status.text("No Errors.");
-            $status.addClass("label-success");
+            $status.text('No Errors.');
+            $status.addClass('label-success');
         }
         DotWrapper($).scan();
     }
@@ -127,25 +127,25 @@ function GraphGist($) {
     }
 
     function formUrl(url, title, author, twitter) {
-        return "https://docs.google.com/a/neopersistence.com/forms/d/1BhtdunQd9QqLmIl01sK49curYY1dj2OPxXFgvf8HPAE/viewform?entry.718349727="
+        return 'https://docs.google.com/a/neopersistence.com/forms/d/1BhtdunQd9QqLmIl01sK49curYY1dj2OPxXFgvf8HPAE/viewform?entry.718349727='
             + encodeURIComponent(url)
-            + "&entry.1981612324="
+            + '&entry.1981612324='
             + encodeURIComponent(title.length > 18 ? title.substr(0, title.length - 18) : title)
-            + "&entry.1328778537="
+            + '&entry.1328778537='
             + encodeURIComponent(author)
-            + "&entry.507462214="
+            + '&entry.507462214='
             + encodeURIComponent(twitter);
     }
 
     function initAndGetHeading() {
-        var headingText = "Neo4j GraphGist";
+        var headingText = 'Neo4j GraphGist';
         var heading = $('h1').first();
         if (!heading.length) {
             heading = $('h2').first();
         }
         if (heading.length) {
             headingText = heading.text();
-            document.title = headingText + " - Neo4j GraphGist";
+            document.title = headingText + ' - Neo4j GraphGist';
         }
 
         return headingText;
@@ -192,8 +192,8 @@ function GraphGist($) {
 
         $footer.prepend('<i class="icon-check"></i><a target="_blank" title="Submit an original GraphGist and get a Neo4j t-shirt" href="' + formUrl(window.location.href, document.title, author, twitter) + '"> Submit</a> ');
         $footer.prepend('<i class="icon-cogs"></i> Uses Neo4j Version <a target="_blank" href="http://docs.neo4j.org/chunked/' + version + '/cypher-query-lang.html">' + version + '</a> ');
-        $("h2[id]").css({cursor: "pointer"}).click(function () {
-            window.location.href = window.location.href.replace(/($|#.+?$)/, "#" + $(this).attr("id"))
+        $('h2[id]').css({cursor: 'pointer'}).click(function () {
+            window.location.href = window.location.href.replace(/($|#.+?$)/, '#' + $(this).attr('id'))
         });
 
         processMathJAX();
@@ -331,9 +331,9 @@ function GraphGist($) {
         findPreviousQueryWrapper('h5.graph-visualization', $content, function ($heading, $wrapper) {
             //
             var visualization = $wrapper.data('visualization');
-            var id = "graph-visualization-" + (counter++);
-            var $visContainer = $VISUALIZATION.clone().attr("id", id).insertAfter($heading);
-            var show_result_only = $heading.attr("graph-mode") && $heading.attr("graph-mode").indexOf("result") != -1;
+            var id = 'graph-visualization-' + (counter++);
+            var $visContainer = $VISUALIZATION.clone().attr('id', id).insertAfter($heading);
+            var show_result_only = $heading.attr('graph-mode') && $heading.attr('graph-mode').indexOf('result') != -1;
             $heading.remove(); // text('The graph after query ' + $wrapper.data('number'));
             if (visualization) {
                 $visContainer.height(400);
@@ -358,15 +358,15 @@ function GraphGist($) {
         for (i = 0; i < data.nodes.length; i++) {
             var node = data.nodes[i];
             if (node.selected) {
-                node["$index"] = nodes.length;
+                node['$index'] = nodes.length;
                 nodes.push(node);
             }
         }
         for (i = 0; i < data.links.length; i++) {
             var link = data.links[i];
             if (link.selected || data.nodes[link.source].selected && data.nodes[link.target].selected) {
-                link.source = data.nodes[link.source]["$index"];
-                link.target = data.nodes[link.target]["$index"];
+                link.source = data.nodes[link.source]['$index'];
+                link.target = data.nodes[link.target]['$index'];
                 links.push(link);
             }
         }
@@ -374,7 +374,7 @@ function GraphGist($) {
     }
 
     function renderVersal(id, visualization) {
-        var myChart = new GraphVisualizer($("#" + id), window.ColorManager(), 840, 300);
+        var myChart = new GraphVisualizer($('#' + id), window.ColorManager(), 840, 300);
         myChart.draw(visualization, true);
     }
 

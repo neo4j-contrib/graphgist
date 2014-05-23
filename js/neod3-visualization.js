@@ -73,8 +73,9 @@ function renderNeod3(id,visualization) {
     var graphModel = neo.graphModel()
                      .nodes(nodes)
                      .relationships(links);
+    var dummyFunc = function() {};
     var graphView = neo.graphView()
     .style(styleSheet)
-    .width(800).height(400);
+    .width(800).height(400).on('nodeClicked', dummyFunc).on('relationshipClicked', dummyFunc).on('nodeDblClicked', dummyFunc);
     d3.select("#"+id).append("svg").data([graphModel]).call(graphView);
 }
