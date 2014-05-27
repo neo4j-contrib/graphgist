@@ -27,9 +27,11 @@ function GraphGist($) {
     var $RESULT_TOGGLE_BUTTON = $TOGGLE_BUTTON.clone().addClass('result-toggle').attr('title', 'Show/hide result.');
     var $QUERY_MESSAGE = $('<pre/>').addClass('query-message');
     var $VISUALIZATION = $('<div/>').addClass('visualization');
+    var VISUALIZATION_HEIGHT = 400;
     var $TABLE_CONTAINER = $('<div/>').addClass('result-table');
     var ASCIIDOCTOR_OPTIONS = Opal.hash('attributes', [ 'notitle!' ], 'attribute-missing', 'drop');
     var DEFAULT_SOURCE = 'github-neo4j-contrib%2Fgists%2F%2Fmeta%2FHome.adoc'
+    var $FULLSCREEN_ICON = $('<i class="icon-fullscreen"></i>');
 
     var DEFAULT_VERSION = '2.0.0';
     var CONSOLE_VERSIONS = { '2.0.0-M06': 'http://neo4j-console-20m06.herokuapp.com/',
@@ -75,7 +77,7 @@ function GraphGist($) {
         if ('initSocial' in window) {
             initSocial(initAndGetHeading());
             share();
-            }
+        }
         var version = postProcessPage();
         var consoleUrl = CONSOLE_VERSIONS[version in CONSOLE_VERSIONS ? version : DEFAULT_VERSION];
         CypherConsole({'url': consoleUrl}, function (conslr) {
@@ -114,8 +116,8 @@ function GraphGist($) {
             '++++\n<p class="console"><span class="loading"><i class="icon-cogs"></i> Running queries, preparing the console!</span></p>\n++++\n');
         sanitized = sanitized.replace(/^\/\/\s*?hide/gm, '++++\n<span class="hide-query"></span>\n++++\n');
         sanitized = sanitized.replace(/^\/\/\s*?setup/m, '++++\n<span id="setup-query"></span>\n++++\n');
-        sanitized = sanitized.replace(/^\/\/\s*?graph_result.*/gm, '++++\n<h5 class="graph-visualization" graph-mode="result"></h5>\n++++\n');
-        sanitized = sanitized.replace(/^\/\/\s*?graph.*/gm, '++++\n<h5 class="graph-visualization"></h5>\n++++\n');
+        sanitized = sanitized.replace(/^\/\/\s*?graph_result.*/gm, '++++\n<h5 class="graph-visualization" graph-mode="result"><img alt="loading" class="loading" src="images/loading.gif"></h5>\n++++\n');
+        sanitized = sanitized.replace(/^\/\/\s*?graph.*/gm, '++++\n<h5 class="graph-visualization"><img alt="loading" src="images/loading.gif" class="loading"></h5>\n++++\n');
         sanitized = sanitized.replace(/^\/\/\s*?output.*/gm, '++++\n<span class="query-output"></span>\n++++\n');
         sanitized = sanitized.replace(/^\/\/\s*?table.*/gm, '++++\n<h5 class="result-table"></h5>\n++++\n');
         sanitized += '\n[subs="attributes"]\n++++\n<span id="metadata"\n author="{author}"\n version="{neo4j-version}"\n twitter="{twitter}"\n tags="{tags}"\n/>\n++++\n';
@@ -329,23 +331,44 @@ function GraphGist($) {
     function renderGraphs() {
         var counter = 0;
         findPreviousQueryWrapper('h5.graph-visualization', $content, function ($heading, $wrapper) {
-            //
             var visualization = $wrapper.data('visualization');
             var id = 'graph-visualization-' + (counter++);
             var $visContainer = $VISUALIZATION.clone().attr('id', id).insertAfter($heading);
             var show_result_only = $heading.attr('graph-mode') && $heading.attr('graph-mode').indexOf('result') != -1;
-            $heading.remove(); // text('The graph after query ' + $wrapper.data('number'));
+            $heading.remove();
             if (visualization) {
-                $visContainer.height(400);
-                setTimeout(function () {
-                    var height = $visContainer.height();
-                    console.log('Viz', height);
-                }, 0);
-//                renderVersal(id,visualization);
-                renderNeod3(id, handleSelection(visualization, show_result_only));
+                $visContainer.height(VISUALIZATION_HEIGHT);
+                var refresher = renderNeod3(id, $visContainer, handleSelection(visualization, show_result_only));
+                $FULLSCREEN_ICON.clone().appendTo($visContainer).click(function () {
+                    if ($visContainer.hasClass('fullscreen')) {
+                        $('body').unbind('keydown', contractHandler);
+                        contract();
+                    } else {
+                        expand();
+                        $('body').keydown(contractHandler);
+                    }
+                });
             }
             else {
                 $visContainer.text('There is no graph to render.').addClass('alert-error');
+            }
+
+            function expand() {
+                $visContainer.addClass('fullscreen');
+                $visContainer.height('100%');
+                refresher();
+            }
+
+            function contract() {
+                $visContainer.removeClass('fullscreen');
+                $visContainer.height(400);
+                refresher();
+            }
+
+            function contractHandler(event) {
+                if ('which' in event && event.which === 27) {
+                    contract();
+                }
             }
         });
     }
@@ -373,12 +396,12 @@ function GraphGist($) {
         return {nodes: nodes, links: links};
     }
 
-/*
-    function renderVersal(id,visualization) {
-        var myChart = new GraphVisualizer($("#"+id), window.ColorManager(), 840, 300);
-        myChart.draw(visualization, true);
-    }
-*/
+    /*
+     function renderVersal(id,visualization) {
+     var myChart = new GraphVisualizer($("#"+id), window.ColorManager(), 840, 300);
+     myChart.draw(visualization, true);
+     }
+     */
 
     function renderTables() {
         findPreviousQueryWrapper('h5.result-table', $content, function ($heading, $wrapper) {
@@ -482,12 +505,5 @@ function GraphGist($) {
         }
 
         $content.html('<div class="alert alert-block alert-error"><h4>Error</h4>' + messageText + '</div>');
-    }
-
-    var visualizer = new GraphVisualization();
-
-    function d3graph(element, graph) {
-        var width = 800, height = 300;
-        visualizer.visualize(element, width, height, graph);
     }
 }

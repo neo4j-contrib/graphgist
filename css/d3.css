@@ -1,6 +1,7 @@
 div.visualization {
     border: 1px solid #cccccc;
     border-radius: 4px;
+    position: relative;
 }
 
 div.visualization > svg {

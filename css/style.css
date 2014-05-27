@@ -6,7 +6,7 @@
 }
 
 /* Chrome@Windows fix for https://code.google.com/p/chromium/issues/detail?id=137692 */
-@media screen and (-webkit-min-device-pixel-ratio:0) {
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
     @font-face {
         font-family: 'OfficinaSerifStd-Bold';
         src: url("fonts/officinaserifstd-bold.svg#officinaserifstd-bold") format('svg');
@@ -71,7 +71,7 @@ p {
     margin: 15px 0;
 }
 
-li>p {
+li > p {
     margin: 0;
 }
 
@@ -133,10 +133,12 @@ a.resize-toggle {
     right: 0;
     bottom: -39px;
 }
+
 a.show-console-toggle {
     position: relative;
     top: -35px;
 }
+
 a.show-console-toggle.show-console-toggle-hidden-console {
     top: 0;
 }
@@ -215,7 +217,7 @@ p.console {
     background: #eeeeee url('../images/loading.gif') no-repeat center center;
 }
 
-p.console>span.loading {
+p.console > span.loading {
     display: block;
     margin: 0 auto;
     width: 100%;
@@ -247,4 +249,36 @@ p.console>span.loading {
 }
 
 #sidebar_right {
+}
+
+img.loading {
+    padding: 168px 0;
+    margin: 0 45%;
+}
+
+div.visualization > i {
+    position: absolute;
+    right: 2px;
+    top: 2px;
+    padding: 2px;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #666666;
+    background: rgba(255, 255, 255, 0.8);
+}
+
+div.fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background: #ffffff;
+    border: 0 none;
+    padding: 0;
+    margin: 0;
+    z-index: 10000;
+    cursor: pointer;
 }
