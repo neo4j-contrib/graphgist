@@ -9,13 +9,14 @@ var styleContents =
       font-size: 10px;\
     }\
     relationship {\
-      color: #D4D6D7;\
-      shaft-width: 1px;\
-      font-size: 8px;\
+      color: #4356C0;\
+      shaft-width: 3px;\
+      font-size: 9px;\
       padding: 3px;\
       text-color-external: #000000;\
       text-color-internal: #FFFFFF;\
     }\n";
+
 var skip = ["id","start","end","source","target","labels","type","selected"];
 var prio_props = ["name","title","tag"];
 
@@ -30,15 +31,21 @@ function renderNeod3(id,visualization) {
   }
 
   function node_styles(nodes) {
+	  function label(n) { 
+        var labels=n["labels"];
+		if (labels && labels.length) {
+			return labels[labels.length-1];
+		}
+	 	return "";
+	  }
       var style = {};
       for (var i=0;i<nodes.length;i++) {
          nodes[i].properties=extract_props(nodes[i]);
          var keys = Object.keys(nodes[i].properties);
-         var labels=nodes[i]["labels"];
-         if (labels && labels.length > 0 && keys.length>0) {
-            var label = labels[labels.length-1];
+         if (label(nodes[i]) != "" && keys.length>0) {
             keys = prio_props.filter(function (k) { return keys.indexOf(k) != -1}).concat(keys);
-            style["node."+label] = keys[0];
+            var selector = "node."+label(nodes[i]);
+            style[selector] = style[selector] || keys[0];
          }
       }
       return style;

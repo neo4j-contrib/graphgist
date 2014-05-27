@@ -373,11 +373,12 @@ function GraphGist($) {
         return {nodes: nodes, links: links};
     }
 
-    function renderVersal(id, visualization) {
-        var myChart = new GraphVisualizer($('#' + id), window.ColorManager(), 840, 300);
+/*
+    function renderVersal(id,visualization) {
+        var myChart = new GraphVisualizer($("#"+id), window.ColorManager(), 840, 300);
         myChart.draw(visualization, true);
     }
-
+*/
 
     function renderTables() {
         findPreviousQueryWrapper('h5.result-table', $content, function ($heading, $wrapper) {
