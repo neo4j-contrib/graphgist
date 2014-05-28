@@ -351,6 +351,9 @@ function GraphGist($) {
                         $('body').keydown(contractHandler);
                     }
                 });
+                $visContainer.mutate('width', function(){
+                    refresher();
+                }) ;
             }
             else {
                 $visContainer.text('There is no graph to render.').addClass('alert-error');
