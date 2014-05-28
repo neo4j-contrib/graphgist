@@ -16,6 +16,9 @@
 GraphGist(jQuery);
 
 function GraphGist($) {
+    if ('support' in $) {
+        $.support.cors = true;
+    }
     var HAS_ERRORS = false;
     var $WRAPPER = $('<div class="query-wrapper" />');
     var COLLAPSE_ICON = 'icon-minus-sign-alt';
