@@ -70,6 +70,29 @@ function renderNeod3(id, $container, visualization) {
         return styleContents + styleSheet;
     }
 
+    function applyZoom() {
+        renderer.select(".nodes").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+        renderer.select(".relationships").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+    }
+
+    function zoomStart() {
+        if (d3.event.sourceEvent.altKey) {
+            zoomBehavior.on("zoom",applyZoom);
+            renderer.on("mousedown.zoom", null)
+        }
+        else {
+            zoomBehavior
+            .on("mousedown.zoom", null)
+            .on("mousewheel.zoom", null)
+            .on("mousemove.zoom", null)
+            .on("DOMMouseScroll.zoom", null)
+            .on("dblclick.zoom", null)
+            .on("touchstart.zoom", null)
+            .on("touchmove.zoom", null)
+            .on("touchend.zoom", null);
+        }
+    }
+
     var links = visualization.links;
     var nodes = visualization.nodes;
     for (var i = 0; i < links.length; i++) {
@@ -89,7 +112,11 @@ function renderNeod3(id, $container, visualization) {
         .style(styleSheet)
         .width($container.width()).height($container.height()).on('nodeClicked', dummyFunc).on('relationshipClicked', dummyFunc).on('nodeDblClicked', dummyFunc);
     var renderer = d3.select("#" + id).append("svg").data([graphModel]);
+    var zoomBehavior = d3.behavior.zoom().on("zoomstart", zoomStart).scaleExtent([0.2,8])
+
     renderer.call(graphView);
+    renderer.call(zoomBehavior);
+
     return function () {
         graphView.height($container.height());
         graphView.width($container.width());
