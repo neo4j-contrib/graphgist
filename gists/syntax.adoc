@@ -15,30 +15,20 @@ They are:  +//console+ for a query console; +//hide+, +//setup+ and +//output+ t
 Click on the Page Source button in the menu to see the source for this GraphGist.
 Read below to get the full details.
 
-== Include a query console
-
-+//console+
-
-becomes:
-
-//console
-
-NOTE: The page layout will work best when the console precedes the first query.
-
 == Define a http://docs.neo4j.org/chunked/snapshot/cypher-query-lang.html[Cypher] query
 
  [source,cypher]
  ----
- CREATE (n{name:'cypher'})-[r:LIKES]->({name:'icecream'})
- RETURN n.name, r
+ MATCH (who:Person {name:'Me'})-[likes:LIKES]->(what)
+ RETURN who,likes,what
  ----
 
 becomes:
 
 [source,cypher]
 ----
-CREATE (n{name:'cypher'})-[r:LIKES]->({name:'icecream'})
-RETURN n.name, r
+MATCH (who:Person {name:'Me'})-[likes:LIKES]->(what)
+RETURN who,likes,what
 ----
 
 _Queries are executed in the order they appear on the page during rendering, so make sure they can be performed in that order._
@@ -65,8 +55,8 @@ Let's try all the settings together, which means this query will be used to init
  //output
  [source,cypher]
  ----
- CREATE (n{name:'neo4j'})-[:LIKES]->({name:'complex data'})
- RETURN n.name
+ CREATE (me:Person {name:'Me'})-[r:LIKES]->(neo4j:Database:Graph:NoSQL {name:'Neo4j'})
+ RETURN me.name, r, neo4j
  ----
 
 which becomes:
@@ -76,20 +66,37 @@ which becomes:
 //output
 [source,cypher]
 ----
-CREATE (n{name:'neo4j'})-[:LIKES]->({name:'complex data'})
-RETURN n.name
+CREATE (me:Person {name:'Me'})-[r:LIKES]->(neo4j:Database:Graph:NoSQL {name:'Neo4j'})
+RETURN me.name, r, neo4j
 ----
 
 
 == Show a graph visualization
 
-The visualization is based on the database contents after the preceding query in the page.
+The visualization is based on the **database contents** after the preceding query in the page.
 
 +//graph+
 
 becomes:
 
 //graph
+
+
+== Show a graph visualization
+
+[source,cypher]
+----
+MATCH (who:Person {name:'Me'})-[likes:LIKES]->(what)
+RETURN who,likes,what
+----
+
+The visualisation is based on the **results** returned by the preceding query in the page.
+
++//graph_result+
+
+becomes:
+
+//graph_result
 
 == Show a result table for a query
 
@@ -107,8 +114,19 @@ This is what happens if a query causes an error:
 
 [source,cypher]
 ----
-CREATE (n{name:'cypher'}
+CREATE (n:QueryLanguage {name:'cypher'}
 ----
+
+== Include a query console
+
+A console button will be included anyway to hide or show the console. 
+This will place the cypher-console where you want it and open it by default.
+
++//console+
+
+becomes:
+
+//console
 
 == Basic AsciiDoc formatting
 
