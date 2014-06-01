@@ -256,18 +256,33 @@ img.loading {
     margin: 0 45%;
 }
 
-div.visualization > i {
+div.visualization {
+    margin-top: 42px;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    position: relative;
+}
+
+div.visualization-icons {
     position: absolute;
     right: 2px;
-    top: 2px;
-    padding: 2px;
+    top: -22px;
     border-radius: 4px;
     font-size: 14px;
     color: #666666;
     background: rgba(255, 255, 255, 0.8);
 }
 
-div.fullscreen {
+div.visualization.fullscreen > div.visualization-icons {
+    top: 2px;
+}
+
+div.visualization-icons > i {
+    padding: 0 2px 0 4px;
+    cursor: pointer;
+}
+
+div.visualization.fullscreen {
     position: fixed;
     top: 0;
     left: 0;
@@ -281,4 +296,14 @@ div.fullscreen {
     margin: 0;
     z-index: 10000;
     cursor: pointer;
+}
+
+a.visualization-download {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+}
+
+div.visualization.fullscreen > a.visualization-download {
+    top: 24px;
 }
