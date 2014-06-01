@@ -466,7 +466,6 @@ neo.graphView = function() {
     return _results;
   };
   chart = function(selection) {
-console.log("selection",selection)
     selection.each(function(graphModel) {
       if (!viz) {
         viz = neo.viz(this, graphModel, layout, style);

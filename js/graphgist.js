@@ -34,7 +34,7 @@ function GraphGist($) {
     var $TABLE_CONTAINER = $('<div/>').addClass('result-table');
     var ASCIIDOCTOR_OPTIONS = Opal.hash('attributes', [ 'notitle!' ], 'attribute-missing', 'drop');
     var DEFAULT_SOURCE = 'github-neo4j-contrib%2Fgists%2F%2Fmeta%2FHome.adoc'
-    var $FULLSCREEN_ICON = $('<i class="icon-fullscreen"></i>');
+    var $VISUALIZATION_ICONS = $('<div class="visualization-icons"><i class="icon-fullscreen fullscreen-icon"></i></div>');
 
     var DEFAULT_VERSION = '2.0.0';
     var CONSOLE_VERSIONS = { '2.0.0-M06': 'http://neo4j-console-20m06.herokuapp.com/',
@@ -47,6 +47,8 @@ function GraphGist($) {
         'local': 'http://localhost:8080/',
         '1.9': 'http://neo4j-console-19.herokuapp.com/'
     }
+
+    var neod3Renderer = new Neod3Renderer();
 
     var $content = undefined;
     var $gistId = undefined;
@@ -337,41 +339,57 @@ function GraphGist($) {
             var visualization = $wrapper.data('visualization');
             var id = 'graph-visualization-' + (counter++);
             var $visContainer = $VISUALIZATION.clone().attr('id', id).insertAfter($heading);
-            var show_result_only = $heading.attr('graph-mode') && $heading.attr('graph-mode').indexOf('result') != -1;
+            var show_result_only = $heading.attr('graph-mode') && $heading.attr('graph-mode').indexOf('result') !== -1;
             $heading.remove();
             if (visualization) {
                 $visContainer.height(VISUALIZATION_HEIGHT);
-                var refresher = renderNeod3(id, $visContainer, handleSelection(visualization, show_result_only));
-                $FULLSCREEN_ICON.clone().appendTo($visContainer).click(function () {
-                    if ($visContainer.hasClass('fullscreen')) {
-                        $('body').unbind('keydown', contractHandler);
-                        contract();
-                    } else {
-                        expand();
-                        $('body').keydown(contractHandler);
-                    }
-                });
-                $visContainer.mutate('width', function(){
-                    refresher();
-                }) ;
+                var rendererHooks = neod3Renderer.render(id, $visContainer, handleSelection(visualization, show_result_only));
+                var subscriptions = 'subscriptions' in rendererHooks ? rendererHooks['subscriptions'] : {};
+                var actions = 'actions' in rendererHooks ? rendererHooks['actions'] : {};
+                var $visualizationIcons = $VISUALIZATION_ICONS.clone().appendTo($visContainer);
+                $visualizationIcons.children('i.fullscreen-icon').click(fullscreenClick);
+                for (var iconName in actions) {
+                    $('<i class="' + iconName + '"></i>').appendTo($visualizationIcons).click(actions[iconName]);
+                }
+                $visContainer.mutate('width', sizeChange);
             }
             else {
                 $visContainer.text('There is no graph to render.').addClass('alert-error');
             }
 
+            function fullscreenClick() {
+                if ($visContainer.hasClass('fullscreen')) {
+                    $('body').unbind('keydown', keyHandler);
+                    contract();
+                } else {
+                    expand();
+                    $('body').keydown(keyHandler);
+                }
+            }
+
             function expand() {
                 $visContainer.addClass('fullscreen');
                 $visContainer.height('100%');
-                refresher();
+                if ('expand' in subscriptions) {
+                    subscriptions.expand();
+                }
             }
 
             function contract() {
                 $visContainer.removeClass('fullscreen');
                 $visContainer.height(400);
-                refresher();
+                if ('contract' in subscriptions) {
+                    subscriptions.contract();
+                }
             }
 
-            function contractHandler(event) {
+            function sizeChange() {
+                if ('sizeChange' in subscriptions) {
+                    subscriptions.sizeChange();
+                }
+            }
+
+            function keyHandler(event) {
                 if ('which' in event && event.which === 27) {
                     contract();
                 }
