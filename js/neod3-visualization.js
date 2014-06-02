@@ -28,6 +28,10 @@ function Neod3Renderer() {
         $downloadSvgLink.hide();
     });
     var downloadSvgLink = $downloadSvgLink[0];
+    var msBlobSupport = typeof window.navigator.msSaveOrOpenBlob !== 'undefined';
+
+    function dummyFunc() {
+    }
 
     function render(id, $container, visualization) {
         function extract_props(pc) {
@@ -115,8 +119,6 @@ function Neod3Renderer() {
         var graphModel = neo.graphModel()
             .nodes(nodes)
             .relationships(links);
-        var dummyFunc = function () {
-        };
         var graphView = neo.graphView()
             .style(styleSheet)
             .width($container.width()).height($container.height()).on('nodeClicked', dummyFunc).on('relationshipClicked', dummyFunc).on('nodeDblClicked', dummyFunc);
@@ -135,15 +137,20 @@ function Neod3Renderer() {
         function saveToSvg() {
             var svgElement = $('#' + id).children('svg').first()[0];
             var xml = serializeSvg(svgElement, $container);
-            if (downloadSvgLink.href !== '#') {
+            if (!msBlobSupport && downloadSvgLink.href !== '#') {
                 window.URL.revokeObjectURL(downloadSvgLink.href);
             }
             var blob = new window.Blob([xml], {
                 'type': 'image/svg+xml'
             });
-            downloadSvgLink.href = window.URL.createObjectURL(blob);
-            $downloadSvgLink.appendTo($container).show();
-            $downloadSvgLink.attr('download', id + '.svg');
+            var fileName = id + '.svg';
+            if (!msBlobSupport) {
+                downloadSvgLink.href = window.URL.createObjectURL(blob);
+                $downloadSvgLink.appendTo($container).show();
+                $downloadSvgLink.attr('download', fileName);
+            } else {
+                window.navigator.msSaveOrOpenBlob(blob, fileName);
+            }
         }
 
         function getFunctions() {
