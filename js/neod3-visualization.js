@@ -87,11 +87,13 @@ function Neod3Renderer() {
         function enableZoomHandlers() {
             renderer.on("wheel.zoom",zoomHandlers.wheel);
             renderer.on("mousedown.zoom",zoomHandlers.mousedown);
+            renderer.on("DOMMouseScroll.zoom",zoomHandlers.DOMMouseScroll);
         }
 
         function disableZoomHandlers() {
             renderer.on("wheel.zoom",null);
             renderer.on("mousedown.zoom", null);
+            renderer.on("DOMMouseScroll.zoom", null);
         }
 
         function altHandler() {
@@ -130,6 +132,7 @@ function Neod3Renderer() {
 
         zoomHandlers.wheel = renderer.on("wheel.zoom");
         zoomHandlers.mousedown = renderer.on("mousedown.zoom");
+        zoomHandlers.DOMMouseScroll = renderer.on("DOMMouseScroll.zoom");
         disableZoomHandlers();
 
         d3.select('body').on("keydown", altHandler).on("keyup", altHandler);
