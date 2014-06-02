@@ -28,6 +28,8 @@ function Neod3Renderer() {
         $downloadSvgLink.hide();
     });
     var downloadSvgLink = $downloadSvgLink[0];
+    var blobSupport = 'Blob' in window;
+    var URLSupport = 'URL' in window && 'createObjectURL' in window.URL
     var msBlobSupport = typeof window.navigator.msSaveOrOpenBlob !== 'undefined';
 
     function dummyFunc() {
@@ -155,7 +157,7 @@ function Neod3Renderer() {
 
         function getFunctions() {
             var funcs = {};
-            if (window.Blob) {
+            if (blobSupport && (URLSupport || msBlobSupport)) {
                 funcs['icon-download-alt'] = saveToSvg
             }
             return funcs;
