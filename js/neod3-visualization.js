@@ -95,7 +95,13 @@ function Neod3Renderer() {
         }
 
         function disableZoomHandlers() {
-            renderer.on(".zoom",null);
+            renderer.on("wheel.zoom",null);
+            renderer.on("mousewheel.zoom",null);
+            renderer.on("mousedown.zoom", null);
+            renderer.on("DOMMouseScroll.zoom", null);
+            renderer.on("touchstart.zoom",null);
+            renderer.on("touchmove.zoom",null);
+            renderer.on("touchend.zoom",null);
         }
 
         function altHandler() {
