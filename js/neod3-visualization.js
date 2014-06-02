@@ -84,21 +84,22 @@ function Neod3Renderer() {
             renderer.select(".relationships").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
         }
 
-        function zoomStart() {
-            if (d3.event.sourceEvent.altKey) {
-                zoomBehavior.on("zoom", applyZoom);
-                renderer.on("mousedown.zoom", null)
+        function enableZoomHandlers() {
+            renderer.on("wheel.zoom",zoomHandlers.wheel);
+            renderer.on("mousedown.zoom",zoomHandlers.mousedown);
+        }
+
+        function disableZoomHandlers() {
+            renderer.on("wheel.zoom",null);
+            renderer.on("mousedown.zoom", null);
+        }
+
+        function altHandler() {
+            if (d3.event.altKey) {
+                enableZoomHandlers();
             }
             else {
-                zoomBehavior
-                    .on("mousedown.zoom", null)
-                    .on("mousewheel.zoom", null)
-                    .on("mousemove.zoom", null)
-                    .on("DOMMouseScroll.zoom", null)
-                    .on("dblclick.zoom", null)
-                    .on("touchstart.zoom", null)
-                    .on("touchmove.zoom", null)
-                    .on("touchend.zoom", null);
+               disableZoomHandlers();
             }
         }
 
@@ -121,10 +122,17 @@ function Neod3Renderer() {
             .style(styleSheet)
             .width($container.width()).height($container.height()).on('nodeClicked', dummyFunc).on('relationshipClicked', dummyFunc).on('nodeDblClicked', dummyFunc);
         var renderer = d3.select("#" + id).append("svg").data([graphModel]);
-        var zoomBehavior = d3.behavior.zoom().on("zoomstart", zoomStart).scaleExtent([0.2, 8])
+        var zoomHandlers = {};
+        var zoomBehavior = d3.behavior.zoom().on("zoom", applyZoom).scaleExtent([0.2, 8])
 
         renderer.call(graphView);
         renderer.call(zoomBehavior);
+
+        zoomHandlers.wheel = renderer.on("wheel.zoom");
+        zoomHandlers.mousedown = renderer.on("mousedown.zoom");
+        disableZoomHandlers();
+
+        d3.select('body').on("keydown", altHandler).on("keyup", altHandler);
 
         function refresh() {
             graphView.height($container.height());
