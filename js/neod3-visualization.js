@@ -110,8 +110,8 @@ function Neod3Renderer() {
             renderer.on("touchend.zoom",null);
         }
 
-        function altHandler() {
-            if (d3.event.altKey) {
+        function keyHandler() {
+            if (d3.event.altKey || d3.event.shiftKey) {
                 enableZoomHandlers();
             }
             else {
@@ -151,7 +151,7 @@ function Neod3Renderer() {
         zoomHandlers.touchend = renderer.on("touchend.zoom");
         disableZoomHandlers();
 
-        d3.select('body').on("keydown", altHandler).on("keyup", altHandler);
+        d3.select('body').on("keydown", keyHandler).on("keyup", keyHandler);
 
         function refresh() {
             graphView.height($container.height());
