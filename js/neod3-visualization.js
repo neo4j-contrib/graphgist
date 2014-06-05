@@ -93,7 +93,7 @@ function Neod3Renderer() {
         function enableZoomHandlers() {
             renderer.on("wheel.zoom",zoomHandlers.wheel);
             renderer.on("mousewheel.zoom",zoomHandlers.mousewheel);
-            renderer.on("mousedown.zoom",zoomHandlers.mousedown);
+            //renderer.on("mousedown.zoom",zoomHandlers.mousedown);
             renderer.on("DOMMouseScroll.zoom",zoomHandlers.DOMMouseScroll);
             renderer.on("touchstart.zoom",zoomHandlers.touchstart);
             renderer.on("touchmove.zoom",zoomHandlers.touchmove);
@@ -103,7 +103,7 @@ function Neod3Renderer() {
         function disableZoomHandlers() {
             renderer.on("wheel.zoom",null);
             renderer.on("mousewheel.zoom",null);
-            renderer.on("mousedown.zoom", null);
+            //renderer.on("mousedown.zoom", null);
             renderer.on("DOMMouseScroll.zoom", null);
             renderer.on("touchstart.zoom",null);
             renderer.on("touchmove.zoom",null);
