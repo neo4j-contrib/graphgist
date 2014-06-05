@@ -258,6 +258,7 @@ img.loading {
 
 div.visualization {
     margin-top: 42px;
+    margin-bottom: 21px;
     border: 1px solid #cccccc;
     border-radius: 4px;
     position: relative;
