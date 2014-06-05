@@ -689,10 +689,6 @@ neo.style = (function() {
         'border-color': '#46A39E',
         'text-color-internal': '#FFFFFF'
       }, {
-        color: '#FF6C7C',
-        'border-color': '#EB5D6C',
-        'text-color-internal': '#FFFFFF'
-      }, {
         color: '#FCC940',
         'border-color': '#F3BA25',
         'text-color-internal': '#000000'
@@ -700,7 +696,31 @@ neo.style = (function() {
         color: '#4356C0',
         'border-color': '#3445A2',
         'text-color-internal': '#FFFFFF'
-      }
+      }, {
+        color: '#FF6C7C',
+        'border-color': '#EB5D6C',
+        'text-color-internal': '#FFFFFF'
+      }, {
+        color: '#a2cf81',
+        'border-color': '#9bbd82',
+        'text-color-internal': '#000000'
+      }, {
+        color: '#f79235',
+        'border-color': '#e68f40',
+        'text-color-internal': '#000000'
+      }, {
+        color: '#785cc7',
+        'border-color': '#625096',
+        'text-color-internal': '#FFFFFF'
+      }, {
+        color: '#d05e7c',
+        'border-color': '#b05b72',
+        'text-color-internal': '#FFFFFF'
+      }, {
+        color: '#3986b7',
+        'border-color': '#3a7499',
+        'text-color-internal': '#FFFFFF'
+        }
     ],
     style: {
       'node': {
