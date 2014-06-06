@@ -34,7 +34,8 @@ function GraphGist($) {
     var $TABLE_CONTAINER = $('<div/>').addClass('result-table');
     var ASCIIDOCTOR_OPTIONS = Opal.hash('attributes', [ 'notitle!' ], 'attribute-missing', 'drop');
     var DEFAULT_SOURCE = 'github-neo4j-contrib%2Fgists%2F%2Fmeta%2FHome.adoc'
-    var $VISUALIZATION_ICONS = $('<div class="visualization-icons"><i class="icon-fullscreen fullscreen-icon"></i></div>');
+    var $VISUALIZATION_ICONS = $('<div class="visualization-icons"><i class="icon-fullscreen fullscreen-icon" title="Toggle fullscreen mode"></i></div>');
+    var $I = $('<i/>');
 
     var DEFAULT_VERSION = '2.0.0';
     var CONSOLE_VERSIONS = { '2.0.0-M06': 'http://neo4j-console-20m06.herokuapp.com/',
@@ -340,58 +341,64 @@ function GraphGist($) {
             var id = 'graph-visualization-' + (counter++);
             var $visContainer = $VISUALIZATION.clone().attr('id', id).insertAfter($heading);
             var show_result_only = $heading.attr('graph-mode') && $heading.attr('graph-mode').indexOf('result') !== -1;
+            var selectedVisualization = handleSelection(visualization, show_result_only);
             $heading.remove();
-            if (visualization) {
-                $visContainer.height(VISUALIZATION_HEIGHT);
-                var rendererHooks = neod3Renderer.render(id, $visContainer, handleSelection(visualization, show_result_only));
-                var subscriptions = 'subscriptions' in rendererHooks ? rendererHooks['subscriptions'] : {};
-                var actions = 'actions' in rendererHooks ? rendererHooks['actions'] : {};
-                var $visualizationIcons = $VISUALIZATION_ICONS.clone().appendTo($visContainer);
-                $visualizationIcons.children('i.fullscreen-icon').click(fullscreenClick);
-                for (var iconName in actions) {
-                    $('<i class="' + iconName + '"></i>').appendTo($visualizationIcons).click(actions[iconName]);
-                }
-                $visContainer.mutate('width', sizeChange);
-            }
-            else {
-                $visContainer.text('There is no graph to render.').addClass('alert-error');
-            }
+            $visContainer.height(VISUALIZATION_HEIGHT);
+            performVisualizationRendering();
 
-            function fullscreenClick() {
-                if ($visContainer.hasClass('fullscreen')) {
-                    $('body').unbind('keydown', keyHandler);
-                    contract();
-                } else {
-                    expand();
-                    $('body').keydown(keyHandler);
+            function performVisualizationRendering() {
+                if (visualization) {
+                    var rendererHooks = neod3Renderer.render(id, $visContainer, selectedVisualization);
+                    var subscriptions = 'subscriptions' in rendererHooks ? rendererHooks['subscriptions'] : {};
+                    var actions = 'actions' in rendererHooks ? rendererHooks['actions'] : {};
+                    var $visualizationIcons = $VISUALIZATION_ICONS.clone().appendTo($visContainer);
+                    $visualizationIcons.children('i.fullscreen-icon').click(fullscreenClick);
+                    for (var iconName in actions) {
+                        var actionData = actions[iconName];
+                        $I.clone().addClass(iconName).attr('title', actionData.title).appendTo($visualizationIcons).click(actionData.func);
+                    }
+                    $visContainer.mutate('width', sizeChange);
                 }
-            }
-
-            function expand() {
-                $visContainer.addClass('fullscreen');
-                $visContainer.height('100%');
-                if ('expand' in subscriptions) {
-                    subscriptions.expand();
+                else {
+                    $visContainer.text('There is no graph to render.').addClass('alert-error');
                 }
-            }
 
-            function contract() {
-                $visContainer.removeClass('fullscreen');
-                $visContainer.height(400);
-                if ('contract' in subscriptions) {
-                    subscriptions.contract();
+                function fullscreenClick() {
+                    if ($visContainer.hasClass('fullscreen')) {
+                        $('body').unbind('keydown', keyHandler);
+                        contract();
+                    } else {
+                        expand();
+                        $('body').keydown(keyHandler);
+                    }
                 }
-            }
 
-            function sizeChange() {
-                if ('sizeChange' in subscriptions) {
-                    subscriptions.sizeChange();
+                function expand() {
+                    $visContainer.addClass('fullscreen');
+                    $visContainer.height('100%');
+                    if ('expand' in subscriptions) {
+                        subscriptions.expand();
+                    }
                 }
-            }
 
-            function keyHandler(event) {
-                if ('which' in event && event.which === 27) {
-                    contract();
+                function contract() {
+                    $visContainer.removeClass('fullscreen');
+                    $visContainer.height(400);
+                    if ('contract' in subscriptions) {
+                        subscriptions.contract();
+                    }
+                }
+
+                function sizeChange() {
+                    if ('sizeChange' in subscriptions) {
+                        subscriptions.sizeChange();
+                    }
+                }
+
+                function keyHandler(event) {
+                    if ('which' in event && event.which === 27) {
+                        contract();
+                    }
                 }
             }
         });
