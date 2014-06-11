@@ -262,6 +262,7 @@ function GraphGist($) {
             'init': 'none',
             'query': query || 'none',
             'message': 'none',
+            'viz' : 'none',
             'no_root': true
         }, success, error);
 
