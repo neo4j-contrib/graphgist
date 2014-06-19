@@ -7,6 +7,7 @@ function Neod3Renderer() {
           border-color: #D4D6D7;\
           border-width: 2px;\
           text-color-internal: #000000;\
+          text-color-external: #000000;\
           caption: '{name}';\
           font-size: 10px;\
         }\
@@ -76,12 +77,13 @@ function Neod3Renderer() {
             for (var k in style) {
                 var color = colors[c];
                 c = (c + 1) % colors.length
-                styleSheet += k + " {caption: '{" + style[k] + "}'; color: " + color.color +
+                styleSheet += "\n" +k + " {caption: '{" + style[k] + "}'; color: " + color.color +
                     "; border-color: " + color['border-color'] +
-                    "; text-color-internal: " + color['text-color-internal'] +
-                    "; text-color-external: " + color['text-color-internal'] +
+                    "; text-color-internal: #000000" + // + color['text-color-internal'] +
+                    "; text-color-external: #000000" + // + color['text-color-internal'] +
                     "; }\n";
             }
+console.log("styleSheet",styleSheet)
             return styleContents + styleSheet;
         }
 

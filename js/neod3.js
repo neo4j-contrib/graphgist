@@ -208,6 +208,28 @@ NeoD3Geometry = (function() {
     return true;
   };
 
+  NeoD3Geometry.prototype.formatNodeCaptions = function(nodes) {
+    var captionText, i, lines, node, template, words, _i, _j, _len, _ref, _results;
+    var style = this.style;
+    _results = [];
+    for (_i = 0, _len = nodes.length; _i < _len; _i++) {
+      node = nodes[_i];
+      template = style.forNode(node).get("caption");
+      captionText = style.interpolate(template, node.id, node.propertyMap);
+      words = captionText.split(" ");
+      lines = [];
+      for (i = _j = 0, _ref = words.length - 1; 0 <= _ref ? _j <= _ref : _j >= _ref; i = 0 <= _ref ? ++_j : --_j) {
+        lines.push({
+          node: node,
+          text: words[i],
+          baseline: (1 + i - words.length / 2) * 10
+        });
+      }
+      _results.push(node.caption = lines);
+    }
+    return _results;
+  };
+  
   fitCaptionIntoCircle = function(node, style) {
     var candidateLines, candidateWords, captionText, consumedWords, emptyLine, fitOnFixedNumberOfLines, fontFamily, fontSize, lineCount, lineHeight, lines, maxLines, measure, template, words, _i, _ref, _ref1;
     template = style.forNode(node).get("caption");
@@ -264,15 +286,15 @@ NeoD3Geometry = (function() {
     return lines;
   };
 
-  NeoD3Geometry.prototype.formatNodeCaptions = function(nodes) {
-    var node, _i, _len, _results;
-    _results = [];
-    for (_i = 0, _len = nodes.length; _i < _len; _i++) {
-      node = nodes[_i];
-      _results.push(node.caption = fitCaptionIntoCircle(node, this.style));
-    }
-    return _results;
-  };
+  // NeoD3Geometry.prototype.formatNodeCaptions = function(nodes) {
+  //   var node, _i, _len, _results;
+  //   _results = [];
+  //   for (_i = 0, _len = nodes.length; _i < _len; _i++) {
+  //     node = nodes[_i];
+  //     _results.push(node.caption = fitCaptionIntoCircle(node, this.style));
+  //   }
+  //   return _results;
+  // };
 
   NeoD3Geometry.prototype.measureRelationshipCaption = function(relationship, caption) {
     var fontFamily, fontSize, padding;
@@ -1447,7 +1469,11 @@ neo.utils.measureText = (function() {
         return node.caption;
       });
       text.enter().append('text').attr({
-        'text-anchor': 'middle'
+        'text-anchor': 'middle',
+//        'font-weight': 'bold',
+        'stroke': '#FFFFFF',
+        'stroke-width' : '0.2',
+        'font-weight': '400'
       });
       text.text(function(line) {
         return line.text;
@@ -1455,10 +1481,10 @@ neo.utils.measureText = (function() {
         return line.baseline;
       }).attr('font-size', function(line) {
         return viz.style.forNode(line.node).get('font-size');
-      }).attr({
-        'fill': function(line) {
+      }).attr('stroke', function(line) {
+        return viz.style.forNode(line.node).get('color');
+      }).attr('fill', function(line) {
           return viz.style.forNode(line.node).get('text-color-internal');
-        }
       });
       return text.exit().remove();
     },
