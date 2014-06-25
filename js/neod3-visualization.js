@@ -83,7 +83,6 @@ function Neod3Renderer() {
                     "; text-color-external: #000000" + // + color['text-color-internal'] +
                     "; }\n";
             }
-console.log("styleSheet",styleSheet)
             return styleContents + styleSheet;
         }
 
