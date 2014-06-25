@@ -71,23 +71,23 @@ table.dataTable .css_right {
 }
 
 .sorting_asc {
-    background: url('../images/sort_asc.png') no-repeat center right;
+    background: url('http://gist.neo4j.org/images/sort_asc.png') no-repeat center right;
 }
 
 .sorting_desc {
-    background: url('../images/sort_desc.png') no-repeat center right;
+    background: url('http://gist.neo4j.org/images/sort_desc.png') no-repeat center right;
 }
 
 .sorting {
-    background: url('../images/sort_both.png') no-repeat center right;
+    background: url('http://gist.neo4j.org/images/sort_both.png') no-repeat center right;
 }
 
 .sorting_asc_disabled {
-    background: url('../images/sort_asc_disabled.png') no-repeat center right;
+    background: url('http://gist.neo4j.org/images/sort_asc_disabled.png') no-repeat center right;
 }
 
 .sorting_desc_disabled {
-    background: url('../images/sort_desc_disabled.png') no-repeat center right;
+    background: url('http://gist.neo4j.org/images/sort_desc_disabled.png') no-repeat center right;
 }
 
 .result-table input, .result-table select {
