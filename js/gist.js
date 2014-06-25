@@ -31,6 +31,9 @@ function Gist($, $content) {
             if (idCut !== -1) {
                 id = id.substring(0, idCut);
             }
+            if (id.length > 20 && id.substring(0, 4) === '_ga=') {
+                id = defaultSource;
+            }
         }
         var fetcher = fetchGithubGist;
         if (id.length > 8 && id.substr(0, 8) === 'dropbox-') {
