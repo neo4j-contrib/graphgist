@@ -36,18 +36,22 @@ function CypherConsole(config, ready) {
     createConsole(ready, consoleClass, contentId);
 
     function createConsole(ready, elementClass, contentId) {
-        var $element = $('p.' + elementClass).first();
-        if ($element.length !== 1) {
-            //no console defined in the document
-            $element = $('<p/>').addClass(elementClass);
-            $('#' + contentId).append($element);
-            $element.hide();
+        if ($('code.cypher').length > 0) {
+            var $element = $('p.' + elementClass).first();
+            if ($element.length !== 1) {
+                //no console defined in the document
+                $element = $('<p/>').addClass(elementClass);
+                $('#' + contentId).append($element);
+                $element.hide();
+            }
+            $element.each(function () {
+                var $context = $(this);
+                addConsole($context, ready)
+            });
+            addPlayButtons();
+        } else {
+            ready();
         }
-        $element.each(function () {
-            var $context = $(this);
-            addConsole($context, ready)
-        });
-        addPlayButtons();
     }
 
     function addConsole($context, ready) {

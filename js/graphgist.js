@@ -99,7 +99,6 @@ function GraphGist($) {
                     renderTables();
                 }, function () {
                     postProcessRendering();
-                    initDisqus($content);
                 });
             });
         });
@@ -118,6 +117,7 @@ function GraphGist($) {
             $status.addClass('label-success');
         }
         DotWrapper($).scan();
+        initDisqus($content);
     }
 
     function preProcessContents(content) {
@@ -300,7 +300,11 @@ function GraphGist($) {
             statements.push(statement);
             $wrappers.push($wrapper);
         });
-        consolr.query(statements, success, error);
+        if (statements.length > 0) {
+            consolr.query(statements, success, error);
+        } else {
+            postProcessRendering();
+        }
 
         function success(data, resultNo) {
             receivedResults++;
