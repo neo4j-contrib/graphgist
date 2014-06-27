@@ -1,4 +1,7 @@
 function initDisqus($content) {
+    if ($('#disqus_thread').length > 0) {
+        return;
+    }
     $content.append('<div id="disqus_thread"></div>');
     var disqus_shortname = 'graphgist';
 
@@ -30,58 +33,58 @@ function share() {
 }
 
 function initSocial(heading) {
-(function () {
-    var po = document.createElement('script');
-    po.type = 'text/javascript';
-    po.async = true;
-    po.src = 'https://apis.google.com/js/platform.js';
-    var s = document.getElementsByTagName('script')[0];
-    s.parentNode.insertBefore(po, s);
-})();
+    (function () {
+        var po = document.createElement('script');
+        po.type = 'text/javascript';
+        po.async = true;
+        po.src = 'https://apis.google.com/js/platform.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(po, s);
+    })();
 
-!function (d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (!d.getElementById(id)) {
+    !function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (!d.getElementById(id)) {
+            js = d.createElement(s);
+            js.id = id;
+            js.src = "https://platform.twitter.com/widgets.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }
+    }(document, "script", "twitter-wjs");
+
+    (function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
         js = d.createElement(s);
         js.id = id;
-        js.src = "https://platform.twitter.com/widgets.js";
+        js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=442180952526716";
         fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+
+    var location = window.location.href;
+    var index = location.indexOf('#');
+    if (index !== -1) {
+        location = location.substr(0, index);
     }
-}(document, "script", "twitter-wjs");
+    var uniqueId = window.location.search;
+    if (typeof uniqueId === 'undefined' || (!uniqueId) || uniqueId === '?') {
+        uniqueId = 'graphgist-home';
+    }
+    PDRTJS_settings_7478426 = {
+        "id": "7478426",
+        "unique_id": uniqueId,
+        "title": heading,
+        "permalink": location
+    };
 
-(function (d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) return;
-    js = d.createElement(s);
-    js.id = id;
-    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=442180952526716";
-    fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));
-
-var location = window.location.href;
-var index = location.indexOf('#');
-if ( index !== -1) {
-    location = location.substr(0, index);
-}
-var uniqueId = window.location.search;
-if (typeof uniqueId === 'undefined' || (!uniqueId) || uniqueId === '?') {
-    uniqueId = 'graphgist-home';
-}
-PDRTJS_settings_7478426 = {
-    "id" : "7478426",
-    "unique_id" : uniqueId,
-    "title" : heading,
-    "permalink" : location
-};
-
-(function (d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) return;
-    js = d.createElement(s);
-    js.id = id;
-    js.src = "http://i0.poll.fm/js/rating/rating.js";
-    fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'polldaddy-rating'));
+    (function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "http://i0.poll.fm/js/rating/rating.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'polldaddy-rating'));
 
 }
 

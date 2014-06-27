@@ -86,6 +86,9 @@ function GraphGist($) {
             initSocial(initAndGetHeading());
             share();
         }
+        window.setTimeout(function () {
+            initDisqus($content);
+        }, 5 * 1000);
         var version = postProcessPage();
         var consoleUrl = CONSOLE_VERSIONS[version in CONSOLE_VERSIONS ? version : DEFAULT_VERSION];
         CypherConsole({'url': consoleUrl}, function (conslr) {
@@ -262,7 +265,7 @@ function GraphGist($) {
             'init': 'none',
             'query': query || 'none',
             'message': 'none',
-            'viz' : 'none',
+            'viz': 'none',
             'no_root': true
         }, success, error);
 
