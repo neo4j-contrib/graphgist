@@ -15,7 +15,10 @@
 
 function Gist($, $content) {
 
-    var DROPBOX_BASE_URL = 'https://dl.dropboxusercontent.com/u/';
+    var DROPBOX_PUBLIC_BASE_URL = 'https://dl.dropboxusercontent.com/u/';
+    var DROPBOX_PRIVATE_BASE_URL = 'https://www.dropbox.com/s/';
+    var DROPBOX_PRIVATE_API_BASE_URL = 'https://dl.dropboxusercontent.com/s/';
+
     var VALID_GIST = /^[0-9a-f]{5,32}\/?$/;
 
     return {'getGistAndRenderPage': getGistAndRenderPage, 'readSourceId': readSourceId};
@@ -37,8 +40,12 @@ function Gist($, $content) {
         }
         var fetcher = fetchGithubGist;
         if (id.length > 8 && id.substr(0, 8) === 'dropbox-') {
-            fetcher = fetchDropboxFile;
+            fetcher = fetchPublicDropboxFile;
             id = id.substr(8);
+        }
+        else if (id.length > 9 && id.substr(0, 9) === 'dropboxs-') {
+            fetcher = fetchPrivateDropboxFile;
+            id = id.substr(9);
         }
         else if (id.length > 7 && id.substr(0, 7) === 'github-') {
             fetcher = fetchGithubFile;
@@ -64,9 +71,13 @@ function Gist($, $content) {
             $target.blur();
             var gist = $.trim($target.val());
             if (gist.indexOf('/') !== -1) {
-                var baseLen = DROPBOX_BASE_URL.length;
-                if (gist.length > baseLen && gist.substr(0, baseLen) === DROPBOX_BASE_URL) {
-                    gist = 'dropbox-' + encodeURIComponent(gist.substr(baseLen));
+                var dropboxPublicBaseLen = DROPBOX_PUBLIC_BASE_URL.length;
+                var dropboxPrivateBaseLen = DROPBOX_PRIVATE_BASE_URL.length;
+                if (gist.length > dropboxPublicBaseLen && gist.substr(0, dropboxPublicBaseLen) === DROPBOX_PUBLIC_BASE_URL) {
+                    gist = 'dropbox-' + encodeURIComponent(gist.substr(dropboxPublicBaseLen));
+                }
+                else if (gist.length > dropboxPrivateBaseLen && gist.substr(0, dropboxPrivateBaseLen) === DROPBOX_PRIVATE_BASE_URL) {
+                    gist = 'dropboxs-' + encodeURIComponent(gist.substr(dropboxPrivateBaseLen));
                 }
                 else if (gist.length > 30 && (gist.substr(0, 19) === 'https://github.com/' || gist.substr(0, 23) === 'https://raw.github.com/')
                     ) {
@@ -155,8 +166,16 @@ function Gist($, $content) {
         });
     }
 
-    function fetchDropboxFile(id, success, error) {
-        var url = DROPBOX_BASE_URL + decodeURIComponent(id);
+    function fetchPublicDropboxFile(id, success, error) {
+        fetchDropboxFile(id, success, error, DROPBOX_PUBLIC_BASE_URL);
+    }
+
+    function fetchPrivateDropboxFile(id, success, error) {
+        fetchDropboxFile(id, success, error, DROPBOX_PRIVATE_API_BASE_URL);
+    }
+
+    function fetchDropboxFile(id, success, error, baseUrl) {
+        var url = baseUrl + decodeURIComponent(id);
         $.ajax({
             'url': url,
             'success': function (data) {
