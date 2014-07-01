@@ -20,6 +20,8 @@ CodeMirror.colorize = (function() {
       if (!mode) continue;
       if (mode === "cypher") {
         theme = " cm-s-neo";
+      } else if (mode === "java") {
+        mode = "text/x-java";
       } else if (mode === "sql") {
         mode = "text/x-sql";
       }

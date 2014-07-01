@@ -249,6 +249,10 @@ function GraphGist($) {
                 }
             } else if ($el.hasClass('sql')) {
                 $el.attr('data-lang', 'sql');
+            } else if ($el.hasClass('java')) {
+              $el.attr('data-lang', 'java');
+            } else if ($el.hasClass('xml')) {
+              $el.attr('data-lang', 'xml');
             }
         });
 
