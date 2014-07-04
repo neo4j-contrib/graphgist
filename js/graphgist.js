@@ -430,9 +430,10 @@ function GraphGist($) {
                 nodes.push(node);
             }
         }
+        var hasSelectedRels = data.links.filter(function(link) { return link.selected; }).length > 0
         for (i = 0; i < data.links.length; i++) {
             var link = data.links[i];
-            if (link.selected || data.nodes[link.source].selected && data.nodes[link.target].selected) {
+            if (link.selected || (!hasSelectedRels && data.nodes[link.source].selected && data.nodes[link.target].selected)) {
                 link.source = data.nodes[link.source]['$index'];
                 link.target = data.nodes[link.target]['$index'];
                 links.push(link);

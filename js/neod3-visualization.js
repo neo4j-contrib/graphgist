@@ -62,7 +62,7 @@ function Neod3Renderer() {
                 if (label(nodes[i]) != "" && keys.length > 0) {
                     keys = prio_props.filter(function (k) {
                         return keys.indexOf(k) != -1
-                    }).concat(keys);
+                    }).concat(keys).concat(['id']);
                     var selector = "node." + label(nodes[i]);
                     style[selector] = style[selector] || keys[0];
                 }
