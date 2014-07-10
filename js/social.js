@@ -1,4 +1,7 @@
 function initDisqus($content) {
+    if (window.location.hostname != 'gist.neo4j.org') {
+      return;
+    }
     if ($('#disqus_thread').length > 0) {
         return;
     }
