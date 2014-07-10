@@ -1532,7 +1532,7 @@ neo.utils.measureText = (function() {
       return selection.selectAll('path').attr('d', function(d) {
         return d.arrowOutline;
       }).attr('transform', function(d) {
-        return "translate(" + d.startPoint.x + " " + d.startPoint.y + ") rotate(" + d.angle + ")";
+        return isNaN(d.startPoint.x) || isNaN(d.startPoint.y) ? null : "translate(" + d.startPoint.x + " " + d.startPoint.y + ") rotate(" + d.angle + ")";
       });
     }
   });
@@ -1554,11 +1554,11 @@ neo.utils.measureText = (function() {
     },
     onTick: function(selection, viz) {
       return selection.selectAll('text').attr('x', function(rel) {
-        return rel.midShaftPoint.x;
+        return isNaN(rel.midShaftPoint.x) ? null : rel.midShaftPoint.x;
       }).attr('y', function(rel) {
-        return rel.midShaftPoint.y + parseFloat(viz.style.forRelationship(rel).get('font-size')) / 2 - 1;
+        return isNaN(rel.midShaftPoint.y) ? null : rel.midShaftPoint.y + parseFloat(viz.style.forRelationship(rel).get('font-size')) / 2 - 1;
       }).attr('transform', function(rel) {
-        return "rotate(" + rel.textAngle + " " + rel.midShaftPoint.x + " " + rel.midShaftPoint.y + ")";
+        return isNaN(rel.midShaftPoint.x) || isNaN(rel.midShaftPoint.y) ? null :  "rotate(" + rel.textAngle + " " + rel.midShaftPoint.x + " " + rel.midShaftPoint.y + ")";
       }).text(function(rel) {
         return rel.shortCaption;
       });
@@ -1589,7 +1589,7 @@ neo.utils.measureText = (function() {
           return 0;
         }
       }).attr('transform', function(d) {
-        return "translate(" + d.startPoint.x + " " + d.startPoint.y + ") rotate(" + d.angle + ")";
+        return isNaN(d.startPoint.x) || isNaN(d.startPoint.y) ? null : "translate(" + d.startPoint.x + " " + d.startPoint.y + ") rotate(" + d.angle + ")";
       });
     }
   });
