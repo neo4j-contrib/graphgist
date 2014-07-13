@@ -75,7 +75,8 @@ function CypherConsole(config, ready) {
                         }
                     }
                 } catch (err) {
-                    console.log(err)
+                    // for debugging only
+                    // console.log(err)
                 }
             }, 2000);
         });
