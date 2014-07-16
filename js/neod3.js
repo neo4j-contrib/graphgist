@@ -1396,7 +1396,7 @@ neo.utils.measureText = (function() {
   measureUsingCanvas = function(text, font) {
     var canvas, canvasSelection, context;
     canvasSelection = d3.select('canvas#textMeasurementCanvas').data([this]);
-    canvasSelection.enter().append('canvas').attr('id', 'textMeasuringCanvas').style('display', 'none');
+    canvasSelection.enter().append('canvas').attr('id', 'textMeasurementCanvas').style('display', 'none');
     canvas = canvasSelection.node();
     context = canvas.getContext('2d');
     context.font = font;
