@@ -21,7 +21,7 @@ function Neod3Renderer() {
         }\n";
 
     var skip = ["id", "start", "end", "source", "target", "labels", "type", "selected"];
-    var prio_props = ["name", "title", "tag"];
+    var prio_props = ["name", "title", "tag", "username", "lastname"];
 
     var serializer = null;
 
@@ -57,14 +57,19 @@ function Neod3Renderer() {
 
             var style = {};
             for (var i = 0; i < nodes.length; i++) {
-                nodes[i].properties = extract_props(nodes[i]);
-                var keys = Object.keys(nodes[i].properties);
+                var props= nodes[i].properties = extract_props(nodes[i]);
+                var keys = Object.keys(props);
                 if (label(nodes[i]) != "" && keys.length > 0) {
-                    keys = prio_props.filter(function (k) {
+                    var selected_keys = prio_props.filter(function (k) {
                         return keys.indexOf(k) != -1
-                    }).concat(keys).concat(['id']);
+                    });
+                    selected_keys = selected_keys.concat(keys).concat(['id']);
                     var selector = "node." + label(nodes[i]);
-                    style[selector] = style[selector] || keys[0];
+                    var selectedKey = selected_keys[0];
+                    if (typeof(props[selectedKey]) == "string" && props[selectedKey].length > 30) {
+                        props[selectedKey] = props[selectedKey].substring(0,30)+" ...";
+                    }
+                    style[selector] = style[selector] || selectedKey;
                 }
             }
             return style;
