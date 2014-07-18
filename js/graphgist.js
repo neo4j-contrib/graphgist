@@ -126,7 +126,7 @@ function GraphGist($) {
             /^\/\/\s*?console/m,
             '++++\n<p class="console"><span class="loading"><i class="icon-cogs"></i> Running queries, preparing the console!</span></p>\n++++\n');
         sanitized = sanitized.replace(/^\/\/\s*?hide/gm, '++++\n<span class="hide-query"></span>\n++++\n');
-        sanitized = sanitized.replace(/^\/\/\s*?setup/m, '++++\n<span id="setup-query"></span>\n++++\n');
+        sanitized = sanitized.replace(/^\/\/\s*?setup/gm, '++++\n<span class="setup"></span>\n++++\n');
         sanitized = sanitized.replace(/^\/\/\s*?graph_result.*/gm, '++++\n<h5 class="graph-visualization" graph-mode="result"><img alt="loading" class="loading" src="http://gist.neo4j.org/images/loading.gif"></h5>\n++++\n');
         sanitized = sanitized.replace(/^\/\/\s*?graph.*/gm, '++++\n<h5 class="graph-visualization"><img alt="loading" src="http://gist.neo4j.org/images/loading.gif" class="loading"></h5>\n++++\n');
         sanitized = sanitized.replace(/^\/\/\s*?output.*/gm, '++++\n<span class="query-output"></span>\n++++\n');
@@ -213,7 +213,7 @@ function GraphGist($) {
         findQuery('span.hide-query', $content, function (codeElement) {
             $(codeElement.parentNode).addClass('hide-query');
         });
-        findQuery('#setup-query', $content, function (codeElement) {
+        findQuery('span.setup', $content, function (codeElement) {
             $(codeElement.parentNode).addClass('setup-query');
         });
         findQuery('span.query-output', $content, function (codeElement) {
@@ -334,18 +334,23 @@ function GraphGist($) {
     }
 
     function getSetupQuery() {
-        var query = undefined;
-        $('#content pre.highlight.setup-query').first().children('div.query-wrapper').first().each(function () {
+        var queries = [];
+        $('#content pre.highlight.setup-query > div.query-wrapper').each(function () {
             var $wrapper = $(this);
-            query = $wrapper.data('query');
-            if (query) {
-                $wrapper.prevAll('h5').first().each(function () {
-                    var $heading = $(this);
-                    $heading.text($heading.text() + ' — this query has been used to initialize the console');
-                });
+            var query = $.trim($wrapper.data('query'));
+            if (query.length === 0) {
+              return true;
             }
+            if (query.slice(-1) === ';') {
+                query = query.slice(0, -1);
+            }
+            queries.push($.trim(query));
+            $wrapper.prevAll('h5').first().each(function () {
+                var $heading = $(this);
+                $heading.text($heading.text() + ' — this query has been used to initialize the console');
+            });
         });
-        return query;
+        return queries.length === 0 ? undefined : queries.join(';\n');
     }
 
     function renderGraphs() {
