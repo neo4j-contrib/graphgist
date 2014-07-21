@@ -209,8 +209,9 @@ function Gist($, $content) {
         var url="http://www.neo4j.org/api/graphgist?"+id;
         $.ajax({
             'url': url,
-            'success': function (data) {
-                success(data, url);
+            'success': function (data, status, res) {
+                var source = res.getResponseHeader('GraphGist-Source')
+                success(data, source || url);
             },
             'dataType': 'text',
             'error': function (xhr, status, errorMessage) {
