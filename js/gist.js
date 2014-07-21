@@ -38,6 +38,8 @@ function Gist($, $content) {
                 id = defaultSource;
             }
         }
+        var fetcher = neo4jGistFetcher;
+/*
         var fetcher = fetchGithubGist;
         if (id.length > 8 && id.substr(0, 8) === 'dropbox-') {
             fetcher = fetchPublicDropboxFile;
@@ -59,6 +61,7 @@ function Gist($, $content) {
                 fetcher = fetchLocalSnippet;
             }
         }
+*/
         fetcher(id, renderer, function (message) {
             errorMessage(message, id);
         });
@@ -190,6 +193,20 @@ function Gist($, $content) {
 
     function fetchAnyUrl(id, success, error) {
         var url = decodeURIComponent(id);
+        $.ajax({
+            'url': url,
+            'success': function (data) {
+                success(data, url);
+            },
+            'dataType': 'text',
+            'error': function (xhr, status, errorMessage) {
+                error(errorMessage);
+            }
+        });
+    }
+
+    function neo4jGistFetcher(id, success, error) {
+        var url="http://www.neo4j.org/api/graphgist?"+id;
         $.ajax({
             'url': url,
             'success': function (data) {
