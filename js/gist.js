@@ -45,15 +45,12 @@ function Gist($, $content) {
         var fetcher = fetchGithubGist;
         if (id.length > 8 && id.substr(0, 8) === 'dropbox-') {
             fetcher = fetchPublicDropboxFile;
-            id = id.substr(8);
         }
         else if (id.length > 9 && id.substr(0, 9) === 'dropboxs-') {
             fetcher = fetchPrivateDropboxFile;
-            id = id.substr(9);
         }
         else if (id.length > 7 && id.substr(0, 7) === 'github-') {
             fetcher = fetchGithubFile;
-            id = id.substr(7);
         }
         else if (!VALID_GIST.test(id)) {
             if (id.indexOf('%3A%2F%2F') !== -1) {
@@ -78,6 +75,7 @@ function Gist($, $content) {
         }
 
         function error(message) {
+			console.log("Error fetching",id,message);
             returnCount++;
             if (!successful && returnCount === fetchers.length) {
                 errorMessage(message, id);
@@ -161,6 +159,7 @@ function Gist($, $content) {
     }
 
     function fetchGithubFile(gist, success, error) {
+        gist = gist.substr(7);
         var decoded = decodeURIComponent(gist);
         var parts = decoded.split('/');
         var branch = 'master';
@@ -192,10 +191,12 @@ function Gist($, $content) {
     }
 
     function fetchPublicDropboxFile(id, success, error) {
+        id = id.substr(8);
         fetchDropboxFile(id, success, error, DROPBOX_PUBLIC_BASE_URL);
     }
 
     function fetchPrivateDropboxFile(id, success, error) {
+        id = id.substr(9);
         fetchDropboxFile(id, success, error, DROPBOX_PRIVATE_API_BASE_URL);
     }
 
