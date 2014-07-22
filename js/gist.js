@@ -40,7 +40,7 @@ function Gist($, $content) {
         }
 
         var fetchers = [];
-        //fetchers.push(neo4jGistFetcher);
+        fetchers.push(neo4jGistFetcher);
 
         var fetcher = fetchGithubGist;
         if (id.length > 8 && id.substr(0, 8) === 'dropbox-') {
