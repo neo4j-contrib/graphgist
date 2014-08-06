@@ -17,13 +17,20 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script type="text/javascript" src="js/jquery-ui-1.10.3.custom.min.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/d3/3.4.9/d3.min.js"></script>
+    <script type="text/javascript">
+        if (window.navigator.userAgent.indexOf('MSIE ') > 0 || window.navigator.userAgent.indexOf('Trident') > 0) {
+            window.isInternetExplorer = true;
+            $(document).ready(function () {
+                $('#content').addClass('internet-explorer');
+            });
+        }
+    </script>
 
     <!--MathJAX-->
     <script type="text/x-mathjax-config;executed=true">
         MathJax.Hub.Config({
         tex2jax: { inlineMath: [['$','$'],['\\(','\\)']] }
         });
-
     </script>
     <script type="text/javascript"
             src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
@@ -45,7 +52,6 @@
     <script src="js/cypher.datatable.js"></script>
 
     <!-- neod3 -->
-    <link href="css/neod3.css" rel="stylesheet">
     <script src="js/neod3.js"></script>
     <script src="js/neod3-visualization.js"></script>
     <!--script src="js/visualization.js"></script-->
@@ -60,12 +66,11 @@
     <!--versal widget-->
     <!--script src="js/versal_color_manager.js"></script-->
     <!--script src="js/versal_visualization.js"></script-->
-  
 
 
     <!-- Syntax Highlighter -->
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.3.0/codemirror.min.css">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.3.0/theme/neo.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.3.0/theme/neo.css"/>
     <script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.3.0/codemirror.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.3.0/addon/runmode/runmode.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.3.0/mode/javascript/javascript.js"></script>
@@ -154,7 +159,7 @@
         <div>
             <a href="https://github.com/neo4j-contrib/graphgist/wiki" title="Neo4j GraphGist Collection"
                target="_blank"><span
-                    class="badge badge-info"><i class="icon-beaker"></i> Examples!</span></a>
+                class="badge badge-info"><i class="icon-beaker"></i> Examples!</span></a>
         </div>
         <div id="social-container">
             <div class="g-plusone" data-size="small"><i class="fa fa-google-plus"></i></div>
@@ -171,11 +176,5 @@
 <div id="fb-root"></div>
 <script type="text/javascript" src="js/social.js"></script>
 <script type="text/javascript" src="js/ga.js"></script>
-<script type="text/javascript">
-    /*@cc_on @*/
-    /*@
-     $( '#content' ).addClass( 'internet-explorer' );
-     @*/
-</script>
 </body>
 </html>

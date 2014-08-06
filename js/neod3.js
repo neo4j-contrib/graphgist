@@ -1470,10 +1470,9 @@ neo.utils.measureText = (function() {
       });
       text.enter().append('text').attr({
         'text-anchor': 'middle',
-//        'font-weight': 'bold',
+        'font-weight': 'bold',
         'stroke': '#FFFFFF',
-        'stroke-width' : '0.2',
-        'font-weight': '400'
+        'stroke-width' : '0'
       });
       text.text(function(line) {
         return line.text;

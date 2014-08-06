@@ -44,12 +44,15 @@ function GraphGist($) {
         '2.0.1': 'http://neo4j-console-20.herokuapp.com/',
         '2.0.2': 'http://neo4j-console-20.herokuapp.com/',
         '2.0.3': 'http://neo4j-console-20.herokuapp.com/',
+        '2.0.4': 'http://neo4j-console-20.herokuapp.com/',
         '2.1.0': 'http://neo4j-console-21.herokuapp.com/',
         '2.1.1': 'http://neo4j-console-21.herokuapp.com/',
+        '2.1.2': 'http://neo4j-console-21.herokuapp.com/',
+        '2.1.3': 'http://neo4j-console-21.herokuapp.com/',
         '2.1': 'http://neo4j-console-21.herokuapp.com/',
         'local': 'http://localhost:8080/',
         '1.9': 'http://neo4j-console-19.herokuapp.com/'
-    }
+    };
 
     var neod3Renderer = new Neod3Renderer();
 

@@ -9,7 +9,7 @@ function Neod3Renderer() {
           text-color-internal: #000000;\
           text-color-external: #000000;\
           caption: '{name}';\
-          font-size: 10px;\
+          font-size: 12px;\
         }\
         relationship {\
           color: #4356C0;\
@@ -30,8 +30,18 @@ function Neod3Renderer() {
     });
     var downloadSvgLink = $downloadSvgLink[0];
     var blobSupport = 'Blob' in window;
-    var URLSupport = 'URL' in window && 'createObjectURL' in window.URL
+    var URLSupport = 'URL' in window && 'createObjectURL' in window.URL;
     var msBlobSupport = typeof window.navigator.msSaveOrOpenBlob !== 'undefined';
+    var svgStyling = '<style>\ntext{font-family:sans-serif}\n</style>';
+    var stylingUrl = window.location.hostname === 'www.neo4j.org' ? 'http://gist.neo4j.org/css/neod3' : 'css/neod3';
+    if (window.isInternetExplorer) {
+        stylingUrl += '-ie.css';
+    } else {
+        stylingUrl += '.css';
+    }
+
+    var existingStyles = {};
+    var currentColor = 1;
 
     function dummyFunc() {
     }
@@ -59,14 +69,14 @@ function Neod3Renderer() {
             for (var i = 0; i < nodes.length; i++) {
                 var props= nodes[i].properties = extract_props(nodes[i]);
                 var keys = Object.keys(props);
-                if (label(nodes[i]) != "" && keys.length > 0) {
+                if (label(nodes[i]) !== "" && keys.length > 0) {
                     var selected_keys = prio_props.filter(function (k) {
-                        return keys.indexOf(k) != -1
+                        return keys.indexOf(k) !== -1
                     });
                     selected_keys = selected_keys.concat(keys).concat(['id']);
                     var selector = "node." + label(nodes[i]);
                     var selectedKey = selected_keys[0];
-                    if (typeof(props[selectedKey]) == "string" && props[selectedKey].length > 30) {
+                    if (typeof(props[selectedKey]) === "string" && props[selectedKey].length > 30) {
                         props[selectedKey] = props[selectedKey].substring(0,30)+" ...";
                     }
                     style[selector] = style[selector] || selectedKey;
@@ -75,20 +85,29 @@ function Neod3Renderer() {
             return style;
         }
 
-        function style_sheet(style, styleContents) {
-            var styleSheet = "";
-            var c = 1;
+        function style_sheet(styles, styleContents) {
+            var styleItems = [];
             var colors = neo.style.defaults.colors;
-            for (var k in style) {
-                var color = colors[c];
-                c = (c + 1) % colors.length
-                styleSheet += "\n" +k + " {caption: '{" + style[k] + "}'; color: " + color.color +
-                    "; border-color: " + color['border-color'] +
-                    "; text-color-internal: #000000" + // + color['text-color-internal'] +
-                    "; text-color-external: #000000" + // + color['text-color-internal'] +
-                    "; }\n";
+            for (var selector in styles) {
+                var styleItem;
+                if (selector in existingStyles) {
+                    styleItem = existingStyles[selector];
+                } else {
+                    var color = colors[currentColor];
+                    currentColor = (currentColor + 1) % colors.length;
+                    var textColor = window.isInternetExplorer ? '#000000' : color['text-color-internal'];
+                    styleItem = selector +
+                        " {caption: '{" + styles[selector] +
+                        "}'; color: " + color.color +
+                        "; border-color: " + color['border-color'] +
+                        "; text-color-internal: " +  textColor +
+                        "; text-color-external: " +  textColor +
+                        "; }";
+                    existingStyles[selector] = styleItem;
+                }
+                styleItems.push(styleItem);
             }
-            return styleContents + styleSheet;
+            return styleContents + styleItems.join("\n");
         }
 
         function applyZoom() {
@@ -132,8 +151,8 @@ function Neod3Renderer() {
             links[i].target = links[i].end;
             links[i].properties = props(links[i]);
         }
-        var nodeStyle = node_styles(nodes);
-        var styleSheet = style_sheet(nodeStyle, styleContents)
+        var nodeStyles = node_styles(nodes);
+        var styleSheet = style_sheet(nodeStyles, styleContents);
 
         var graphModel = neo.graphModel()
             .nodes(nodes)
@@ -216,9 +235,15 @@ function Neod3Renderer() {
             }
         }
         var svg = serializer(element);
-        svg = svg.replace('<svg ', '<svg height="' + $container.height() + '" width="' + $container.width() + '" style="font-family: sans-serif;" ');
+        svg = svg.replace('<svg ', '<svg height="' + $container.height() + '" width="' + $container.width() + '" ')
+            .replace(/<g/, '\n' + svgStyling + '\n<g');
         return svg;
     }
+
+    $.get(stylingUrl, function (data) {
+        svgStyling = '<style>\n' + data + '\n</style>';
+        $(svgStyling).appendTo('head');
+    });
 
     return {'render': render};
 }
