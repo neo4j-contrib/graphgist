@@ -40,7 +40,9 @@ function Gist($, $content) {
         }
 
         var fetchers = [];
-        fetchers.push(neo4jGistFetcher);
+        if (window.location.hostname.indexOf('www.neo4j.org') !== -1) {
+            fetchers.push(neo4jGistFetcher);
+        }
 
         var fetcher = fetchGithubGist;
         if (id.length > 8 && id.substr(0, 8) === 'dropbox-') {
@@ -75,14 +77,14 @@ function Gist($, $content) {
         }
 
         function error(message) {
-			console.log("Error fetching",id,message);
+            console.log("Error fetching", id, message);
             returnCount++;
             if (!successful && returnCount === fetchers.length) {
                 errorMessage(message, id);
             }
         }
 
-        $.each(fetchers, function() {
+        $.each(fetchers, function () {
             this(id, success, error);
         });
     }
