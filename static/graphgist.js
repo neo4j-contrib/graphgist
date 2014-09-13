@@ -16,6 +16,7 @@
 GraphGist(jQuery);
 
 function GraphGist($) {
+    debugger
     if ('support' in $) {
         $.support.cors = true;
     }
@@ -95,6 +96,7 @@ function GraphGist($) {
         var version = postProcessPage();
         var consoleUrl = CONSOLE_VERSIONS[version in CONSOLE_VERSIONS ? version : DEFAULT_VERSION];
         CypherConsole({'url': consoleUrl}, function (conslr) {
+            debugger
             consolr = conslr;
             executeQueries(function () {
                 initConsole(function () {
@@ -267,6 +269,7 @@ function GraphGist($) {
     }
 
     function initConsole(callback, always) {
+        debugger
         var query = getSetupQuery();
         consolr.init({
             'init': 'none',
@@ -296,6 +299,7 @@ function GraphGist($) {
     }
 
     function executeQueries(callbackAfter) {
+        debugger
         var statements = [];
         var $wrappers = [];
         var receivedResults = 0;
@@ -338,7 +342,8 @@ function GraphGist($) {
 
     function getSetupQuery() {
         var queries = [];
-        $('#content pre.highlight.setup-query > div.query-wrapper').each(function () {
+        debugger
+        $('#content pre.highlight.setup-query > div').each(function () {
             var $wrapper = $(this);
             var query = $.trim($wrapper.data('query'));
             if (query.length === 0) {

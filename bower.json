@@ -1,0 +1,39 @@
+{
+  "name": "Graph Gist",
+  "version": "0.0.0",
+  "homepage": "https://github.com/hustonhedinger/graphgist",
+  "authors": [
+    "Michael Hunger <michael.hunger@neotechnology.com>"
+  ],
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "neo4j",
+    "graphs",
+    "visualization",
+    "graph"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "static/vendor",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "alchemyjs": "~0.2.1",
+    "opal": "~0.6.2",
+    "base64": "~0.3.0",
+    "jquery": "~1.10.2",
+    "datatables": "1.9.4",
+    "jquery.ui": "1.10.3",
+    "underscore": "1.5.2",
+    "MathJax": "~2.4.0"
+  },
+  "resolutions": {
+    "jquery": "~2.1.0"
+  }
+}
