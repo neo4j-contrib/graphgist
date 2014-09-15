@@ -30,7 +30,8 @@
     "datatables": "1.9.4",
     "jquery.ui": "1.10.3",
     "underscore": "1.5.2",
-    "MathJax": "~2.4.0"
+    "MathJax": "~2.4.0",
+    "jquery-mutate": "*"
   },
   "resolutions": {
     "jquery": "~2.1.0"

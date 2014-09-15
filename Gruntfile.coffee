@@ -12,18 +12,16 @@ module.exports = (grunt) ->
     grunt.initConfig
 
         config: config
-
-        # watch files for changes and then auto reload files
-
+        uglify:
+            options:
+                mangle: false
         useminPrepare:
             html:
                 src: "<%= config.app %>/index.html"
                 options:
                     dest: "<%= config.site %>"
-
         usemin:
             html: ["<%= config.site %>/{,*/,*/*/}*.html"]
-
         copy:
             dist:
                 files: [
@@ -43,7 +41,6 @@ module.exports = (grunt) ->
                         "!vendor"
                         ] 
                 ]
-
         imagemin:
           dist:
             files: [
@@ -52,7 +49,6 @@ module.exports = (grunt) ->
               src: "{,*/}*.{gif,jpeg,jpg,png}"
               dest: "<%= config.site %>/images"
             ]
-
         svgmin:
           dist:
             files: [
@@ -61,7 +57,6 @@ module.exports = (grunt) ->
               src: "{,*/}*.svg"
               dest: "<%= config.site %>/images"
             ]
-
         htmlmin:
           dist:
             options:
@@ -73,16 +68,12 @@ module.exports = (grunt) ->
               removeOptionalTags: true
               removeRedundantAttributes: true
               useShortDoctype: true
-
             files: [
               expand: true
               cwd: "<%= config.site %>"
               src: "*.html"
               dest: "<%= config.site %>"
             ]
-
-
-        # empties folders to start fresh
         clean:
             site:
                 files: [
@@ -90,7 +81,6 @@ module.exports = (grunt) ->
                   src: [".tmp", "<%= config.site %>/*", "!<%= config.site %>/.git*"]
                 ]
             server: ".tmp"
-
         concurrent:
             dist: [
                 "imagemin"
