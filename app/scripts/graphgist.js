@@ -338,7 +338,7 @@ function GraphGist($) {
 
     function getSetupQuery() {
         var queries = [];
-        $('#content pre.highlight.setup-query > div').each(function () {
+        $('#content pre.highlight.setup-query > div.query-wrapper').each(function () {
             var $wrapper = $(this);
             var query = $.trim($wrapper.data('query'));
             if (query.length === 0) {
@@ -370,18 +370,9 @@ function GraphGist($) {
 
             function performVisualizationRendering() {
                 if (visualization) {
-                    var graphJSON = {
-                        nodes: visualization['nodes'],
-                        edges: visualization['links']
-                    };
-                    var conf = {
-                        divSelector: id.toString(),
-                        dataSource: graphJSON
-                    };
-                    alchemy.begin(conf);
-                    // var rendererHooks = neod3Renderer.render(id, $visContainer, selectedVisualization);
-                    // var subscriptions = 'subscriptions' in rendererHooks ? rendererHooks['subscriptions'] : {};
-                    // var actions = 'actions' in rendererHooks ? rendererHooks['actions'] : {};
+                    var rendererHooks = neod3Renderer.render(id, $visContainer, selectedVisualization);
+                    var subscriptions = 'subscriptions' in rendererHooks ? rendererHooks['subscriptions'] : {};
+                    var actions = 'actions' in rendererHooks ? rendererHooks['actions'] : {};
                     var $visualizationIcons = $VISUALIZATION_ICONS.clone().appendTo($visContainer);
                     $visualizationIcons.children('i.fullscreen-icon').click(fullscreenClick);
                     for (var iconName in actions) {
