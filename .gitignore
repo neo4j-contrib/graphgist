@@ -2,4 +2,7 @@
 .settings
 .idea/
 *.iml
-static/vendor
+.tmp
+node_modules
+app/vendor
+site/

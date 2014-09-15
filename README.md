@@ -9,12 +9,23 @@ Building
 -----------
 
     git clone git@github.com:neo4j-contrib/graphgist.git
+    
     cd graphgist
-    # install bower command line tools
-    npm install -g bower
-    # create static/vendor folder
+    
+    # install yeoman command line tools 
+    npm install -g yo
+    
+    # install local node modules
+    npm install
+    
+    # install local vendor files with bower
     bower install
-    # run a development server
+    
+    # build app into "site" folder
+    grunt build
+    
+    # run a server from the "app" or "site" folder
     python -m SimpleHTTPServer
     
-This is a static site, not further deployment needed. It is hosted via gh-pages.
+
+#TODO add grunt gh-pages task

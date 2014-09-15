@@ -7,11 +7,11 @@
     <title>Neo4j GraphGist</title>
     <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
     <link href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
-    <link href="css/datatable.css" rel="stylesheet">
-    <link href="css/d3.css" rel="stylesheet">
+    <link href="styles/datatable.css" rel="stylesheet">
+    <link href="styles/d3.css" rel="stylesheet">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.3.0/codemirror.min.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.3.0/theme/neo.css"/>
-    <link href="css/style.css" rel="stylesheet">
+    <link href="styles/style.css" rel="stylesheet">
     <link rel="icon" href="favicon.ico"/>
     <link rel="shortcut icon" href="favicon.ico"/>
 </head>
@@ -105,20 +105,6 @@
 <div id="fb-root"></div>
     
 
-    <!-- Vendor -->
-    <!-- To do build minified version -->
-    <script src="static/vendor/opal/opal/0.5.5/opal.min.js"></script>
-    <!-- // <script src="static/opal.js"></script> -->
-    <!-- Wrong ASCII DOCTOR???? -->
-    <!-- // <script src="static/vendor/asciidoctor.js/dist/asciidoctor-all.min.js"></script> -->
-    <script src="static/asciidoctor.js"></script>
-    <script src="static/vendor/jquery/dist/jquery.min.js"></script>
-    <script src="static/vendor/jquery.ui/ui/jquery.ui.core.js"></script>
-    <script src="static/vendor/jquery.ui/ui/jquery.ui.widget.js"></script>
-    <script src="static/vendor/jquery.ui/ui/jquery.ui.mouse.js"></script>
-    <script src="static/vendor/jquery.ui/ui/jquery.ui.resizable.js"></script>
-    <script src="static/vendor/d3/d3.min.js"></script>
-
     <script type="text/javascript">
         if (window.navigator.userAgent.indexOf('MSIE ') > 0 || window.navigator.userAgent.indexOf('Trident') > 0) {
             window.isInternetExplorer = true;
@@ -128,21 +114,28 @@
         }
     </script>
 
-    <script src="static/vendor/MathJax/MathJax.js"></script>
-    <script src="static/vendor/MathJax/config/TeX-AMS-MML_HTMLorMML.js"></script>
+    <!-- build:js scripts/vendor.js -->
+    <script src="vendor/opal/opal/0.5.5/opal.min.js"></script>
+    <script src="scripts/asciidoctor.js"></script>
+    <script src="vendor/jquery/dist/jquery.min.js"></script>
+    <script src="vendor/jquery.ui/ui/jquery.ui.core.js"></script>
+    <script src="vendor/jquery.ui/ui/jquery.ui.widget.js"></script>
+    <script src="vendor/jquery.ui/ui/jquery.ui.mouse.js"></script>
+    <script src="vendor/jquery.ui/ui/jquery.ui.resizable.js"></script>
+    <script src="vendor/d3/d3.min.js"></script>
+    <script src="vendor/MathJax/MathJax.js"></script>
+    <script src="vendor/MathJax/config/TeX-AMS-MML_HTMLorMML.js"></script>
+    <script src="vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="vendor/lodash/dist/lodash.min.js"></script>
+    <script src="vendor/datatables/media/js/jquery.dataTables.js"></script>
+    <script src="vendor/alchemyjs/dist/alchemy.min.js"></script>
+    <script src="scripts/base64.js"></script>
+    <!-- endbuild -->
     <script>
         MathJax.Hub.Config({
         tex2jax: { inlineMath: [['$','$'],['\\(','\\)']] }
         });
     </script>
-
-    <script src="static/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="static/vendor/underscore/underscore-min.js"></script>
-    <script src="http://platform.twitter.com/widgets.js"></script>
-    <script src="static/vendor/datatables/media/js/jquery.dataTables.js"></script>
-    <!-- if this doesn't work uncomment base64 -->
-    <!-- // <script src="static/vendor/base64/base64.min.js"></script> -->
-    <script src="static/base64.js"></script>
     <!-- TODO -->
     <script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.3.0/codemirror.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.3.0/addon/runmode/runmode.js"></script>
@@ -151,27 +144,23 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.3.0/mode/cypher/cypher.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.2.0/mode/xml/xml.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.2.0/mode/clike/clike.js"></script>
-
     <!-- end vendor -->
 
+    <!-- build:js scripts/main.js -->
+    <script src="scripts/cypher.datatable.js"></script>
+    <script src="scripts/neod3.js"></script>
+    <script src="scripts/neod3-visualization.js"></script>
+    <script src="scripts/visualization.js"></script>
+    <script src="scripts/console.js"></script>
+    <script src="scripts/gist.js"></script>
+    <script src="scripts/dot.js"></script>
+    <script src="scripts/graphgist.js"></script>
+    <script src="scripts/mutate.min.js"></script>
+    <script src="scripts/colorize.js"></script>
+    <!-- endbuild -->
 
-
-    <!-- Main -->
-    <script src="static/cypher.datatable.js"></script>
-
-    <script src="static/neod3.js"></script>
-    <script src="static/neod3-visualization.js"></script>
-    <script src="static/visualization.js"></script>
-
-    <script src="static/console.js"></script>
-    <script src="static/gist.js"></script>
-    <script src="static/dot.js"></script>
-    <script src="static/graphgist.js"></script>
-    <script src="static/mutate.min.js"></script>
-    <script src="static/colorize.js"></script>
-
-    <script type="text/javascript" src="static/social.js"></script>
-    <script type="text/javascript" src="static/ga.js"></script>
+    <script type="text/javascript" src="scripts/social.js"></script>
+    <script type="text/javascript" src="scripts/ga.js"></script>
 
     <script type="text/javascript">
     if (!window.console || !('log' in window.console)) {
@@ -179,6 +168,7 @@
         }};
     }
     </script>
+    <script src="http://platform.twitter.com/widgets.js"></script>
     
 </body>
 </html>

@@ -16,7 +16,6 @@
 GraphGist(jQuery);
 
 function GraphGist($) {
-    debugger
     if ('support' in $) {
         $.support.cors = true;
     }
@@ -96,7 +95,6 @@ function GraphGist($) {
         var version = postProcessPage();
         var consoleUrl = CONSOLE_VERSIONS[version in CONSOLE_VERSIONS ? version : DEFAULT_VERSION];
         CypherConsole({'url': consoleUrl}, function (conslr) {
-            debugger
             consolr = conslr;
             executeQueries(function () {
                 initConsole(function () {
@@ -269,7 +267,6 @@ function GraphGist($) {
     }
 
     function initConsole(callback, always) {
-        debugger
         var query = getSetupQuery();
         consolr.init({
             'init': 'none',
@@ -299,7 +296,6 @@ function GraphGist($) {
     }
 
     function executeQueries(callbackAfter) {
-        debugger
         var statements = [];
         var $wrappers = [];
         var receivedResults = 0;
@@ -342,7 +338,6 @@ function GraphGist($) {
 
     function getSetupQuery() {
         var queries = [];
-        debugger
         $('#content pre.highlight.setup-query > div').each(function () {
             var $wrapper = $(this);
             var query = $.trim($wrapper.data('query'));
@@ -375,9 +370,18 @@ function GraphGist($) {
 
             function performVisualizationRendering() {
                 if (visualization) {
-                    var rendererHooks = neod3Renderer.render(id, $visContainer, selectedVisualization);
-                    var subscriptions = 'subscriptions' in rendererHooks ? rendererHooks['subscriptions'] : {};
-                    var actions = 'actions' in rendererHooks ? rendererHooks['actions'] : {};
+                    var graphJSON = {
+                        nodes: visualization['nodes'],
+                        edges: visualization['links']
+                    };
+                    var conf = {
+                        divSelector: id.toString(),
+                        dataSource: graphJSON
+                    };
+                    alchemy.begin(conf);
+                    // var rendererHooks = neod3Renderer.render(id, $visContainer, selectedVisualization);
+                    // var subscriptions = 'subscriptions' in rendererHooks ? rendererHooks['subscriptions'] : {};
+                    // var actions = 'actions' in rendererHooks ? rendererHooks['actions'] : {};
                     var $visualizationIcons = $VISUALIZATION_ICONS.clone().appendTo($visContainer);
                     $visualizationIcons.children('i.fullscreen-icon').click(fullscreenClick);
                     for (var iconName in actions) {
