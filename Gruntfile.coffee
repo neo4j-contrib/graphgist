@@ -15,7 +15,7 @@ module.exports = (grunt) ->
         "gh-pages":
           options:
             base: "site"
-            branch: "foobar" # defaults to "gh-pages", uncomment to test deployment on branch "foobar"
+            # branch: "foobar" # defaults to "gh-pages", uncomment to test deployment on branch "foobar"
           src: ["**"]
         uglify:
             options:

@@ -21,11 +21,9 @@ Building
     # install local vendor files with bower
     bower install
     
-    # build app into "site" folder
-    grunt build
-    
-    # run a server from the "app" or "site" folder
+    # to develop
+    cd app
     python -m SimpleHTTPServer
-    
 
-#TODO add grunt gh-pages task
+    # to build "site" and deploy to gh-pages
+    grunt release
