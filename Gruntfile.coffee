@@ -12,6 +12,11 @@ module.exports = (grunt) ->
     grunt.initConfig
 
         config: config
+        "gh-pages":
+          options:
+            base: "site"
+            branch: "foobar" # defaults to "gh-pages", uncomment to test deployment on branch "foobar"
+          src: ["**"]
         uglify:
             options:
                 mangle: false
@@ -98,4 +103,9 @@ module.exports = (grunt) ->
         "copy:dist"
         "usemin"
         "htmlmin"
+    ]
+
+    grunt.registerTask "release", [
+      "build"
+      "gh-pages"
     ]
