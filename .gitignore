@@ -4,6 +4,7 @@
 *.iml
 .tmp
 .grunt
+.DS_Store
 node_modules
 app/vendor
 site/

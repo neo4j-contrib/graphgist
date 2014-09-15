@@ -5,13 +5,21 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>Neo4j GraphGist</title>
+    <!-- vendor.css -->
+    <!-- <link href="vendor/jquery.ui/themes/base/jquery.ui.resizable.css" rel="stylesheet">     -->
     <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
     <link href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
     <link href="styles/datatable.css" rel="stylesheet">
     <link href="styles/d3.css" rel="stylesheet">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.3.0/codemirror.min.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.3.0/theme/neo.css"/>
+    <link href="vendor/alchemyjs/dist/alchemy.min.css" rel="stylesheet"/>
+    <!-- endvendor -->
+
+    <!-- main.css -->
     <link href="styles/style.css" rel="stylesheet">
+    <!-- endmain -->
+    
     <link rel="icon" href="favicon.ico"/>
     <link rel="shortcut icon" href="favicon.ico"/>
 </head>
@@ -118,10 +126,10 @@
     <script src="vendor/opal/opal/0.5.5/opal.min.js"></script>
     <script src="scripts/asciidoctor.js"></script>
     <script src="vendor/jquery/dist/jquery.min.js"></script>
-    <script src="vendor/jquery.ui/ui/jquery.ui.core.js"></script>
-    <script src="vendor/jquery.ui/ui/jquery.ui.widget.js"></script>
-    <script src="vendor/jquery.ui/ui/jquery.ui.mouse.js"></script>
-    <script src="vendor/jquery.ui/ui/jquery.ui.resizable.js"></script>
+    <script src="vendor/jquery-ui/ui/core.js"></script>
+    <script src="vendor/jquery-ui/ui/widget.js"></script>
+    <script src="vendor/jquery-ui/ui/mouse.js"></script>
+    <script src="vendor/jquery-ui/ui/resizable.js"></script>
     <script src="vendor/jquery-mutate/js/events.js"></script>
     <script src="vendor/jquery-mutate/js/mutate.js"></script>
     <script src="vendor/d3/d3.min.js"></script>
@@ -130,7 +138,9 @@
     <script src="vendor/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="vendor/lodash/dist/lodash.min.js"></script>
     <script src="vendor/datatables/media/js/jquery.dataTables.js"></script>
-    <script src="vendor/alchemyjs/dist/alchemy.min.js"></script>
+    <!-- Quickly test new version of alchemy -->
+    <!-- <script src="vendor/alchemyjs/dist/alchemy.min.js"></script> -->
+    <script src="http://cdn.graphalchemist.com/alchemy.min.js"></script>
     <script src="scripts/base64.js"></script>
     <!-- endbuild -->
     <script>
@@ -150,13 +160,14 @@
 
     <!-- build:js scripts/main.js -->
     <script src="scripts/cypher.datatable.js"></script>
-    <script src="scripts/neod3.js"></script>
-    <script src="scripts/neod3-visualization.js"></script>
-    <script src="scripts/visualization.js"></script>
+    <!-- // <script src="scripts/neod3.js"></script> -->
+    <!-- // <script src="scripts/neod3-visualization.js"></script> -->
+    <!-- // <script src="scripts/visualization.js"></script> -->
     <script src="scripts/console.js"></script>
     <script src="scripts/gist.js"></script>
     <script src="scripts/dot.js"></script>
-    <script src="scripts/graphgist.js"></script>
+    // <script src="scripts/alchemygraphgist.js"></script>
+    <!-- // <script src="scripts/graphgist.js"></script> -->
     <!-- // <script src="scripts/mutate.min.js"></script> -->
     <script src="scripts/colorize.js"></script>
     <!-- endbuild -->

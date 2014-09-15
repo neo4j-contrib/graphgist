@@ -89,7 +89,9 @@ function CypherConsole(config, ready) {
         var $verticalResizeButton = $RESIZE_VERTICAL_BUTTON.clone().appendTo($iframeWrapper).mousedown(function (event) {
             event.preventDefault();
         });
+        // TODO
         $iframeWrapper.resizable({'handles': {'s': $verticalResizeButton}, 'alsoResize': $context, 'minHeight': 80, 'start': function () {
+
                 $resizeOverlay.appendTo($iframeWrapper);
             }, 'stop': function (event, ui) {
                 $resizeOverlay.detach();

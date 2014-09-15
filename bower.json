@@ -26,12 +26,12 @@
     "alchemyjs": "~0.2.1",
     "opal": "~0.6.2",
     "base64": "~0.3.0",
-    "jquery": "~1.10.2",
     "datatables": "1.9.4",
-    "jquery.ui": "1.10.3",
     "underscore": "1.5.2",
     "MathJax": "~2.4.0",
-    "jquery-mutate": "*"
+    "jquery-mutate": "*",
+    "jquery": "~2.1.1",
+    "jquery-ui": "~1.11.1"
   },
   "resolutions": {
     "jquery": "~2.1.0"
