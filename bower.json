@@ -31,9 +31,14 @@
     "jquery.ui": "1.10.3",
     "underscore": "1.5.2",
     "MathJax": "~2.4.0",
-    "jquery-mutate": "*"
+    "jquery-mutate": "*",
+    "font-awesome": "3.2.1",
+    "bootstrap": "2.3.2",
+    "bootstrap-css-only": "2.3.2",
+    "codemirror": "4.5"
   },
   "resolutions": {
-    "jquery": "~2.1.0"
+    "jquery": ">= 1.9.0",
+    "bootstrap": "2.3.2"
   }
 }

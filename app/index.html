@@ -5,18 +5,88 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>Neo4j GraphGist</title>
-    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
-    <link href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
-    <link href="styles/datatable.css" rel="stylesheet">
-    <link href="styles/d3.css" rel="stylesheet">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.3.0/codemirror.min.css">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.3.0/theme/neo.css"/>
-    <link href="styles/style.css" rel="stylesheet">
+<!--     
+    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet"/>
+ -->
+    <!-- build:css styles/vendor.css -->
+    <link href="vendor/bootstrap/docs/assets/css/bootstrap.css" rel="stylesheet"/>
+    <link href="vendor/font-awesome/css/font-awesome.css" rel="stylesheet"/>
+    <!-- is this vendor? -->
+    <link href="styles/datatable.css" rel="stylesheet"/>
+    <!-- if so then: -->
+    <!-- <link href=vendor/datatables/media/css/jquery.dataTables.css" rel="stylesheet"> -->
+    <link rel="stylesheet" href="vendor/codemirror/lib/codemirror.css"/>
+    <link rel="stylesheet" href="vendor/codemirror/theme/neo.css"/>
+    <!-- endbuild -->
+
+    <!-- build:css styles/main.css -->
+    <link href="styles/d3.css" rel="stylesheet"/>
+    <link href="styles/style.css" rel="stylesheet"/>
+    <!-- endbuild -->
+
+    <!-- used by scripts/neod3-visualization -->
+    <link href="styles/neod3.css" rel="stylesheet"/>
+
     <link rel="icon" href="favicon.ico"/>
     <link rel="shortcut icon" href="favicon.ico"/>
 </head>
 
 <body>
+
+<script type="text/javascript">
+    if (window.navigator.userAgent.indexOf('MSIE ') > 0 || window.navigator.userAgent.indexOf('Trident') > 0) {
+        window.isInternetExplorer = true;
+        $(document).ready(function () {
+            $('#content').addClass('internet-explorer');
+        });
+    }
+</script>
+
+<!-- build:js scripts/vendor.js -->
+<script src="vendor/opal/opal/0.5.5/opal.min.js"></script>
+<script src="vendor/jquery/jquery.js"></script>
+<script src="vendor/jquery.ui/ui/jquery.ui.core.js"></script>
+<script src="vendor/jquery.ui/ui/jquery.ui.widget.js"></script>
+<script src="vendor/jquery.ui/ui/jquery.ui.mouse.js"></script>
+<script src="vendor/jquery.ui/ui/jquery.ui.resizable.js"></script>
+<script src="vendor/jquery-mutate/js/events.js"></script>
+<script src="vendor/jquery-mutate/js/mutate.js"></script>
+<script src="vendor/d3/d3.min.js"></script>
+<script src="vendor/MathJax/MathJax.js"></script>
+<script src="vendor/MathJax/config/TeX-AMS-MML_HTMLorMML.js"></script>
+<script src="vendor/bootstrap/docs/assets/js/bootstrap.js"></script>
+<script src="vendor/lodash/dist/lodash.min.js"></script>
+<script src="vendor/datatables/media/js/jquery.dataTables.js"></script>
+<script src="vendor/alchemyjs/dist/alchemy.min.js"></script>
+<script src="vendor/codemirror/lib/codemirror.js"></script>
+<script src="vendor/codemirror/addon/runmode/runmode.js"></script>
+<script src="vendor/codemirror/mode/javascript/javascript.js"></script>
+<script src="vendor/codemirror/mode/sql/sql.js"></script>
+<script src="vendor/codemirror/mode/cypher/cypher.js"></script>
+<script src="vendor/codemirror/mode/xml/xml.js"></script>
+<script src="vendor/codemirror/mode/clike/clike.js"></script>
+<script src="scripts/asciidoctor.js"></script>
+<script src="scripts/base64.js"></script>
+<!-- endbuild -->
+<script>
+    MathJax.Hub.Config({
+    tex2jax: { inlineMath: [['$','$'],['\\(','\\)']] }
+    });
+</script>
+
+<!-- build:js scripts/main.js -->
+<script src="scripts/cypher.datatable.js"></script>
+<script src="scripts/neod3.js"></script>
+<script src="scripts/neod3-visualization.js"></script>
+<script src="scripts/visualization.js"></script>
+<script src="scripts/console.js"></script>
+<script src="scripts/gist.js"></script>
+<script src="scripts/dot.js"></script>
+<script src="scripts/graphgist.js"></script>
+<!-- // <script src="scripts/mutate.min.js"></script> -->
+<script src="scripts/colorize.js"></script>
+<!-- endbuild -->
+
 
 <div class="navbar">
     <div class="navbar-inner">
@@ -103,74 +173,17 @@
     <i class="icon-github-sign"></i> The GraphGist <a href="https://github.com/neo4j-contrib/graphgist">project</a>.
 </footer>
 <div id="fb-root"></div>
-    
 
-    <script type="text/javascript">
-        if (window.navigator.userAgent.indexOf('MSIE ') > 0 || window.navigator.userAgent.indexOf('Trident') > 0) {
-            window.isInternetExplorer = true;
-            $(document).ready(function () {
-                $('#content').addClass('internet-explorer');
-            });
-        }
-    </script>
+<script type="text/javascript" src="scripts/social.js"></script>
+<script type="text/javascript" src="scripts/ga.js"></script>
 
-    <!-- build:js scripts/vendor.js -->
-    <script src="vendor/opal/opal/0.5.5/opal.min.js"></script>
-    <script src="scripts/asciidoctor.js"></script>
-    <script src="vendor/jquery/dist/jquery.min.js"></script>
-    <script src="vendor/jquery.ui/ui/jquery.ui.core.js"></script>
-    <script src="vendor/jquery.ui/ui/jquery.ui.widget.js"></script>
-    <script src="vendor/jquery.ui/ui/jquery.ui.mouse.js"></script>
-    <script src="vendor/jquery.ui/ui/jquery.ui.resizable.js"></script>
-    <script src="vendor/jquery-mutate/js/events.js"></script>
-    <script src="vendor/jquery-mutate/js/mutate.js"></script>
-    <script src="vendor/d3/d3.min.js"></script>
-    <script src="vendor/MathJax/MathJax.js"></script>
-    <script src="vendor/MathJax/config/TeX-AMS-MML_HTMLorMML.js"></script>
-    <script src="vendor/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="vendor/lodash/dist/lodash.min.js"></script>
-    <script src="vendor/datatables/media/js/jquery.dataTables.js"></script>
-    <script src="vendor/alchemyjs/dist/alchemy.min.js"></script>
-    <script src="scripts/base64.js"></script>
-    <!-- endbuild -->
-    <script>
-        MathJax.Hub.Config({
-        tex2jax: { inlineMath: [['$','$'],['\\(','\\)']] }
-        });
-    </script>
-    <!-- TODO -->
-    <script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.3.0/codemirror.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.3.0/addon/runmode/runmode.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.3.0/mode/javascript/javascript.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.3.0/mode/sql/sql.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.3.0/mode/cypher/cypher.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.2.0/mode/xml/xml.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.2.0/mode/clike/clike.js"></script>
-    <!-- end vendor -->
-
-    <!-- build:js scripts/main.js -->
-    <script src="scripts/cypher.datatable.js"></script>
-    <script src="scripts/neod3.js"></script>
-    <script src="scripts/neod3-visualization.js"></script>
-    <script src="scripts/visualization.js"></script>
-    <script src="scripts/console.js"></script>
-    <script src="scripts/gist.js"></script>
-    <script src="scripts/dot.js"></script>
-    <script src="scripts/graphgist.js"></script>
-    <!-- // <script src="scripts/mutate.min.js"></script> -->
-    <script src="scripts/colorize.js"></script>
-    <!-- endbuild -->
-
-    <script type="text/javascript" src="scripts/social.js"></script>
-    <script type="text/javascript" src="scripts/ga.js"></script>
-
-    <script type="text/javascript">
+<script type="text/javascript">
     if (!window.console || !('log' in window.console)) {
         window.console = {log: function () {
         }};
     }
-    </script>
-    <script src="http://platform.twitter.com/widgets.js"></script>
+</script>
+<script src="http://platform.twitter.com/widgets.js"></script>
     
 </body>
 </html>

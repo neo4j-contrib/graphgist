@@ -22,8 +22,7 @@ Building
     bower install
     
     # to develop
-    cd app
-    python -m SimpleHTTPServer
+    grunt serve
 
     # to build "site" and deploy to gh-pages
-    grunt release
+    grunt release --seriously
