@@ -8,3 +8,4 @@
 node_modules
 app/vendor
 site/
+*.DS_Store

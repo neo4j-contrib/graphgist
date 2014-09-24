@@ -375,7 +375,15 @@ function GraphGist($) {
                     dataSource: graphJSON,
                     forceLocked: false,
                     directedEdges: true,
-                    edgeArrowSize: 50,
+                    // edgeArrowSize: 20,
+                    showControlDash: false,
+                    nodeFilters: false,
+                    clusterControl: false,
+                    edgeFilters: false,
+                    curvedEdges: true,
+                    edgeCaption: function(edge) {
+                        return edge.type.toLowerCase();
+                    },
                     graphHeight: function() {
                        return VISUALIZATION_HEIGHT
                     }
