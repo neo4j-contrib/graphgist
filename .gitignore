@@ -2,4 +2,9 @@
 .settings
 .idea/
 *.iml
-
+.tmp
+.grunt
+node_modules
+app/vendor
+site/
+*.DS_Store

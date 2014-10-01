@@ -1,0 +1,50 @@
+{
+  "name": "graphgist",
+  "homepage": "http://gist.neo4j.org/",
+  "Description": "Neo4j GraphGists are an easy way to create and share documents containing not just prose, structure and pictures but most importantly example graph models and use-cases expressed in Neo4j’s query language Cypher.",
+  "authors": [
+    "Anders Nawroth <anders.nawroth@neotechnology.com>",
+    "Michael Hunger <michael.hunger@neotechnology.com>",
+    "Peter Neubauer <peter.neubauer@neotechnology.com>"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/neo4j-contrib/graphgist.git"
+  },
+    "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "neo4j",
+    "graphs",
+    "visualization",
+    "graph"
+  ],
+  "license": "Apache-2.0",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "app/static/vendor",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "alchemyjs": "~0.2.1",
+    "opal": "~0.6.2",
+    "base64": "~0.3.0",
+    "jquery": "~1.10.2",
+    "datatables": "1.9.4",
+    "jquery.ui": "1.10.3",
+    "underscore": "1.5.2",
+    "MathJax": "~2.4.0",
+    "jquery-mutate": "*",
+    "font-awesome": "3.2.1",
+    "bootstrap": "2.3.2",
+    "bootstrap-css-only": "2.3.2",
+    "codemirror": "4.5"
+  },
+  "resolutions": {
+    "jquery": ">= 1.9.0",
+    "bootstrap": "2.3.2"
+  }
+}
