@@ -6,25 +6,46 @@ For a loose collection of cool Gists, see https://github.com/neo4j-contrib/graph
 
 === Building
 
-[source,shell]
+You'll need a working install of https://www.npmjs.org/[npm].
+
+Check out the code from GitHub:
+
 ----
 git clone git@github.com:neo4j-contrib/graphgist.git
 
 cd graphgist
+----
 
-# install yeoman command line tools 
+Install http://yeoman.io/[Yeoman] command line tools:
+
+----
 npm install -g yo
+----
 
-# install local node modules
+Install local node modules:
+
+----
 npm install
+----
 
-# install local vendor files with bower
+Install local vendor files in the _app/vendor_ directory with http://bower.io/[Bower]:
+
+----
 bower install
+----
 
-# to develop
+To develop:
+
+----
 grunt serve
+----
 
-# to build "site" and deploy to gh-pages
+To build the live site and deploy to `gh-pages`:
+
+----
 grunt release --seriously
 ----
+
+TIP: Make sure to run `bower install` again if the _bower.json_ file has been edited/updated.
+
 
