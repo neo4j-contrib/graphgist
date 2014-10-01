@@ -1,12 +1,17 @@
 {
-  "name": "Graph Gist",
-  "version": "0.0.0",
-  "homepage": "https://github.com/neo4j-contrib/graphgist",
+  "name": "graphgist",
+  "homepage": "http://gist.neo4j.org/",
+  "Description": "Neo4j GraphGists are an easy way to create and share documents containing not just prose, structure and pictures but most importantly example graph models and use-cases expressed in Neo4j’s query language Cypher.",
   "authors": [
+    "Anders Nawroth <anders.nawroth@neotechnology.com>",
     "Michael Hunger <michael.hunger@neotechnology.com>",
-    "Anders Nawroth"
+    "Peter Neubauer <peter.neubauer@neotechnology.com>"
   ],
-  "moduleType": [
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/neo4j-contrib/graphgist.git"
+  },
+    "moduleType": [
     "globals"
   ],
   "keywords": [
@@ -15,7 +20,7 @@
     "visualization",
     "graph"
   ],
-  "license": "Apache2",
+  "license": "Apache-2.0",
   "ignore": [
     "**/.*",
     "node_modules",

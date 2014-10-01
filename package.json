@@ -1,20 +1,25 @@
 {
   "name": "GraphGist",
   "version": "0.0.0",
-  "description": "The Neo4j GraphGists ====================",
+  "description": "Neo4j GraphGists are an easy way to create and share documents containing not just prose, structure and pictures but most importantly example graph models and use-cases expressed in Neo4j’s query language Cypher.",
+  "homepage": "http://gist.neo4j.org/",
+  "bugs": "https://github.com/neo4j-contrib/graphgist/issues",
   "main": "null",
   "scripts": {
     "test": "null"
   },
   "repository": {
     "type": "git",
-    "url": "null"
+    "url": "https://github.com/neo4j-contrib/graphgist.git"
   },
   "keywords": [
-    "null"
+    "neo4j",
+    "graphs",
+    "visualization",
+    "graph"
   ],
-  "author": "null",
-  "license": "Apache2",
+  "author": "The Neo4j Team",
+  "license": "Apache-2.0",
   "devDependencies": {
     "grunt": "~0.4.5",
     "load-grunt-tasks": "~0.6.0",
