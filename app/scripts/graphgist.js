@@ -143,7 +143,7 @@ function GraphGist($) {
     }
 
     function formUrl(url, title, author, twitter) {
-        return 'https://docs.google.com/a/neotechnology.com/forms/d/1HQG5x3g8ig3LTjWGM3G2X_zx9tgmN2ltH4AOBvXajwY/viewform?entry.718349727='
+        return 'https://docs.google.com/forms/d/1blgZoRZ6vLbpnqdJx3b5c4BkO_mgmD-hgdRQTMm7kc4/viewform?entry.718349727='
             + encodeURIComponent(url)
             + '&entry.1981612324='
             + encodeURIComponent(title.length > 18 ? title.substr(0, title.length - 18) : title)
