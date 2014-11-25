@@ -36,7 +36,7 @@ function CypherConsole(config, ready) {
     createConsole(ready, consoleClass, contentId);
 
     function createConsole(ready, elementClass, contentId) {
-        if ($('code.cypher').length > 0) {
+        if ($('code.cypher,code.language-cypher').length > 0) {
             var $element = $('p.' + elementClass).first();
             if ($element.length !== 1) {
                 //no console defined in the document

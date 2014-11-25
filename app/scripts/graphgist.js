@@ -32,7 +32,7 @@ function GraphGist($) {
     var $VISUALIZATION = $('<div/>').addClass('visualization');
     var VISUALIZATION_HEIGHT = 400;
     var $TABLE_CONTAINER = $('<div/>').addClass('result-table');
-    var ASCIIDOCTOR_OPTIONS = Opal.hash('attributes', [ 'notitle!' ], 'attribute-missing', 'drop');
+    var ASCIIDOCTOR_OPTIONS = Opal.hash2(['attributes','attribute-missing','safe'], {'attributes': [ 'notitle!', 'allow-uri-read','cache-uri' ], 'attribute-missing': 'drop','safe':'SERVER'});
     var DEFAULT_SOURCE = 'github-neo4j-contrib%2Fgists%2F%2Fmeta%2FHome.adoc'
     var $VISUALIZATION_ICONS = $('<div class="visualization-icons"><i class="icon-fullscreen fullscreen-icon" title="Toggle fullscreen mode"></i></div>');
     var $I = $('<i/>');
@@ -95,6 +95,7 @@ function GraphGist($) {
         var version = postProcessPage();
         var consoleUrl = CONSOLE_VERSIONS[version in CONSOLE_VERSIONS ? version : DEFAULT_VERSION];
         CypherConsole({'url': consoleUrl}, function (conslr) {
+console.log("consolr",conslr, consolr)
             consolr = conslr;
             executeQueries(function () {
                 initConsole(function () {
@@ -207,7 +208,7 @@ function GraphGist($) {
         }
 
         $footer.prepend('<i class="icon-check"></i><a target="_blank" title="Submit an original GraphGist and get a Neo4j t-shirt" href="' + formUrl(window.location.href, document.title, author, twitter) + '"> Submit</a> ');
-        $footer.prepend('<i class="icon-cogs"></i> Uses Neo4j Version <a target="_blank" href="http://docs.neo4j.org/chunked/' + version + '/cypher-query-lang.html">' + version + '</a> ');
+        $footer.prepend('<i class="icon-cogs"></i> Uses Neo4j Version <a target="_blank" href="http://neo4j.com/docs/' + version + '/cypher-query-lang.html">' + version + '</a> ');
         $('h2[id]').css({cursor: 'pointer'}).click(function () {
             window.location.href = window.location.href.replace(/($|#.+?$)/, '#' + $(this).attr('id'))
         });
@@ -225,7 +226,7 @@ function GraphGist($) {
         var number = 0;
         $('code', $content).each(function (index, el) {
             var $el = $(el);
-            if ($el.hasClass('cypher')) {
+            if ($el.hasClass('cypher') || $el.hasClass('language-cypher')) {
                 number++;
                 var $parent = $el.parent();
                 $parent.addClass('with-buttons');
@@ -507,7 +508,7 @@ function GraphGist($) {
         $(selector, context).each(
             function () {
                 $(this).nextAll('div.listingblock').children('div').children('pre.highlight')
-                    .children('code.cypher').first().each(function () {
+                    .children('code.cypher,code.language-cypher').first().each(function () {
                         operation(this);
                     });
             });
