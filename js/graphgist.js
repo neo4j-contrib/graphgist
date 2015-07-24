@@ -256,6 +256,8 @@ function GraphGist($) {
               $el.attr('data-lang', 'java');
             } else if ($el.hasClass('xml')) {
               $el.attr('data-lang', 'xml');
+            } else if ($el.hasClass('groovy')) {
+              $el.attr('data-lang', 'groovy');
             }
         });
 

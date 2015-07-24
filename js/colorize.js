@@ -24,6 +24,8 @@ CodeMirror.colorize = (function() {
         mode = "text/x-java";
       } else if (mode === "sql") {
         mode = "text/x-sql";
+      } else if (mode === "groovy") {
+        mode = "text/x-groovy";
       }
 
       var text = [];
