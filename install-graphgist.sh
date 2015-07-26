@@ -20,7 +20,7 @@ sed -e 's/:neo4j-version:.*/:neo4j-version: local/g' gists/syntax.adoc > gists/m
 
 python -m SimpleHTTPServer&
 
-open http://localhost:8000/?http%3A%2F%2Flocalhost%3A8000%2Fgists%2Fmy-graph-use-case.adoc
+open http://localhost:8000/index.html?http%3A%2F%2Flocalhost%3A8000%2Fgists%2Fmy-graph-use-case.adoc
 
 # you can put your graphgist files e.g. in graphgist/gists and access them with http://localhost:8000/gists/my-graph-use-case.adoc to paste into the URL-box
 
