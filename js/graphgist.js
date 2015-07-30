@@ -32,7 +32,7 @@ function GraphGist($) {
     var $VISUALIZATION = $('<div/>').addClass('visualization');
     var VISUALIZATION_HEIGHT = 400;
     var $TABLE_CONTAINER = $('<div/>').addClass('result-table');
-    var ASCIIDOCTOR_OPTIONS = Opal.hash('attributes', [ 'notitle!' ], 'attribute-missing', 'drop');
+    var ASCIIDOCTOR_OPTIONS = Opal.hash('attributes', [ 'notitle!', 'env-graphgist' ], 'attribute-missing', 'drop');
     var DEFAULT_SOURCE = 'github-neo4j-contrib%2Fgists%2F%2Fmeta%2FHome.adoc'
     var $VISUALIZATION_ICONS = $('<div class="visualization-icons"><i class="icon-fullscreen fullscreen-icon" title="Toggle fullscreen mode"></i></div>');
     var $I = $('<i/>');
