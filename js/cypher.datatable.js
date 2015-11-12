@@ -64,7 +64,10 @@ function convertCell(cell) {
         return props(cell);
     }
     if (typeof cell === 'string') {
-       if (cell.match(/https?:/)) return '<a href="'+cell+'" target="_blank">'+cell+'</a>';
+       if (cell.match(/^https?:/)) {
+        if (cell.match(/(jpg|png|gif)$/i)) return '<img style="display:inline;max-height:100%" src="'+cell+'">';
+        return '<a href="'+cell+'" target="_blank">'+cell+'</a>';
+	   };
     }
     return cell;
 }
