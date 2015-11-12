@@ -63,6 +63,9 @@ function convertCell(cell) {
         }
         return props(cell);
     }
+    if (typeof cell === 'string') {
+       if (cell.match(/https?:/)) return '<a href="'+cell+'" target="_blank">'+cell+'</a>';
+    }
     return cell;
 }
 
