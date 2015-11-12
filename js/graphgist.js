@@ -37,7 +37,11 @@ function GraphGist($) {
     var $VISUALIZATION_ICONS = $('<div class="visualization-icons"><i class="icon-fullscreen fullscreen-icon" title="Toggle fullscreen mode"></i></div>');
     var $I = $('<i/>');
 
+<<<<<<< HEAD
     var DEFAULT_VERSION = '2.2';
+=======
+    var DEFAULT_VERSION = '2.3';
+>>>>>>> added 2.2 and 2.3
     var CONSOLE_VERSIONS = { '2.0.0-M06': 'http://neo4j-console-20m06.herokuapp.com/',
         '2.0.0-RC1': 'http://neo4j-console-20rc1.herokuapp.com/',
         '2.0.0': 'http://neo4j-console-20.herokuapp.com/',
@@ -51,6 +55,11 @@ function GraphGist($) {
         '2.1.3': 'http://neo4j-console-21.herokuapp.com/',
         '2.1': 'http://neo4j-console-21.herokuapp.com/',
         '2.2': 'http://neo4j-console-22.herokuapp.com/',
+<<<<<<< HEAD
+=======
+        '2.3': 'http://neo4j-console-23.herokuapp.com/',
+        '2.3.1': 'http://neo4j-console-23.herokuapp.com/',
+>>>>>>> added 2.2 and 2.3
         'local': 'http://localhost:8080/',
         '1.9': 'http://neo4j-console-19.herokuapp.com/'
     };
