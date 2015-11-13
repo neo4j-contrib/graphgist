@@ -22,7 +22,7 @@ function convertResult(data) {
         var newRow = [];
         for (var col = 0; col < count; col++) {
             var value = convertCell(currentRow[columns[col]]);
-            newRow[col] = value;
+            newRow[col] = render(value);
             result.columns[col].sWidth = Math.max(value.length * CHAR_WIDTH, result.columns[col].sWidth);
         }
         result.data[row] = newRow;
@@ -36,6 +36,15 @@ function convertResult(data) {
         result.columns[col].sWidth = '' + Math.round(100 * result.columns[col].sWidth / width) + '%';
     }
     return result;
+}
+function render(cell) {
+    if (typeof cell === 'string') {
+       if (cell.match(/^https?:/)) {
+        if (cell.match(/(jpg|png|gif)$/i)) return '<img style="display:inline;max-height:100%" src="'+cell+'">';
+        return '<a href="'+cell+'" target="_blank">'+cell+'</a>';
+	   };
+    }
+   return cell;
 }
 
 function convertCell(cell) {
@@ -62,12 +71,6 @@ function convertCell(cell) {
             return '(' + cell['_id'] + labels + props(cell) + ')';
         }
         return props(cell);
-    }
-    if (typeof cell === 'string') {
-       if (cell.match(/^https?:/)) {
-        if (cell.match(/(jpg|png|gif)$/i)) return '<img style="display:inline;max-height:100%" src="'+cell+'">';
-        return '<a href="'+cell+'" target="_blank">'+cell+'</a>';
-	   };
     }
     return cell;
 }
