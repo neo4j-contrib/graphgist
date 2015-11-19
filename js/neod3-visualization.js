@@ -46,7 +46,7 @@ function Neod3Renderer() {
     function dummyFunc() {
     }
 
-    function render(id, $container, visualization) {
+    function render(id, $container, visualization, styleConfig) {
         function extract_props(pc) {
             var p = {};
             for (var key in pc) {
@@ -74,7 +74,7 @@ function Neod3Renderer() {
                         return keys.indexOf(k) !== -1
                     });
                     selected_keys = selected_keys.concat(keys).concat(['id']);
-                    var selector = "node." + label(nodes[i]);
+                    var selector = selectorFor(label(nodes[i]));
                     var selectedKey = selected_keys[0];
                     if (typeof(props[selectedKey]) === "string" && props[selectedKey].length > 30) {
                         props[selectedKey] = props[selectedKey].substring(0,30)+" ...";
@@ -83,6 +83,35 @@ function Neod3Renderer() {
                 }
             }
             return style;
+        }
+
+
+        function isSelector(label) { return label.substring(0,5) == "node."; }
+        function selectorFor(label) { return "node."+label; }
+        function styleFor(label, property,color) {
+            var textColor = window.isInternetExplorer ? '#000000' : color['text-color-internal'];
+            var result =
+            (isSelector(label) ? label : selectorFor(label)) + 
+            " {caption: '{" + property +"}' "+
+            "; color: " + color.color +
+            "; border-color: " + color['border-color'] +
+            "; text-color-internal: " +  textColor +
+            "; text-color-external: " +  textColor +
+            "; }";
+            return result;
+        }
+
+        // red:Person(name), green/lightgreen/white:Book(title)
+        function initialStyleConfig(styleConfig) {
+           if (!styleConfig || styleConfig.trim().length == 0) return {};
+           var style = {};
+           var parts = styleConfig.trim().split(/[,:()]\s*/)
+           for (var i=0;i<parts.length;i+=4) {
+              var color=parts[i], label=parts[i+1], prop=parts[i+2];
+              var colors=color.split(/\//)
+              style[selectorFor(label)]=styleFor(label,prop,{color:colors[0], "border-color":colors[1]||colors[0], "text-color-internal":colors[2]||'#000000'});
+           }
+           return style;
         }
 
         function style_sheet(styles, styleContents) {
@@ -95,14 +124,8 @@ function Neod3Renderer() {
                 } else {
                     var color = colors[currentColor];
                     currentColor = (currentColor + 1) % colors.length;
-                    var textColor = window.isInternetExplorer ? '#000000' : color['text-color-internal'];
-                    styleItem = selector +
-                        " {caption: '{" + styles[selector] +
-                        "}'; color: " + color.color +
-                        "; border-color: " + color['border-color'] +
-                        "; text-color-internal: " +  textColor +
-                        "; text-color-external: " +  textColor +
-                        "; }";
+                    var property = styles[selector];
+                    styleItem = styleFor(selector, property, color);
                     existingStyles[selector] = styleItem;
                 }
                 styleItems.push(styleItem);
@@ -144,6 +167,7 @@ function Neod3Renderer() {
             }
         }
 
+        var existingStyles = initialStyleConfig(styleConfig);
         var links = visualization.links;
         var nodes = visualization.nodes;
         for (var i = 0; i < links.length; i++) {

@@ -134,8 +134,8 @@ function GraphGist($) {
             '++++\n<p class="console"><span class="loading"><i class="icon-cogs"></i> Running queries, preparing the console!</span></p>\n++++\n');
         sanitized = sanitized.replace(/^\/\/\s*?hide/gm, '++++\n<span class="hide-query"></span>\n++++\n');
         sanitized = sanitized.replace(/^\/\/\s*?setup/gm, '++++\n<span class="setup"></span>\n++++\n');
-        sanitized = sanitized.replace(/^\/\/\s*?graph_result.*/gm, '++++\n<h5 class="graph-visualization" graph-mode="result"><img alt="loading" class="loading" src="http://gist.neo4j.org/images/loading.gif"></h5>\n++++\n');
-        sanitized = sanitized.replace(/^\/\/\s*?graph.*/gm, '++++\n<h5 class="graph-visualization"><img alt="loading" src="http://gist.neo4j.org/images/loading.gif" class="loading"></h5>\n++++\n');
+        sanitized = sanitized.replace(/^\/\/\s*?graph_result.*/gm, '\n[subs="attributes"]\n++++\n<h5 class="graph-visualization" data-style="{style}" graph-mode="result"><img alt="loading" class="loading" src="http://gist.neo4j.org/images/loading.gif"></h5>\n++++\n');
+        sanitized = sanitized.replace(/^\/\/\s*?graph.*/gm, '\n[subs="attributes"]\n++++\n<h5 class="graph-visualization" data-style="{style}"><img alt="loading" src="http://gist.neo4j.org/images/loading.gif" class="loading"></h5>\n++++\n');
         sanitized = sanitized.replace(/^\/\/\s*?output.*/gm, '++++\n<span class="query-output"></span>\n++++\n');
         sanitized = sanitized.replace(/^\/\/\s*?table.*/gm, '++++\n<h5 class="result-table"></h5>\n++++\n');
         sanitized += '\n[subs="attributes"]\n++++\n<span id="metadata"\n author="{author}"\n version="{neo4j-version}"\n twitter="{twitter}"\n tags="{tags}"\n/>\n++++\n';
@@ -368,6 +368,8 @@ function GraphGist($) {
             var visualization = $wrapper.data('visualization');
             var id = 'graph-visualization-' + (counter++);
             var $visContainer = $VISUALIZATION.clone().attr('id', id).insertAfter($heading);
+            var style = $heading.attr('data-style');
+console.log("style",style);
             var show_result_only = $heading.attr('graph-mode') && $heading.attr('graph-mode').indexOf('result') !== -1;
             var selectedVisualization = handleSelection(visualization, show_result_only);
             $heading.remove();
@@ -376,7 +378,7 @@ function GraphGist($) {
 
             function performVisualizationRendering() {
                 if (visualization) {
-                    var rendererHooks = neod3Renderer.render(id, $visContainer, selectedVisualization);
+                    var rendererHooks = neod3Renderer.render(id, $visContainer, selectedVisualization, style);
                     var subscriptions = 'subscriptions' in rendererHooks ? rendererHooks['subscriptions'] : {};
                     var actions = 'actions' in rendererHooks ? rendererHooks['actions'] : {};
                     var $visualizationIcons = $VISUALIZATION_ICONS.clone().appendTo($visContainer);

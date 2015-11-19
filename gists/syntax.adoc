@@ -1,12 +1,13 @@
 = How to create a GraphGist
 Anders Nawroth <anders@neotechnology.com>
 v0.1, 2013-09-01
-:neo4j-version: 2.0.0
+:neo4j-version: 2.3
 :author: Anders Nawroth
 :twitter: @nawroth
+:style: red:Person(name), #54A835/#1078B5/white:Database(name)
 
 You create a GraphGist by creating a https://gist.github.com/[GitHub Gist] in http://asciidoctor.org/docs/asciidoc-quick-reference/[AsciiDoc] and enter the URL to it in the form on this page.
-Alternatively, you can put an AsciiDoc document in https://www.dropbox.com/[Dropbox] and enter the public URL in the form.
+Alternatively, you can put an AsciiDoc document in https://www.dropbox.com/[Dropbox], etherpad, pastebin or google doc, and enter the public URL in the URL-box top-right.
 
 This GraphGist shows the basics of using AsciiDoc syntax and a few additions for GraphGists.
 The additions are entered as comments on their own line.
@@ -14,6 +15,24 @@ They are:  +//console+ for a query console; +//hide+, +//setup+ and +//output+ t
 
 Click on the Page Source button in the menu to see the source for this GraphGist.
 Read below to get the full details.
+
+== Configure GraphGist Metadata
+
+The metadata is optional, it is partially used when submitting a GraphGist.
+To select a particular version, the `neo4j-version` attribute can be used.
+
+To provide custom styling to the graph visualization the `style` attribute provides means to set the color/[border-color]/[text-color] for a label and to pre-select a property.
+The general syntax is: `:style: color:Label1(property1), color/border-color/text-color:Label2(property2),...`
+
+Here are the settings for this document.
+
+[subs="attributes"]
+----
+ :neo4j-version: {neo4j-version}
+ :author: {author}
+ :twitter: {twitter}
+ :style: {style}
+----
 
 == Define a http://docs.neo4j.org/chunked/snapshot/cypher-query-lang.html[Cypher] query
 
@@ -55,7 +74,7 @@ Let's try all the settings together, which means this query will be used to init
  //output
  [source,cypher]
  ----
- CREATE (me:Person {name:'Me'})-[r:LIKES]->(neo4j:Database:Graph:NoSQL {name:'Neo4j'})
+ CREATE (me:Person {name:'Me'})-[r:LIKES]->(neo4j:Database {name:'Neo4j',link:'http://neo4j.com'})
  RETURN me.name, r, neo4j
  ----
 
@@ -66,7 +85,7 @@ which becomes:
 //output
 [source,cypher]
 ----
-CREATE (me:Person {name:'Me'})-[r:LIKES]->(neo4j:Database:Graph:NoSQL {name:'Neo4j'})
+CREATE (me:Person {name:'Me'})-[r:LIKES]->(neo4j:Database {name:'Neo4j',link:'http://neo4j.com'})
 RETURN me.name, r, neo4j
 ----
 
@@ -101,6 +120,13 @@ becomes:
 == Show a result table for a query
 
 This will show a result table for the preceding query.
+Properties/Cells that are URLs are rendered as links and image URLs are rendered as inline images.
+
+[source,cypher]
+----
+MATCH (who:Person {name:'Me'})-[likes:LIKES]->(what)
+RETURN who,likes,what, who.name, what.name, what.link
+----
 
 +//table+
 

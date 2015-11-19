@@ -308,3 +308,7 @@ a.visualization-download {
 div.visualization.fullscreen > a.visualization-download {
     top: 24px;
 }
+
+.hide {
+	display:none;
+}
