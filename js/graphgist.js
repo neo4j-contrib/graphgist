@@ -53,6 +53,7 @@ function GraphGist($) {
         '2.2': 'http://neo4j-console-22.herokuapp.com/',
         '2.3': 'http://neo4j-console-23.herokuapp.com/',
         '2.3.1': 'http://neo4j-console-23.herokuapp.com/',
+        '3.0': 'http://neo4j-console-30.herokuapp.com/',
         'local': 'http://localhost:8080/',
         '1.9': 'http://neo4j-console-19.herokuapp.com/'
     };
