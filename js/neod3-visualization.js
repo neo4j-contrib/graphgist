@@ -86,7 +86,7 @@ function Neod3Renderer() {
         }
 
 
-        function isSelector(label) { return label.substring(0,5) == "node."; }
+        function isSelector(label) { return label && label.substring(0,5) == "node."; }
         function selectorFor(label) { return "node."+label; }
         function styleFor(label, property,color) {
             var textColor = window.isInternetExplorer ? '#000000' : color['text-color-internal'];

@@ -369,7 +369,7 @@ function GraphGist($) {
             var id = 'graph-visualization-' + (counter++);
             var $visContainer = $VISUALIZATION.clone().attr('id', id).insertAfter($heading);
             var style = $heading.attr('data-style');
-console.log("style",style);
+            if (style == "{style}") style = null;
             var show_result_only = $heading.attr('graph-mode') && $heading.attr('graph-mode').indexOf('result') !== -1;
             var selectedVisualization = handleSelection(visualization, show_result_only);
             $heading.remove();
