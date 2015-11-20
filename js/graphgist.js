@@ -70,6 +70,9 @@ function GraphGist($) {
         var gist = new Gist($, $content);
         gist.getGistAndRenderPage(renderContent, DEFAULT_SOURCE);
         $gistId.keydown(gist.readSourceId);
+        if (top.location != self.location) {
+            $('.navbar,#sidebar_right').css('display', 'none');
+        }
     });
 
     function renderContent(originalContent, link, imagesdir) {
