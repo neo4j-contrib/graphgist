@@ -1,0 +1,270 @@
+= Welcome to the GraphGist wiki!
+
+== What is a GraphGist?
+
+Neo4j GraphGists are a way to share documents including Cypher queries. The queries can be executed in an online console. GraphGists can be used to share examples or ideas or outline a question you have.
+
+== Getting started
+
+For instructions on how to create your first graph gist, including an introductory video, make your way over to http://gist.neo4j.org/[gist.neo4j.org]. Once you've created your own graph gist, make sure to submit it to our http://graphgist.neo4j.com[GraphGist portal]
+
+http://twitter.com/aprmayyjun[May Lim] authored this http://gist.neo4j.org/?ed982f1b817cb49ebbf7[Graph of GraphGists] that takes many of the popular GraphGists and ranks them and tags them with domain and use case. 
+This is a good place to start if you are new to GraphGists.
+
+https://dl.dropboxusercontent.com/s/amnujtcgxz04b1v/Screen%20Shot%202014-06-25%20at%207.07.47%20am.png[GraphGist domain model,link="http://gist.neo4j.org/?ed982f1b817cb49ebbf7"]
+
+== http://www.neo4j.org/learn/graphgist_challenge[GraphGist Winter 2013 Challenge] Submissions - Categories:
+
+=== Identity and Access Management
+
+*  http://gist.neo4j.org/?4471127413fd724ed0a3[Entitlements and Access Control] by https://twitter.com/kennybastani[kennybastani] and https://twitter.com/ArcibelLuzbel[ArcibelLuzbel]
+
+=== Education
+
+*  http://gist.neo4j.org/?ca811daa580aee95bd07[Find the best NoSQL distribution] by https://twitter.com/galliva[galliva]
+*  http://gist.neo4j.org/?7943148[The Graph of Programming Languages] by https://twitter.com/aniketalhat[aniketalhat]
+*  http://gist.neo4j.org/?8021754[Organization Learning] by https://twitter.com/luannem[luannem]
+*  http://gist.neo4j.org/?8182930[Interpreting Citation Patterns in Academic Publications: A research aid] by jjaderberg
+*  http://gist.neo4j.org/?8175873[Degrees offered by the University of Oviedo] by https://twitter.com/leyvanegri[leyvanegri]
+*  http://gist.neo4j.org/?1558d1e0fd6f96f78b77[Planning graph for schools] by https://twitter.com/TAuel[TAuel]
+*  http://gist.neo4j.org/?f6c747173450505a5a54[Learning Cypher with San Francisco Bay Map] by https://kuotie@gmail.com[Richard Kuo]
+
+=== Politics/Elections
+
+*  http://gist.neo4j.org/?8167705[Legislative System Graph] by https://twitter.com/yaravind[yaravind]
+*  http://gist.neo4j.org/?https%3A%2F%2Fgist.githubusercontent.com%2Frvanbruggen%2Fc82d0a68d32cf3067706%2Fraw%2Fe05fa4ff92c1822acac87593f058a06f0798f141%2FMiddle%2520East%2520GraphGist.adoc[Friends and Foes in the Middle East] by https://twitter.com/rvanbruggen[rvanbruggen]
+
+=== Finance
+
+*  http://gist.neo4j.org/?github-HazardJ%2Fgists%2F%2FDoc_Source_Graph.adoc[Make documents in a graph] by https://twitter.com/hazardj[hazardj]
+*  http://gist.neo4j.org/?github-neo4j-contrib%2Fgists%2F%2Fother%2FBankFraudDetection.adoc[Bank Fraud Detection] by http://www.twitter.com/kennybastani[kennybastani]
+*  http://gist.neo4j.org/?8582664[Finance and Asset Management] by https://twitter.com/rushugroup[rushugroup]
+*  http://gist.neo4j.org/?8724726[Graphing our way through the ICIJ offshore jurisdiction data] by https://twitter.com/hermansm[hermansm]
+*  http://gist.neo4j.org/?d2bd983035fd4757d1c2[How to use Neo4j to analyse the Offshore Leaks : the case of Azerbaijan] by https://twitter.com/jvilledieu[jvilledieu]
+*  http://gist.neo4j.org/?8116155[Options Trading As A Graph] by https://twitter.com/lyonwj[lyonwj]
+*  http://gist.neo4j.org/?3ad4cb2e3187ab21416b[Credit Card Fraud Detection] by https://twitter.com/jvilledieu[jvilledieu]
+
+=== Life Science
+
+*  http://gist.neo4j.org/?7968633[Pharmaceutical Drugs and their Targets] by https://twitter.com/joshkunken[joshkunken]
+*  http://gist.neo4j.org/?7865910[Competitive Intelligence in Cancer Drug Discovery] by https://twitter.com/livedataconcept[livedataconcept]
+*  http://gist.neo4j.org/?8176106[Medicine & drugs classification for the Central Hospital of Asturias] by https://twitter.com/Roqueeeeee[Roqueeeeee] and https://twitter.com/luigi9215[luigi9215]
+*  http://gist.neo4j.org/?ddc80a55aaac23095705[Plant classification database] by https://twitter.com/glesica[glesica]
+*  http://gist.neo4j.org/?8703821[Plant explorer] by https://twitter.com/widged[widged]
+*  http://gist.neo4j.org/?8721072[Exploring cat pedigrees] by https://twitter.com/jankrag[jankrag]
+*  http://gist.neo4j.org/?8748719[DoctorFinder!] by https://twitter.com/fbiville[fbiville] on behalf of the kick-ass VIDAL team
+*  http://gist.neo4j.org/?192f1e8af5723d3d73c5[What do great white sharks eat?] by https://github.com/jhpoelen[jhpoelen] of http://globalbioticinteractions.org[Global Biotic Interactions]
+*  http://gist.neo4j.org/?6038a7b526bfa48da2c0[Semantically Linking Cancer Models] by http://twitter.com/NuDataScientist[NuDataScientist]
+
+=== Manufacturing
+
+*  http://gist.neo4j.org/?7985887[Christmas Gist - Supply Chain] by https://twitter.com/PascaleScheurer[PascaleScheurer]
+*  http://gist.neo4j.org/?8412907[Project Management] by https://twitter.com/_nicolemargaret[_nicolemargaret]
+*  http://gist.neo4j.org/?8579867[Car Manufacturers 2013] by https://twitter.com/fernanvic1[fernanvic1]
+*  http://gist.neo4j.org/?f04170a4422137960b49[Device manufacture trends] by https://twitter.com/shantaramw[shantaramw]
+*  http://gist.neo4j.org/?9909328[Managing a (Product) Hierarchy] by https://twitter.com/rvanbruggen[rvanbruggen]
+
+=== Sports
+
+*  http://gist.neo4j.org/?8390148[PSU 2014 Football Season] by https://twitter.com/ChelseaHallinan[ChelseaHallinan]
+*  http://gist.neo4j.org/?8019511[Alpine Skiing seasons] by https://twitter.com/pac_19[pac_19]
+*  http://gist.neo4j.org/?167380d216f082ee454b[NBA Sneakers] by https://twitter.com/luisrodrigar[luisrodrigar] and https://twitter.com/Sergio_Gijon[Sergio_Gijon]
+*  http://gist.neo4j.org/?8371221[F1 2012/2013 Season] by https://twitter.com/el_astur[el_astur]
+*  http://gist.neo4j.org/?8493604[League of Legends eSports - LCS] by https://twitter.com/SurrealAnalysis[SurrealAnalysis]
+
+=== Resources
+
+*  http://gist.neo4j.org/?8141937[Piping Water] by https://twitter.com/shaundaley1[shaundaley1]
+*  http://gist.neo4j.org/?7521440722051d915c71[QLAMRE: Quick Look at Mainstream Renewables Energies] by https://twitter.com/Sergio_Gijon[Sergio_Gijon]
+*  http://gist.neo4j.org/?8158724[The graph of fire] by https://twitter.com/darthvader42[darthvader42]
+*  http://gist.neo4j.org/?8630438[EPublishing: A graphical approach to digital publications] by https://twitter.com/DeepeshKuruppat[deepeshk79]
+*  http://gist.neo4j.org/?9171581[Master of Pancakes: Finding missing ingredients for recipes] by https://twitter.com/boggle[boggle]
+
+=== Retail
+
+*  http://gist.neo4j.org/?8015026[WineGraph] by https://twitter.com/ah3rz[ah3rz]
+*  http://gist.neo4j.org/?8ac03de55e9c48431323[Phone store] by https://twitter.com/xun91[xun91]
+*  http://gist.neo4j.org/?8139605[Single Malt Scotch Whisky] by https://twitter.com/patbaumgartner[patbaumgartner]
+*  http://gist.neo4j.org/?8650212[Soft Drinks] by https://twitter.com/fernanvic1[fernanvic1]
+*  http://gist.neo4j.org/?8731452[Food Recommendation] by https://twitter.com/gromajus[gromajus]
+*  http://gist.neo4j.org/?6873cf244c0611533029[Reshipping Scam Detection] by https://twitter.com/jvilledieu[jvilledieu]
+
+=== Telecommunication
+
+*  http://gist.neo4j.org/?github-neo4j-contrib%2Fgists%2F%2Fother%2FNetworkDataCenterManagement1.adoc[Network Dependency Graph] by http://www.twitter.com/kennybastani[kennybastani]
+*  http://gist.neo4j.org/?8526106[Amazon Web Services Global Infrastructure Graph] by https://twitter.com/AIDANJCASEY[AIDANJCASEY]
+* http://gist.neo4j.org/?8658297[Tor Network Graph] by https://twitter.com/esoufy[ESOUFY]
+*  http://gist.neo4j.org/?8733669[Mobile Operators in India] by https://twitter.com/rushugroup[rushugroup]
+*  http://gist.neo4j.org/?8742960[Geoptima Event Log Collection Data Management] by https://twitter.com/craigtaverner[craigtaverner]
+*  http://gist.neo4j.org/?451b776cb3a782965a63[Information Flow Through a Network] by https://twitter.com/@glesica[George Lesica] and https://twitter.com/@lyonwj[William Lyon]
+*  http://gist.neo4j.org/?40caddf1d7537bce962e[Cyber security and attack analysis] by https://twitter.com/@jvilledieu[Jean Villedieu]
+
+=== Transport
+
+*  http://gist.neo4j.org/?1c95e152849dc05cff77[Uber vs. Lyft: Doing Evil with Graphs] by http://www.twitter.com/kevinvangundy[kevinvangundy]
+*  http://gist.neo4j.org/?8078133[Tokyo Metro Subway System] by http://www.twitter.com/joshkunken[joshkunken]
+*  http://gist.neo4j.org/?8159102[Bombay Railway Routes] by http://www.twitter.com/luannem[luannem]
+*  http://gist.neo4j.org/?09520d20fbe707951e1b[Trekking and Mountaineering routing] by https://twitter.com/shantaramw[shantaramw]
+*  http://gist.neo4j.org/?8267654[Asturias Highway Network] by https://twitter.com/DaniLebredo[DaniLebredo]
+*  http://gist.neo4j.org/?8635758[Roads, Nodes and Automobiles] by http://www.jacqui.tk[tekiegirl]
+*  http://gist.neo4j.org/?8748091[TransMilenio Rapid Bus Service] by https://twitter.com/neoecos[neoecos]
+
+=== Advanced Graph Gists
+
+*  http://gist.neo4j.org/?7840248[Untying the Graph Database Import Knot] by http://blog.bruggen.com[rvanbruggen]
+*  http://gist.neo4j.org/?7821099[To play Tic Tac Toe ! with Cypher queries] by https://twitter.com/SylvainRoussy[SylvainRoussy]
+*  http://gist.neo4j.org/?8112746[Skip Lists in Cypher] by http://wes.skeweredrook.com[wefreema]
+*  http://gist.neo4j.org/?8173017[Movie Recommendations with k-NN and Cosine Similarity] by https://twitter.com/_nicolemargaret[_nicolemargaret]
+*  http://gist.neo4j.org/?8389170[Small Social Networking Website] by https://twitter.com/raulestrada_93[RaulEstrada]
+*  http://gist.neo4j.org/?76d0043072143a53d789[Graph modelization of Neo4j internal storage] by https://twitter.com/geraudster[geraudster]
+*  http://gist.neo4j.org/?9641340[Automatic property-based schema and inheritance detection in Structr] by https://twitter.com/cmor_[cmor_]
+
+=== Other
+
+*  http://gist.neo4j.org/?8007635[People, books and cities] by https://twitter.com/p3rnilla[p3rnilla]
+*  http://gist.neo4j.org/?8065763[User, Functions, Applications, or "Slicing onion with an axe"] by http://blog.atena.pl/author/karolbr[karol_brejna]
+*  http://gist.neo4j.org/?7820655[Mahabharata Characters and events] by http://twitter.com/shivswami[shivswami]
+*  http://gist.neo4j.org/?8101362[Christmas Drinks] by http://twitter.com/luannem[luannem]
+*  http://gist.neo4j.org/?8012859[Using the graph to control unique id generation] by http://www.jacqui.tk[tekiegirl]
+*  http://gist.neo4j.org/?8540860[Open Source Licensing Graph] by http://blog.bruggen.com[rvanbruggen]
+*  http://gist.neo4j.org/?8652179[The Cure cypher examples] by http://dev.coop[laurentforet]
+*  http://gist.neo4j.org/?8666304[Wikipedia Tries and Intellisense] by http://xclave.co.uk[cskardon]
+*  http://gist.neo4j.org/?8640853[Embedded Metamodel Subgraphs in the FactMiners Social-Game Ecosystem - Part 1 of 2] by http://www.SoftalkApple.com[Jim_Salmons]
+*  http://gist.neo4j.org/?7817558[Embedded Metamodel Subgraphs in the FactMiners Social-Game Ecosystem - Part 2 of 2] by http://www.SoftalkApple.com[Jim_Salmons]
+*  http://gist.neo4j.org/?8681308[Issue Tracking with Graphs] by https://twitter.com/surrealanalysis[SurrealAnalysis]
+*  http://gist.neo4j.org/?9840876[Business Hours / Opening Hours Graph =1 (More verbose, More flexible)] by https://twitter.com/thomasf[thomasf]
+*  http://gist.neo4j.org/?9852400[Business Hours / Opening Hours Graph =2 (simpler approach)] by https://twitter.com/thomasf[thomasf]
+*  http://gist.neo4j.org/?774e68df235f32e4db5a[Dem-O Bones are CONNECTED!] by https://twitter.com/rvanbruggen[rvanbruggen]
+*  http://gist.neo4j.org/?94e1a2e66a34bd2a5ee0[HR analytics & finding candidates] by https://twitter.com/jvilledieu[jvilledieu]
+*  http://gist.neo4j.org/?1d100a7582ab7192d50b[Øredev Conference schedule as a graph] by https://twitter.com/rvanbruggen[rvanbruggen]
+
+=== GraphGist September 2013 Challenge Submissions
+
+The http://www.neo4j.org/learn/graphgist_challenge[GraphGist Challenge] was run during September 2013 and had the following submissions:
+
+*  http://gist.neo4j.org/?7667544[Holiday Resorts]  by http://javatroops.blogspot.in/2013/03/neo4j-graph-case-study-facebook-trip.html[Raju Rama Krishna] 
+*  http://gist.neo4j.org/?7674302[Sports League]  by https://twitter.com/yaravind[yaravind]
+*  http://gist.neo4j.org/?github-jotomo%2Fneo4j-gist-challenge%2F%2Flearning-graph%2Flearning-graph.adoc[Learning Graph]  by https://github.com/jotomo[jotomo]
+*  http://gist.neo4j.org/?6577945[IKEA furniture Graph]  by http://blog.bruggen.com[rvanbruggen]
+*  http://gist.neo4j.org/?7305021[Enterprise Content Management Graph] by https://twitter.com/PieterJanVA[PieterJanVA]
+*  http://gist.neo4j.org/?6619085[US Flights & Airports] by https://twitter.com/_nicolemargaret[_nicolemargaret]
+*  http://gist.neo4j.org/?6506717[Chess Games and Positions] by https://twitter.com/wefreema[wefreema]
+*  http://gist.neo4j.org/?7307795[Why JIRA should use Neo4J] by https://twitter.com/PieterJanVA[PieterJanVA]
+*  http://gist.neo4j.org/?7674543[Mystery Science Theater 3000 Actors and Characters]by https://twitter.com/virtualswede[virtualswede] 
+*  http://gist.neo4j.org/?6532686[Breaking Bad characters are interested in some products, let's see which are] by https://twitter.com/fforbeck[fforbeck]
+*  http://gist.neo4j.org/?6756709[Ditching Grandma - Graphy Accounting] by https://twitter.com/ShaunDaley1[ShaunDaley1] 
+*  http://gist.neo4j.org/?7869708[MotoGp Graph Gist] by https://twitter.com/ricshouse[ricshouse]
+*  http://gist.neo4j.org/?7668617[European Royalty] by https://twitter.com/frant_hartm[frant_hartm]
+*  http://gist.neo4j.org/?7668632[Product Catalog] by https://twitter.com/yaravind[yaravind]
+*  http://gist.neo4j.org/?6773709[A Simple Meta-Data Model] by https://twitter.com/perival[perival]
+
+== Examples - Howto
+
+*  http://gist.neo4j.org/?5956239[A very simple GraphGist]
+*  http://gist.neo4j.org/?github-neo4j-contrib%2Fgists%2F%2Fmeta%2FHowTo.adoc[How to create a GraphGist - syntax examples]
+*  http://gist.neo4j.org/?7675023[GraphDatabases Book Neo4j 2.0 Live examples]
+*  http://gist.neo4j.org/?6725918[LaTeX math formulas in GraphGists]
+*  http://gist.neo4j.org/?7010516[A gentle introduction to relational reasoning for customer-product discovery]
+
+== Different graph problem designs
+
+** http://docs.neo4j.org/chunked/milestone/data-modeling-examples.html[some from the Neo4j Manual]*
+*  http://gist.neo4j.org/?github-neo4j-contrib%2Fgists%2F%2Fother%2FTVShowGraph.adoc[TV Show Graph]
+*  http://gist.neo4j.org/?5894702[RoleBasedAccess Control with reconciliation]
+*  http://gist.neo4j.org/?5878518[Money laundering and fraud detection]
+*  http://gist.neo4j.org/?dropbox-14493611/oscon-conference.adoc[OSCON - Conference Data Model]
+*  http://gist.neo4j.org/?7311739[Business Rules / Recommendation]
+*  http://gist.neo4j.org/?6028026[An insurance example]
+*  http://gist.neo4j.org/?6037834[The Pinterest Follower Model]
+*  http://gist.neo4j.org/?7311779[Last.fm dataset exploration]
+*  http://gist.neo4j.org/?6221318[Network Management with Neo4j]
+*  http://gist.neo4j.org/?6172623[Musicbrainz import into Neo4j]
+*  http://gist.neo4j.org/?7311886[Shortest paths in orienteering]
+*  http://gist.neo4j.org/?6628418[A simple node versioning scheme]
+*  http://gist.neo4j.org/?github-kbastani/gists//meta/TimeScaleEventMetaModel.adoc[Time Scale Event meta model]
+*  http://gist.neo4j.org/?6608600[Subcategories and multi-language product tagging]
+*  http://gist.neo4j.org/?7331087[Spot Market Arbitrage]
+*  http://gist.neo4j.org/?github-neo4j-contrib%2Fgists%2F%2Fother%2FThePublicationGraph.adoc[The Publication Graph - Magazines, Issues, Content, Tags]
+*  http://gist.neo4j.org/?7486272[Markov Chains]
+*  http://gist.neo4j.org/?8021580[Courses and their dependencies]
+*  http://gist.neo4j.org/?7543857[Ranked rule-based subgraph matching]
+*  http://gist.neo4j.org/?0278fc6cbba43c4bf964[Recruitment graph model]
+
+=== Healthcare
+
+*  http://gist.neo4j.org/?6306397[Healthcare Doctor Graph]
+*  http://gist.neo4j.org/?24d0c8032389c7e52f9f[Metabolic Pathways in bioinformatics]
+*  http://gist.neo4j.org/?7010105[Sickness causalities]
+
+=== Social Networks
+
+*  http://gist.neo4j.org/?github-neo4j-contrib%2Fgists%2F%2Fother%2FSocialNetworkGraph.adoc[Social Network Graph Example from Diaspora]
+*  http://gist.neo4j.org/?dropbox-2900504%2Fgist.adoc[Community Graph Participants, Interests, Contributions, Events and Locations]
+*  http://gist.neo4j.org/?2a5e3363b7017be6a327[Transforming Relational to Graph at TagShout] by https://twitter.com/rioeduardo[rioeduardo]
+
+== Finance
+
+*  http://gist.neo4j.org/?github-neo4j-contrib%2Fgists%2F%2Fother%2FBankFraudDetection.adoc[Bank Fraud Detection]
+*  http://gist.neo4j.org/?9483247[Sales Funnel Analytics]
+*  http://gist.neo4j.org/?6bae1e799484267e3c60[Insurance Fraud Detection]
+
+== Network and Data Center Management
+
+*  http://gist.neo4j.org/?github-neo4j-contrib%2Fgists%2F%2Fother%2FNetworkDataCenterManagement1.adoc[Network Dependency Graph]
+
+== Recommendations
+
+*  http://gist.neo4j.org/?7311739[Business Rules / Recommendation]
+*  http://gist.neo4j.org/?github-kbastani%2Fgists%2F%2Fmeta%2FTimeScaleEventMetaModel.adoc[Recommendation and Time Scales]
+*  http://gist.neo4j.org/?11289752[Movie recommendations based on User-Actor likes and Actor-Movie-play times]
+
+== Tutorials
+
+*  http://gist.neo4j.org/?9362989[Random Result Order]
+*  http://gist.neo4j.org/?9269173[Result Projection to JSON Documents] by Robert Herschke @ etecture
+*  http://gist.neo4j.org/?dropbox-14493611/cypher-introduction.adoc[Cypher Introduction with Movie Data]
+*  http://gist.neo4j.org/?5883990[Upgrading Neoj4 1.9 to 2.0]
+*  http://gist.neo4j.org/?6052414[Incrementing property values while traversing]
+*  http://gist.neo4j.org/?6113785[Tree indexing structures with Neo4j 2.0 and labels]
+*  http://gist.neo4j.org/?github-jotomo/neo4j-gist-challenge//ordered-container/ordered-container.adoc[Ordered Container]
+*  http://gist.neo4j.org/?dropbox-14493611/skills_model.adoc[Graph Modeling]
+*  http://gist.neo4j.org/?8390798[Duplicate Detection in a Collection]
+*  http://gist.neo4j.org/?8972183[Union and Intersection of bipartite networks]
+*  http://gist.neo4j.org/?9263624[SO: Histograms of Publication Workflows]
+
+== Fun graph gists
+
+*  http://gist.neo4j.org/?c43ade7d259a77fe49a8[The Hobbit, or to Nodes and Back Again]
+*  http://gist.neo4j.org/?6009066[The graph of all personal Neo4j Community T-Shirts]
+*  http://gist.neo4j.org/?6019125[The StarWars universe]
+*  http://gist.neo4j.org/?6029850[The Game of Thrones world of Westeros]
+*  http://gist.neo4j.org/?6029939[A small graph of Belgian Beer]
+*  http://gist.neo4j.org/?6210590[The Astérix GraphGist] by https://twitter.com/sfrechette[sfrechette]
+*  http://gist.neo4j.org/?7201286[Pokémon X & Y]
+*  http://gist.neo4j.org/?7598989[The Harry Potter world]
+*  http://gist.neo4j.org/?4fe6d6453383008e95bb[Rock-Paper-Scissors-Lizard-Spock]
+*  http://gist.neo4j.org/?9959119[The Belgian Sitcom Graph: Who's Hot in "Thuis"]
+
+== Philosopher graph gists
+
+Inspired by http://drunks-and-lampposts.com/2012/06/13/graphing-the-history-of-philosophy/ 
+
+*  http://gist.neo4j.org/?6363731[One Node Kant]
+*  http://gist.neo4j.org/?7313331[One Label Philosopher]
+*  http://gist.neo4j.org/?7313355[Plato Influences Aristotle]
+*  http://gist.neo4j.org/?7313389[Influence within a School]
+*  http://gist.neo4j.org/?7676795[Influence within a SchoolType]
+*  http://gist.neo4j.org/?7676836[Influence within a SchoolTypeClass]
+*  http://gist.neo4j.org/?7676918[Eras and Schools]
+
+== Art graph gist
+
+*  http://gist.neo4j.org/?github-inserpio/gists//neo4art.adoc[Van Gogh's Journey] by https://twitter.com/inserpio[inserpio]
+
+== Exploring RDBMS schema using Graphs
+
+*  http://gist.neo4j.org/?a833d725392c5e710211[Exploring SQL Server Adventureworks schema]
+
+== Tour de France 2014
+
+*  http://gist.neo4j.org/?b8c7114d8c9b76b6a4e0[TDF 2014] by https://twitter.com/inserpio[inserpio]
