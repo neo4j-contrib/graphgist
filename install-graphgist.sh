@@ -2,6 +2,7 @@
 
 git clone https://github.com/neo4j-contrib/rabbithole
 cd rabbithole
+git checkout -b 3.0 origin/3.0
 mvn clean test-compile 
 mvn exec:java&
 
